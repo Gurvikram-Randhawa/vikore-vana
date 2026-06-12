@@ -18,7 +18,7 @@ export function FeaturedArticlesList({ articles }: { articles: Article[] }) {
       </div>
       {visibleCount < articles.length && (
         <div className="mt-8 flex justify-center">
-          <button 
+          <button
             onClick={() => setVisibleCount(v => v + 4)}
             className="rounded-full bg-ink px-6 py-2 text-sm font-medium text-white transition hover:bg-cedar"
           >
