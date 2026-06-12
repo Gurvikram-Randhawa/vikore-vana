@@ -30,10 +30,10 @@ export const metadata: Metadata = {
   },
   other: {
     "pinterest-rich-pin": "true",
-    "google-site-verification": "KRtxf-ldKOW9N6uHexTvZwzj1H4kQ6z4w6I12UMapxE"
+    "google-site-verification": "KRtxf-ldKOW9N6uHexTvZwzj1H4kQ6z4w6I12UMapxE",
+    "p:domain_verify": "f62176cdc2626f54e31126000d5c7504"
   }
 };
-
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
