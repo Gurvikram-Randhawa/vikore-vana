@@ -29,7 +29,8 @@ export const metadata: Metadata = {
     card: "summary_large_image"
   },
   other: {
-    "pinterest-rich-pin": "true"
+    "pinterest-rich-pin": "true",
+    "google-site-verification": "KRtxf-ldKOW9N6uHexTvZwzj1H4kQ6z4w6I12UMapxE"
   }
 };
 
