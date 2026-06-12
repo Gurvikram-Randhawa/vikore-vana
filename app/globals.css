@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: #fffaf4;
+  color: #282522;
+}
+
+.dark body {
+  background: #181614;
+  color: #f8efe4;
+}
+
+::selection {
+  background: #d9c7b2;
+  color: #282522;
+}
+
+.container-premium {
+  width: min(100% - 2rem, 1180px);
+  margin-inline: auto;
+}
+
+.image-fade {
+  animation: imageFade 700ms ease both;
+}
+
+@keyframes imageFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.prose-vana {
+  color: inherit;
+}
+
+.prose-vana h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.05;
+}
+
+.prose-vana p {
+  margin-block: 1.15rem;
+  color: #504b45;
+  font-size: 1.075rem;
+  line-height: 1.9;
+}
+
+.dark .prose-vana p {
+  color: #dfd3c5;
+}
+
+.prose-vana img {
+  margin-block: 2rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  background: #efe4d6;
+}
+
+.prose-vana a {
+  color: #9a7b5d;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}

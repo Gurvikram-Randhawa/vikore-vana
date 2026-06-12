@@ -1,0 +1,47 @@
+import type { Metadata } from "next";
+import { Inter, Playfair_Display } from "next/font/google";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { site } from "@/lib/site";
+import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
+
+export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${site.name} | Home Decor & Interior Design Inspiration`,
+    template: `%s | ${site.name}`
+  },
+  description: site.description,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    title: site.name,
+    description: site.description,
+    url: site.url
+  },
+  twitter: {
+    card: "summary_large_image"
+  },
+  other: {
+    "pinterest-rich-pin": "true"
+  }
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
+        <ThemeProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
