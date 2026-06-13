@@ -7,7 +7,70 @@
     <title>Vikore Vana CMS</title>
   </head>
   <body>
-    <!-- Include the script that builds the page and powers Decap CMS -->
+    <script>
+      // Must be set before loading decap-cms.js
+      window.CMS_MANUAL_INIT = true;
+    </script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      CMS.init({
+        config: {
+          backend: {
+            name: "github",
+            repo: "Gurvikram-Randhawa/vikore-vana",
+            branch: "main",
+            base_url: "https://vikore-vana.vercel.app",
+            auth_endpoint: "api/auth"
+          },
+          publish_mode: "editorial_workflow",
+          media_folder: "public/uploads",
+          public_folder: "/uploads",
+          site_url: "https://vikore-vana.vercel.app",
+          display_url: "https://vikore-vana.vercel.app",
+          logo_url: "/uploads/vikore-vana-mark.svg",
+          collections: [
+            {
+              name: "articles",
+              label: "Articles",
+              folder: "content/articles",
+              create: true,
+              slug: "{{slug}}",
+              summary: "{{title}} — {{category}}",
+              fields: [
+                { label: "Title", name: "title", widget: "string" },
+                { label: "Description", name: "description", widget: "text" },
+                { label: "Category", name: "category", widget: "select", options: ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Small Spaces", "Home Decor", "Lighting", "Indoor Plants", "Luxury Decor"] },
+                { label: "Publish Date", name: "date", widget: "datetime" },
+                { label: "Cover Image", name: "cover", widget: "image" },
+                { label: "Featured", name: "featured", widget: "boolean", required: false, default: false },
+                { label: "Draft", name: "draft", widget: "boolean", required: false, default: false },
+                { label: "SEO Title", name: "seoTitle", widget: "string", required: false },
+                { label: "SEO Description", name: "seoDescription", widget: "text", required: false },
+                { label: "SEO Keywords", name: "seoKeywords", widget: "string", required: false },
+                { label: "Recommended Product Slugs", name: "products", widget: "list", required: false },
+                { label: "Article Body", name: "body", widget: "markdown" }
+              ]
+            },
+            {
+              name: "products",
+              label: "Products",
+              folder: "content/products",
+              create: true,
+              slug: "{{slug}}",
+              summary: "{{name}} — {{category}}",
+              fields: [
+                { label: "Product Name", name: "name", widget: "string" },
+                { label: "Product Description", name: "description", widget: "text" },
+                { label: "Product Image Upload", name: "image", widget: "image" },
+                { label: "Affiliate Link", name: "affiliate", widget: "string" },
+                { label: "Category", name: "category", widget: "select", options: ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Small Spaces", "Home Decor", "Lighting", "Indoor Plants", "Luxury Decor"] },
+                { label: "Featured", name: "featured", widget: "boolean", required: false, default: false },
+                { label: "Notes", name: "body", widget: "markdown", required: false }
+              ]
+            }
+          ]
+        }
+      });
+    </script>
   </body>
 </html>
