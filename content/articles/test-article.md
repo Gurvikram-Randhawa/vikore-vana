@@ -1,19 +1,19 @@
 ---
-title: 'test article '
-description: dsf
+title: test article
+description: ''
 category: Home Decor
-date: '2026-06-13T08:49:12.506Z'
+date: '2026-06-13T08:56:28.475Z'
 cover: ''
 featured: true
 draft: false
 seoTitle: ''
-seoDescription: effd
-seoKeywords: df
+seoDescription: ''
+seoKeywords: ''
 products: []
 ---
 ## Section Title
 
-Write your article here.das
+Write your article here.
 
 ![Image description](/uploads/example.jpg)
 
