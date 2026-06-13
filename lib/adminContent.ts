@@ -43,9 +43,15 @@ export function slugify(value: string) {
 }
 
 export function ensureContentDirs() {
-  fs.mkdirSync(articleDir, { recursive: true });
-  fs.mkdirSync(productDir, { recursive: true });
-  fs.mkdirSync(uploadDir, { recursive: true });
+  try {
+    if (!fs.existsSync(articleDir)) fs.mkdirSync(articleDir, { recursive: true });
+    if (!fs.existsSync(productDir)) fs.mkdirSync(productDir, { recursive: true });
+    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+  } catch (error: any) {
+    if (error.code !== "EROFS") {
+      console.warn("Failed to create content directories:", error);
+    }
+  }
 }
 
 function readCollection(dir: string) {
