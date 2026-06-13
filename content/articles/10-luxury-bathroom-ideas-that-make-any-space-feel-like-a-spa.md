@@ -168,7 +168,7 @@ Consider adding:
 
 These finishing touches help create a curated and intentional look.
 
-### Final Thoughts
+## Final Thoughts
 
 Creating a luxury bathroom does not require a complete renovation. By focusing on quality materials, layered lighting, smart storage, and carefully selected decor, you can transform your bathroom into a relaxing spa-inspired retreat that feels elegant every day.
 
