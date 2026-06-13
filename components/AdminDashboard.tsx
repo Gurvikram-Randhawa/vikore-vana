@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Edit3, FileText, ImagePlus, Package, Plus, Save, Trash2, Upload, type LucideIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { site } from "@/lib/site";
+import { fetchArticles, fetchProducts, fetchMedia, createArticle, createProduct, removeContent, uploadMedia, removeMedia } from "@/lib/adminActions";
 
 type ArticleForm = {
   slug: string;
@@ -75,10 +76,10 @@ export function AdminDashboard() {
   const [notice, setNotice] = useState("");
 
   async function loadAll() {
-    const [articleRes, productRes, mediaRes] = await Promise.all([fetch("/api/admin/articles"), fetch("/api/admin/products"), fetch("/api/admin/media")]);
-    setArticles((await articleRes.json()).articles || []);
-    setProducts((await productRes.json()).products || []);
-    setMedia((await mediaRes.json()).media || []);
+    const [articleRes, productRes, mediaRes] = await Promise.all([fetchArticles(), fetchProducts(), fetchMedia()]);
+    setArticles(articleRes || []);
+    setProducts(productRes || []);
+    setMedia(mediaRes || []);
   }
 
   useEffect(() => {
@@ -88,29 +89,22 @@ export function AdminDashboard() {
   const productSlugOptions = useMemo(() => products.map((item) => String(item.slug)), [products]);
 
   async function saveArticle() {
-    const res = await fetch("/api/admin/articles", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...article, products: article.products.split(",").map((item) => item.trim()).filter(Boolean) })
+    const data = await createArticle({
+      ...article,
+      products: article.products.split(",").map((item) => item.trim()).filter(Boolean)
     });
-    const data = await res.json();
-    setNotice(data.ok ? "Article published. Refresh the homepage or categories page to see it." : data.error);
+    setNotice(data.ok ? "Article published. Refresh the homepage or categories page to see it." : data.error || "Unknown error");
     await loadAll();
   }
 
   async function saveProduct() {
-    const res = await fetch("/api/admin/products", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(product)
-    });
-    const data = await res.json();
-    setNotice(data.ok ? "Product saved. It now appears in collections." : data.error);
+    const data = await createProduct(product);
+    setNotice(data.ok ? "Product saved. It now appears in collections." : data.error || "Unknown error");
     await loadAll();
   }
 
   async function deleteItem(type: "articles" | "products", slug: string) {
-    await fetch(`/api/admin/${type}?slug=${encodeURIComponent(slug)}`, { method: "DELETE" });
+    await removeContent(type, slug);
     setNotice(`${type === "articles" ? "Article" : "Product"} deleted.`);
     await loadAll();
   }
@@ -119,8 +113,7 @@ export function AdminDashboard() {
     if (!file) return;
     const data = new FormData();
     data.append("file", file);
-    const res = await fetch("/api/admin/media", { method: "POST", body: data });
-    const json = await res.json();
+    const json = await uploadMedia(data);
     if (json.url) {
       if (target === "article") setArticle((current) => ({ ...current, cover: json.url }));
       if (target === "product") setProduct((current) => ({ ...current, image: json.url }));
@@ -130,7 +123,7 @@ export function AdminDashboard() {
   }
 
   async function deleteMedia(file: string) {
-    await fetch(`/api/admin/media?file=${encodeURIComponent(file)}`, { method: "DELETE" });
+    await removeMedia(file);
     setNotice("Image deleted.");
     await loadAll();
   }

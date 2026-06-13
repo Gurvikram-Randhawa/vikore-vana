@@ -1,3 +1,4 @@
+import { saveArticleToGithub } from "@/lib/githubArticle";
 import { NextRequest, NextResponse } from "next/server";
 import { deleteContent, readAdminArticles, saveArticle } from "@/lib/adminContent";
 
@@ -12,7 +13,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const slug = saveArticle(await request.json());
+    const slug = await saveArticleToGithub(await request.json());
 
     return NextResponse.json({
       ok: true,

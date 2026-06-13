@@ -28,6 +28,17 @@ export async function fetchMedia() {
 export async function createArticle(input: AdminArticleInput) {
   try {
     const slug = saveArticleFile(input);
+    
+    // Also try to save to GitHub if configured
+    if (process.env.GITHUB_TOKEN) {
+      try {
+        const { saveArticleToGithub } = await import("./githubArticle");
+        await saveArticleToGithub(input);
+      } catch (ghError) {
+        console.error("Failed to save to GitHub:", ghError);
+      }
+    }
+    
     return { ok: true, slug };
   } catch (error) {
     return {
