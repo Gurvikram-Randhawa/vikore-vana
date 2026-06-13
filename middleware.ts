@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const protectedPath = request.nextUrl.pathname.startsWith("/admin") || request.nextUrl.pathname.startsWith("/api/admin");
-  if (!protectedPath) return NextResponse.next();
+  const isOldAdmin = request.nextUrl.pathname.startsWith("/old-admin");
+  const isAdminApi = request.nextUrl.pathname.startsWith("/api/admin");
+
+  if (!isOldAdmin && !isAdminApi) return NextResponse.next();
 
   const username = process.env.ADMIN_USERNAME || "admin";
   const password = process.env.ADMIN_PASSWORD || "change-me-before-launch";
@@ -25,5 +27,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin", "/admin/:path*", "/api/admin", "/api/admin/:path*"]
+  matcher: ["/old-admin", "/old-admin/:path*", "/api/admin", "/api/admin/:path*"]
 };

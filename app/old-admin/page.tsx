@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { AdminDashboard } from "@/components/AdminDashboard";
 
 export const metadata: Metadata = {
-  title: "Admin"
+  title: "Admin (Legacy)"
 };
 
-export default function AdminPage() {
+export default function OldAdminPage() {
   return <AdminDashboard />;
 }
