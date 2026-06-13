@@ -1,14 +1,21 @@
 ---
-title: "How to Style a Calm Living Room That Still Feels Expensive"
-description: "A refined approach to warm minimalism, sculptural seating, layered texture, and shoppable pieces that make the living room feel complete."
-category: "Living Room"
-date: "2026-06-01T10:00:00.000Z"
-cover: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1600&q=85"
+title: How to Style a Calm Living Room That Still Feels Expensive
+description: >-
+  A refined approach to warm minimalism, sculptural seating, layered texture,
+  and shoppable pieces that make the living room feel complete.
+category: Living Room
+date: '2026-06-01T10:00:00.000Z'
+cover: >-
+  https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1600&q=85
 featured: true
 draft: false
-seoTitle: "Calm Luxury Living Room Ideas"
-seoDescription: "Explore calm luxury living room styling ideas with warm minimalist furniture, textures, decor, and affiliate product recommendations."
-seoKeywords: "living room decor, luxury living room, warm minimalism, interior design inspiration"
+seoTitle: Calm Luxury Living Room Ideas
+seoDescription: >-
+  Explore calm luxury living room styling ideas with warm minimalist furniture,
+  textures, decor, and affiliate product recommendations.
+seoKeywords: >-
+  living room decor, luxury living room, warm minimalism, interior design
+  inspiration
 products:
   - boucle-lounge-chair
   - travertine-side-table
