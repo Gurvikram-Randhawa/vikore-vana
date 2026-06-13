@@ -27,9 +27,15 @@ export async function fetchMedia() {
 
 export async function createArticle(input: AdminArticleInput) {
   try {
+    if (process.env.VERCEL) {
+      const { saveArticleToGithub } = await import("./githubArticle");
+      const slug = await saveArticleToGithub(input);
+
+      return { ok: true, slug };
+    }
+
     const slug = saveArticleFile(input);
-    
-    // Also try to save to GitHub if configured
+
     if (process.env.GITHUB_TOKEN) {
       try {
         const { saveArticleToGithub } = await import("./githubArticle");
@@ -38,12 +44,12 @@ export async function createArticle(input: AdminArticleInput) {
         console.error("Failed to save to GitHub:", ghError);
       }
     }
-    
+
     return { ok: true, slug };
   } catch (error) {
     return {
       ok: false,
-      error: error instanceof Error ? error.message : "Unable to save article.",
+      error: error instanceof Error ? error.message : "Unable to save article."
     };
   }
 }
