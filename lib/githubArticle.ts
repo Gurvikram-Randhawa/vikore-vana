@@ -29,3 +29,12 @@ export async function saveArticleToGithub(
 
     return slug;
 }
+
+export async function deleteContentFromGithub(
+    type: "articles" | "products",
+    slug: string
+) {
+    const { deleteFile } = await import("./github");
+    const safeSlug = slugify(slug);
+    await deleteFile(`content/${type}/${safeSlug}.md`, `Delete ${type}: ${slug}`);
+}
