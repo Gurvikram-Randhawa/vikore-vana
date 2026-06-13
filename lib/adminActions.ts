@@ -9,6 +9,7 @@ import {
   listUploads,
   saveUpload as saveUploadFile,
   deleteUpload as deleteUploadFile,
+  slugify,
   type AdminArticleInput,
   type AdminProductInput,
 } from "./adminContent";
@@ -31,11 +32,11 @@ export async function fetchMedia() {
 
 export async function createArticle(input: AdminArticleInput) {
   try {
-    let slug = "";
+    let slug = input.slug || slugify(input.title);
     try {
       slug = saveArticleFile(input);
     } catch (e: any) {
-      if (e.code !== "EROFS") throw e;
+      console.warn("Local save skipped:", e.message);
     }
 
     if (process.env.GITHUB_TOKEN) {
@@ -58,11 +59,11 @@ export async function createArticle(input: AdminArticleInput) {
 
 export async function createProduct(input: AdminProductInput) {
   try {
-    let slug = "";
+    let slug = input.slug || slugify(input.name);
     try {
       slug = saveProductFile(input);
     } catch (e: any) {
-      if (e.code !== "EROFS") throw e;
+      console.warn("Local product save skipped:", e.message);
     }
 
     if (process.env.GITHUB_TOKEN) {
@@ -91,7 +92,7 @@ export async function removeContent(
   try {
     deleteContent(type, slug);
   } catch (e: any) {
-    if (e.code !== "EROFS") throw e;
+    console.warn("Local delete skipped:", e.message);
   }
 
   if (process.env.GITHUB_TOKEN) {
@@ -114,7 +115,7 @@ export async function uploadMedia(formData: FormData) {
   try {
     url = await saveUploadFile(file);
   } catch (e: any) {
-    if (e.code !== "EROFS") throw e;
+    console.warn("Local media save skipped:", e.message);
   }
 
   if (process.env.GITHUB_TOKEN) {
@@ -133,7 +134,7 @@ export async function removeMedia(filePath: string) {
   try {
     deleteUploadFile(filePath);
   } catch (e: any) {
-    if (e.code !== "EROFS") throw e;
+    console.warn("Local media delete skipped:", e.message);
   }
 
   if (process.env.GITHUB_TOKEN) {

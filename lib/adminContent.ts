@@ -143,28 +143,3 @@ export function deleteUpload(publicPath: string) {
   const file = path.join(uploadDir, name);
   if (file.startsWith(uploadDir) && fs.existsSync(file)) fs.unlinkSync(file);
 }
-export async function createOrUpdateFile(
-  filePath: string,
-  content: string,
-  message: string
-) {
-  let sha: string | undefined;
-
-  try {
-    const existing = await githubRequest(`/contents/${filePath}`);
-    sha = existing.sha;
-  } catch {
-    // file does not exist yet
-  }
-
-  const body = {
-    message,
-    content: Buffer.from(content).toString("base64"),
-    ...(sha ? { sha } : {})
-  };
-
-  return githubRequest(`/contents/${filePath}`, {
-    method: "PUT",
-    body: JSON.stringify(body)
-  });
-}
