@@ -66,19 +66,27 @@ export async function GET(request: NextRequest) {
   <script>
     (function() {
       function sendMessage(message) {
-        var target = window.opener || window.parent;
+        var target = window.opener || window.parent || window;
+        var origin = target === window ? window.location.origin : '*';
         target.postMessage(
           'authorization:github:' + message.type + ':' + JSON.stringify(message.content),
-          window.location.origin
+          origin
         );
       }
 
+      var messageType = '${messageType}';
+      var content = ${JSON.stringify(content)};
+
       sendMessage({
-        type: '${messageType}',
-        content: ${JSON.stringify(content)}
+        type: messageType,
+        content: content
       });
 
-      setTimeout(function() { window.close(); }, 1000);
+      if (messageType === 'error') {
+        document.body.innerHTML = '<p>Authentication Error: ' + (content.error || 'Unknown error') + '</p><p>Please close this window and try again.</p>';
+      } else {
+        setTimeout(function() { window.close(); }, 1000);
+      }
     })();
   </script>
   <p>Authorizing with GitHub... This window will close automatically.</p>
