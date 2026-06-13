@@ -31,18 +31,19 @@ export async function fetchMedia() {
 
 export async function createArticle(input: AdminArticleInput) {
   try {
-    if (process.env.VERCEL) {
-      const slug = await saveArticleToGithub(input);
-      return { ok: true, slug };
+    let slug = "";
+    try {
+      slug = saveArticleFile(input);
+    } catch (e: any) {
+      if (e.code !== "EROFS") throw e;
     }
-
-    const slug = saveArticleFile(input);
 
     if (process.env.GITHUB_TOKEN) {
       try {
-        await saveArticleToGithub(input);
+        slug = await saveArticleToGithub(input);
       } catch (ghError) {
         console.error("Failed to save to GitHub:", ghError);
+        if (!slug) throw ghError;
       }
     }
 
@@ -57,18 +58,19 @@ export async function createArticle(input: AdminArticleInput) {
 
 export async function createProduct(input: AdminProductInput) {
   try {
-    if (process.env.VERCEL) {
-      const slug = await saveProductToGithub(input);
-      return { ok: true, slug };
+    let slug = "";
+    try {
+      slug = saveProductFile(input);
+    } catch (e: any) {
+      if (e.code !== "EROFS") throw e;
     }
-
-    const slug = saveProductFile(input);
 
     if (process.env.GITHUB_TOKEN) {
       try {
-        await saveProductToGithub(input);
+        slug = await saveProductToGithub(input);
       } catch (ghError) {
         console.error("Failed to save to GitHub:", ghError);
+        if (!slug) throw ghError;
       }
     }
 
@@ -86,12 +88,11 @@ export async function removeContent(
   type: "articles" | "products",
   slug: string
 ) {
-  if (process.env.VERCEL) {
-    await deleteContentFromGithub(type, slug);
-    return { ok: true };
+  try {
+    deleteContent(type, slug);
+  } catch (e: any) {
+    if (e.code !== "EROFS") throw e;
   }
-
-  deleteContent(type, slug);
 
   if (process.env.GITHUB_TOKEN) {
     try {
@@ -109,18 +110,19 @@ export async function uploadMedia(formData: FormData) {
   if (!(file instanceof File))
     return { ok: false, error: "Missing file.", url: "" };
 
-  if (process.env.VERCEL) {
-    const url = await saveUploadToGithub(file);
-    return { ok: true, url };
+  let url = "";
+  try {
+    url = await saveUploadFile(file);
+  } catch (e: any) {
+    if (e.code !== "EROFS") throw e;
   }
-
-  const url = await saveUploadFile(file);
 
   if (process.env.GITHUB_TOKEN) {
     try {
-      await saveUploadToGithub(file);
+      url = await saveUploadToGithub(file);
     } catch (ghError) {
       console.error("Failed to upload to GitHub:", ghError);
+      if (!url) return { ok: false, error: "Failed to upload to GitHub" };
     }
   }
 
@@ -128,12 +130,11 @@ export async function uploadMedia(formData: FormData) {
 }
 
 export async function removeMedia(filePath: string) {
-  if (process.env.VERCEL) {
-    await deleteUploadFromGithub(filePath);
-    return { ok: true };
+  try {
+    deleteUploadFile(filePath);
+  } catch (e: any) {
+    if (e.code !== "EROFS") throw e;
   }
-
-  deleteUploadFile(filePath);
 
   if (process.env.GITHUB_TOKEN) {
     try {
