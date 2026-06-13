@@ -1,3 +1,4 @@
+import { githubRequest } from "@/lib/github";
 import { NextRequest, NextResponse } from "next/server";
 import { deleteContent, readAdminArticles, saveArticle } from "@/lib/adminContent";
 
@@ -5,7 +6,22 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return NextResponse.json({ articles: readAdminArticles() });
+  try {
+    const data = await githubRequest("/contents/content/articles");
+
+    return NextResponse.json({
+      ok: true,
+      files: Array.isArray(data)
+        ? data.map((item: any) => item.name)
+        : []
+    });
+  } catch (error) {
+    return NextResponse.json({
+      ok: false,
+      error: error instanceof Error ? error.message : "GitHub error"
+    });
+  }
+
 }
 
 export async function POST(request: NextRequest) {
