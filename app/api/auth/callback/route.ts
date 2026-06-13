@@ -65,27 +65,28 @@ export async function GET(request: NextRequest) {
 <body>
   <script>
     (function() {
-      function sendMessage(message) {
-        var target = window.opener || window.parent || window;
-        var origin = target === window ? window.location.origin : '*';
-        target.postMessage(
-          'authorization:github:' + message.type + ':' + JSON.stringify(message.content),
-          origin
-        );
-      }
-
-      var messageType = '${messageType}';
-      var content = ${JSON.stringify(content)};
-
-      sendMessage({
-        type: messageType,
-        content: content
-      });
-
-      if (messageType === 'error') {
-        document.body.innerHTML = '<p>Authentication Error: ' + (content.error || 'Unknown error') + '</p><p>Please close this window and try again.</p>';
+      if (window.opener) {
+        var receiveMessage = function(e) {
+          window.removeEventListener("message", receiveMessage, false);
+          
+          var messageType = '${messageType}';
+          var content = ${JSON.stringify(content)};
+          var origin = e.origin === 'null' ? '*' : e.origin;
+          var message = 'authorization:github:' + messageType + ':' + JSON.stringify(content);
+          
+          window.opener.postMessage(message, origin);
+          
+          if (messageType === 'error') {
+            document.body.innerHTML = '<p>Authentication Error: ' + (content.error || 'Unknown error') + '</p><p>Please close this window and try again.</p>';
+          } else {
+            setTimeout(function() { window.close(); }, 1000);
+          }
+        };
+        
+        window.addEventListener("message", receiveMessage, false);
+        window.opener.postMessage("authorizing:github", "*");
       } else {
-        setTimeout(function() { window.close(); }, 1000);
+        document.body.innerHTML = '<p>Authentication Error: No parent window found.</p><p>Please close this window and try again.</p>';
       }
     })();
   </script>
