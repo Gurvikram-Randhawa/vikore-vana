@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { FeaturedArticlesList } from "@/components/FeaturedArticlesList";
-import { ProductCard } from "@/components/ProductCard";
+import { TrendingProductsCarousel } from "@/components/TrendingProductsCarousel";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { getArticles, getProducts } from "@/lib/content";
 import { categorySlug, site } from "@/lib/site";
@@ -59,13 +59,7 @@ export default function HomePage() {
             </div>
             <Link href="/products" className="hidden text-sm font-medium text-cedar sm:inline">Shop all</Link>
           </div>
-          <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar">
-            {products.map((product) => (
-              <div key={product.slug} className="w-full shrink-0 snap-start sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)]">
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
+          <TrendingProductsCarousel products={products} />
         </div>
       </section>
 
