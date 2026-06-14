@@ -31,6 +31,7 @@ export type Product = {
   image: string;
   affiliate: string;
   featured?: boolean;
+  date?: string;
   body?: string;
 };
 
@@ -80,8 +81,14 @@ export function getProducts() {
     image: String(data.image || ""),
     affiliate: String(data.affiliate || "#"),
     featured: Boolean(data.featured),
+    date: data.date ? String(data.date) : "",
     body
-  })).sort((a, b) => a.name.localeCompare(b.name));
+  })).sort((a, b) => {
+    if (!a.date && !b.date) return a.name.localeCompare(b.name);
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return Number(new Date(b.date)) - Number(new Date(a.date));
+  });
 }
 
 export function getRelatedArticles(article: Article, limit = 3) {

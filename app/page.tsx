@@ -18,7 +18,7 @@ export default function HomePage() {
     ...articles.filter((a) => a.featured),
     ...articles.filter((a) => !a.featured),
   ];
-  const trending = products.filter((product) => product.featured).slice(0, 4);
+
 
   return (
     <>
@@ -59,8 +59,12 @@ export default function HomePage() {
             </div>
             <Link href="/products" className="hidden text-sm font-medium text-cedar sm:inline">Shop all</Link>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {trending.map((product) => <ProductCard key={product.slug} product={product} />)}
+          <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar">
+            {products.map((product) => (
+              <div key={product.slug} className="min-w-[280px] sm:min-w-[320px] snap-start shrink-0">
+                <ProductCard product={product} />
+              </div>
+            ))}
           </div>
         </div>
       </section>
