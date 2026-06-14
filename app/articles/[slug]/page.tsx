@@ -78,8 +78,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <span className="mx-2">/</span>
             <span>{article.category}</span>
           </nav>
-          <div className="overflow-hidden rounded-lg bg-bone">
-            <Image src={article.cover} alt="" width={0} height={0} sizes="100vw" style={{ width: '100%', height: 'auto' }} priority />
+          <div className="mx-auto flex justify-center overflow-hidden rounded-lg bg-bone md:max-w-4xl">
+            <Image 
+              src={article.cover} 
+              alt="" 
+              width={0} 
+              height={0} 
+              sizes="100vw" 
+              style={{ width: '100%', height: 'auto', maxHeight: '75vh', objectFit: 'contain' }} 
+              priority 
+            />
           </div>
           <div className="mx-auto mt-10 max-w-3xl">
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-cedar">{article.category}</p>
