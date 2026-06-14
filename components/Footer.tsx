@@ -4,13 +4,13 @@ import { site } from "@/lib/site";
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-black/5 bg-linen py-12 dark:border-white/10 dark:bg-[#201d1a]">
-      <div className="container-premium grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+    <footer className="mt-16 md:mt-24 border-t border-black/5 bg-linen py-8 md:py-12 dark:border-white/10 dark:bg-[#201d1a]">
+      <div className="container-premium grid gap-8 md:gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <Link href="/" className="font-serif text-3xl text-ink dark:text-linen">
+          <Link href="/" className="font-serif text-2xl md:text-3xl text-ink dark:text-linen">
             Vikore Vana
           </Link>
-          <p className="mt-4 max-w-sm text-sm leading-7 text-smoke dark:text-bone">
+          <p className="mt-3 md:mt-4 max-w-sm text-xs md:text-sm leading-relaxed md:leading-7 text-smoke dark:text-bone">
             Curated interiors, small-space ideas, and affiliate furniture edits for a calmer, more beautiful home.
           </p>
         </div>
@@ -18,7 +18,7 @@ export function Footer() {
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-cedar">Explore</p>
           <div className="grid gap-3">
             {site.nav.map((item) => (
-              <Link key={item.href} href={item.href} className="text-sm text-smoke hover:text-ink dark:text-bone dark:hover:text-white">
+              <Link key={item.href} href={item.href} className="text-xs md:text-sm text-smoke hover:text-ink dark:text-bone dark:hover:text-white">
                 {item.label}
               </Link>
             ))}

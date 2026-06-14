@@ -70,18 +70,30 @@ body {
 }
 
 .prose-vana h2 {
-  margin-top: 2.5rem;
+  margin-top: 1.5rem;
   margin-bottom: 1rem;
   font-family: var(--font-playfair), Georgia, serif;
-  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-size: clamp(1.5rem, 4vw, 3.4rem);
   line-height: 1.05;
+}
+
+@media (min-width: 768px) {
+  .prose-vana h2 {
+    margin-top: 2.5rem;
+  }
 }
 
 .prose-vana p {
   margin-block: 1.15rem;
   color: #504b45;
-  font-size: 1.075rem;
-  line-height: 1.9;
+  font-size: clamp(0.95rem, 2vw, 1.075rem);
+  line-height: 1.8;
+}
+
+@media (min-width: 768px) {
+  .prose-vana p {
+    line-height: 1.9;
+  }
 }
 
 .dark .prose-vana p {

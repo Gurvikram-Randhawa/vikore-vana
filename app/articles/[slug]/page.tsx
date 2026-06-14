@@ -70,7 +70,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <ReadingProgress />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <article>
-        <section className="container-premium py-8 md:py-12">
+        <section className="container-premium py-6 md:py-12">
           <nav className="mb-6 text-sm text-smoke dark:text-bone">
             <Link href="/" className="hover:text-ink dark:hover:text-white">Home</Link>
             <span className="mx-2">/</span>
@@ -89,10 +89,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               priority 
             />
           </div>
-          <div className="mx-auto mt-10 max-w-3xl">
+          <div className="mx-auto mt-6 md:mt-10 max-w-3xl">
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-cedar">{article.category}</p>
-            <h1 className="font-serif text-5xl leading-[1.02] text-ink md:text-7xl dark:text-linen">{article.title}</h1>
-            <p className="mt-6 text-lg leading-9 text-smoke dark:text-bone">{article.description}</p>
+            <h1 className="font-serif text-4xl leading-[1.02] text-ink md:text-5xl lg:text-7xl dark:text-linen">{article.title}</h1>
+            <p className="mt-4 md:mt-6 text-base md:text-lg leading-relaxed md:leading-9 text-smoke dark:text-bone">{article.description}</p>
             <div className="mt-7">
               <ShareButtons title={article.title} url={url} image={article.cover} />
             </div>
@@ -106,7 +106,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
           </div>
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <h2 className="mb-5 font-serif text-3xl text-ink dark:text-linen">Recommended Products</h2>
+            <h2 className="mb-4 md:mb-5 font-serif text-2xl md:text-3xl text-ink dark:text-linen">Recommended Products</h2>
             <div className="grid gap-5">
               {products.map((product) => <ProductCard key={product.slug} product={product} />)}
             </div>
@@ -114,8 +114,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </section>
       </article>
 
-      <section className="container-premium py-16">
-        <h2 className="mb-8 font-serif text-4xl text-ink md:text-5xl dark:text-linen">Related Articles</h2>
+      <section className="container-premium py-10 md:py-16">
+        <h2 className="mb-6 md:mb-8 font-serif text-3xl md:text-4xl lg:text-5xl text-ink dark:text-linen">Related Articles</h2>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {related.map((item) => <ArticleCard key={item.slug} article={item} />)}
         </div>

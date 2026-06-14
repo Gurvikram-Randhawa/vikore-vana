@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 
 export default function CategoriesPage() {
   return (
-    <section className="container-premium py-12 md:py-16">
+    <section className="container-premium py-8 md:py-16">
       <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-cedar">Browse by mood and room</p>
-      <h1 className="mb-6 max-w-3xl font-serif text-5xl leading-tight text-ink md:text-7xl dark:text-linen">Interior ideas shaped for real homes.</h1>
-      <p className="mb-10 max-w-2xl text-base leading-8 text-smoke dark:text-bone">Filter room guides, furniture edits, and decor inspiration for apartments, houses, and calm everyday rituals.</p>
+      <h1 className="mb-4 md:mb-6 max-w-3xl font-serif text-4xl leading-tight text-ink md:text-5xl lg:text-7xl dark:text-linen">Interior ideas shaped for real homes.</h1>
+      <p className="mb-8 md:mb-10 max-w-2xl text-sm md:text-base leading-relaxed md:leading-8 text-smoke dark:text-bone">Filter room guides, furniture edits, and decor inspiration for apartments, houses, and calm everyday rituals.</p>
       <FilteredArticles articles={getArticles()} />
     </section>
   );
