@@ -60,6 +60,11 @@ export default function HomePage() {
             <Link href="/products" className="hidden text-sm font-medium text-cedar sm:inline">Shop all</Link>
           </div>
           <TrendingProductsCarousel products={products} />
+          <div className="mt-8 flex justify-center sm:hidden">
+            <Link href="/products" className="rounded-full bg-ink px-6 py-2.5 text-sm font-medium text-white transition hover:bg-cedar dark:bg-white dark:text-ink dark:hover:bg-bone">
+              Shop More
+            </Link>
+          </div>
         </div>
       </section>
 
