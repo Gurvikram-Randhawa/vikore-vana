@@ -61,7 +61,7 @@ export default function HomePage() {
           </div>
           <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar">
             {products.map((product) => (
-              <div key={product.slug} className="min-w-[280px] sm:min-w-[320px] snap-start shrink-0">
+              <div key={product.slug} className="w-full shrink-0 snap-start sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)]">
                 <ProductCard product={product} />
               </div>
             ))}
