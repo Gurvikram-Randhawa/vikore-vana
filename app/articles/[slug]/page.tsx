@@ -78,8 +78,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <span className="mx-2">/</span>
             <span>{article.category}</span>
           </nav>
-          <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-bone md:aspect-[16/8]">
-            <Image src={article.cover} alt="" fill priority sizes="100vw" className="object-cover" />
+          <div className="overflow-hidden rounded-lg bg-bone">
+            <Image src={article.cover} alt="" width={0} height={0} sizes="100vw" style={{ width: '100%', height: 'auto' }} priority />
           </div>
           <div className="mx-auto mt-10 max-w-3xl">
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-cedar">{article.category}</p>
