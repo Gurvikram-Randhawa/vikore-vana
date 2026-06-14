@@ -42,22 +42,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="container-premium py-10">
-        <div className="mb-8 flex items-end justify-between gap-5">
-          <h2 className="font-serif text-4xl text-ink md:text-5xl dark:text-linen">Featured Categories</h2>
-          <Link href="/categories" className="hidden text-sm font-medium text-cedar sm:inline">View all</Link>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {site.categoryTiles.map((category) => (
-            <Link key={category} href={category === "Shop All Products" ? "/products" : `/categories?category=${categorySlug(category)}`} className="group rounded-lg border border-black/5 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-soft dark:border-white/10 dark:bg-white/5">
-              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-cedar">Vikore Edit</span>
-              <h3 className="mt-4 font-serif text-3xl text-ink dark:text-linen">{category}</h3>
-              <p className="mt-3 text-sm leading-7 text-smoke dark:text-bone">{category === "Shop All Products" ? "Browse every curated affiliate find in one polished collection." : "Fresh inspiration, product finds, and refined styling ideas."}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
       <section className="container-premium py-12">
         <div className="mb-8">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-cedar">Latest Guides</p>
@@ -78,6 +62,22 @@ export default function HomePage() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {trending.map((product) => <ProductCard key={product.slug} product={product} />)}
           </div>
+        </div>
+      </section>
+
+      <section className="container-premium py-10">
+        <div className="mb-8 flex items-end justify-between gap-5">
+          <h2 className="font-serif text-4xl text-ink md:text-5xl dark:text-linen">Featured Categories</h2>
+          <Link href="/categories" className="hidden text-sm font-medium text-cedar sm:inline">View all</Link>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {site.categoryTiles.map((category) => (
+            <Link key={category} href={category === "Shop All Products" ? "/products" : `/categories?category=${categorySlug(category)}`} className="group rounded-lg border border-black/5 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-soft dark:border-white/10 dark:bg-white/5">
+              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-cedar">Vikore Edit</span>
+              <h3 className="mt-4 font-serif text-3xl text-ink dark:text-linen">{category}</h3>
+              <p className="mt-3 text-sm leading-7 text-smoke dark:text-bone">{category === "Shop All Products" ? "Browse every curated affiliate find in one polished collection." : "Fresh inspiration, product finds, and refined styling ideas."}</p>
+            </Link>
+          ))}
         </div>
       </section>
 
