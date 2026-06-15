@@ -30,15 +30,15 @@ export function NewsletterForm() {
 
   if (status === "success") {
     return (
-      <div className="mx-auto mt-8 flex max-w-xl flex-col items-center justify-center p-4">
-        <p className="text-white font-medium text-lg">Thank you for subscribing!</p>
-        <p className="text-white/80 text-sm mt-2">You've been added to our list.</p>
+      <div className="mx-auto mt-8 flex w-full flex-col items-start justify-center p-4 md:items-center">
+        <p className="text-lg font-medium text-ink dark:text-linen">Thank you for subscribing!</p>
+        <p className="mt-2 text-sm text-smoke dark:text-bone">You've been added to our list.</p>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto mt-8 max-w-xl relative">
+    <div className="relative mt-8 w-full">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
         <input 
           type="email" 
@@ -46,18 +46,18 @@ export function NewsletterForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email address" 
-          className="min-h-12 flex-1 rounded-full border border-white/20 bg-white px-5 text-sm text-ink outline-none disabled:opacity-50" 
+          className="min-h-12 flex-1 rounded-full border border-black/10 bg-white px-5 text-sm text-ink outline-none transition focus:border-cedar focus:ring-1 focus:ring-cedar disabled:opacity-50 dark:border-white/10 dark:bg-[#201d1a] dark:text-linen dark:focus:border-bone dark:focus:ring-bone" 
           disabled={status === "loading"}
         />
         <button 
           type="submit" 
           disabled={status === "loading"}
-          className="min-h-12 rounded-full bg-cedar px-6 text-sm font-medium text-white disabled:opacity-50 transition hover:bg-white hover:text-cedar dark:hover:bg-ink dark:hover:text-white"
+          className="min-h-12 rounded-full bg-ink px-6 text-sm font-medium text-white transition hover:bg-cedar disabled:opacity-50 dark:bg-linen dark:text-ink dark:hover:bg-bone shrink-0"
         >
           {status === "loading" ? "Subscribing..." : "Subscribe"}
         </button>
       </form>
-      {status === "error" && <p className="text-red-300 text-sm mt-3">Something went wrong. Please try again.</p>}
+      {status === "error" && <p className="mt-3 text-sm text-red-500 dark:text-red-400">Something went wrong. Please try again.</p>}
     </div>
   );
 }

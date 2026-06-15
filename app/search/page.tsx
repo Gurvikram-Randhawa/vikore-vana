@@ -13,7 +13,7 @@ export default function SearchPage() {
   return (
     <section className="container-premium py-12 md:py-16">
       <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-cedar">Search</p>
-      <h1 className="mb-12 max-w-3xl font-serif text-5xl leading-tight text-ink md:text-7xl dark:text-linen">Find your next room idea.</h1>
+      <h1 className="mb-10 max-w-3xl font-serif text-4xl leading-tight text-ink md:text-5xl dark:text-linen">Find your next room idea.</h1>
       <h2 className="mb-6 font-serif text-4xl text-ink dark:text-linen">Articles</h2>
       <FilteredArticles articles={getArticles()} />
       <h2 className="mb-6 mt-16 font-serif text-4xl text-ink dark:text-linen">Products</h2>
