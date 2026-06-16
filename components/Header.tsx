@@ -55,7 +55,7 @@ export function Header() {
         {/* Center: Nav */}
         <div className="flex w-full items-center justify-center gap-8 overflow-x-auto border-t border-black/5 pt-2 no-scrollbar sm:gap-12 md:w-auto md:border-none md:pt-0 md:gap-7 dark:border-white/10">
           {site.nav.map((item) => (
-            <Link key={item.href} href={item.href} className="text-xs md:text-sm font-medium whitespace-nowrap text-smoke transition hover:text-ink dark:text-bone dark:hover:text-white">
+            <Link key={item.href} href={item.href} className="link-underline text-xs md:text-sm font-medium whitespace-nowrap text-smoke transition hover:text-ink dark:text-bone dark:hover:text-white">
               {item.label}
             </Link>
           ))}

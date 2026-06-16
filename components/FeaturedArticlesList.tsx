@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArticleCard } from "@/components/ArticleCard";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import type { Article } from "@/lib/content";
 
 export function FeaturedArticlesList({ articles }: { articles: Article[] }) {
@@ -10,10 +11,12 @@ export function FeaturedArticlesList({ articles }: { articles: Article[] }) {
   return (
     <>
       <div className="grid gap-6 sm:grid-cols-2">
-        {articles.slice(0, visibleCount).map((article) => (
-          <div key={article.slug} className="rounded-xl bg-white dark:bg-white/5 shadow-soft border border-gray-100 dark:border-white/10 p-4">
-            <ArticleCard article={article} large />
-          </div>
+        {articles.slice(0, visibleCount).map((article, index) => (
+          <ScrollReveal key={article.slug} delay={index * 100} distance={40}>
+            <div className="rounded-xl bg-white dark:bg-white/5 shadow-soft border border-gray-100 dark:border-white/10 p-4 h-full">
+              <ArticleCard article={article} large />
+            </div>
+          </ScrollReveal>
         ))}
       </div>
       {visibleCount < articles.length && (

@@ -65,6 +65,202 @@ body {
   }
 }
 
+/* ── Premium Hero Animations ──────────────────────────── */
+
+.hero-stagger > * {
+  opacity: 0;
+  transform: translateY(28px);
+  animation: heroSlideUp 800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-stagger > *:nth-child(1) { animation-delay: 100ms; }
+.hero-stagger > *:nth-child(2) { animation-delay: 280ms; }
+.hero-stagger > *:nth-child(3) { animation-delay: 440ms; }
+.hero-stagger > *:nth-child(4) { animation-delay: 600ms; }
+
+@keyframes heroSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-image-reveal {
+  animation: heroImageReveal 1200ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both;
+}
+
+@keyframes heroImageReveal {
+  from {
+    opacity: 0;
+    transform: scale(1.06) translateY(16px);
+    clip-path: inset(8% 8% 8% 8% round 8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    clip-path: inset(0% 0% 0% 0% round 8px);
+  }
+}
+
+/* ── Animated Underline for Links ─────────────────────── */
+
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #9A7B5D;
+  transition: width 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* ── Premium Section Divider ──────────────────────────── */
+
+.section-line {
+  width: 48px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, #9A7B5D, transparent);
+  margin: 0 auto 1.5rem;
+  animation: lineExpand 1000ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes lineExpand {
+  from { width: 0; opacity: 0; }
+  to { width: 48px; opacity: 1; }
+}
+
+/* ── Shimmer Effect for Buttons ───────────────────────── */
+
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 600ms ease;
+}
+
+.btn-shimmer:hover::before {
+  transform: translateX(100%);
+}
+
+/* ── Glow Ring on Focus / Hover for Inputs ────────────── */
+
+.glow-ring:focus-within {
+  box-shadow: 0 0 0 3px rgba(154, 123, 93, 0.18);
+  transition: box-shadow 300ms ease;
+}
+
+/* ── Card Hover Glow ──────────────────────────────────── */
+
+.card-hover-glow {
+  transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hover-glow:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(42, 37, 32, 0.1),
+              0 0 0 1px rgba(154, 123, 93, 0.08);
+}
+
+.dark .card-hover-glow:hover {
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3),
+              0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* ── Image Zoom Container ─────────────────────────────── */
+
+.img-zoom-container {
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.img-zoom-container img {
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1),
+              filter 700ms ease;
+}
+
+.img-zoom-container:hover img {
+  transform: scale(1.05);
+}
+
+/* ── Floating Badge Animation ─────────────────────────── */
+
+.float-badge {
+  animation: floatBadge 3s ease-in-out infinite alternate;
+}
+
+@keyframes floatBadge {
+  from { transform: translateY(0); }
+  to { transform: translateY(-6px); }
+}
+
+/* ── Smooth Page Transitions ──────────────────────────── */
+
+main {
+  animation: pageEnter 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Premium Category Tile Arrow ──────────────────────── */
+
+.category-tile .tile-arrow {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.category-tile:hover .tile-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.category-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(154, 123, 93, 0.03), transparent);
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.category-tile:hover::before {
+  opacity: 1;
+}
+
+/* ── Prose Styles ─────────────────────────────────────── */
+
 .prose-vana {
   color: inherit;
 }
@@ -112,3 +308,4 @@ body {
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
+

@@ -100,11 +100,11 @@ export function TrendingProductsCarousel({ products }: { products: Product[] }) 
     <div className="relative">
       <div 
         ref={containerRef}
-        className="flex gap-5 overflow-x-auto pb-6 no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing"
+        className="flex gap-5 overflow-x-auto pb-20 no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing"
         style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}
       >
         {products.map((product) => (
-          <div key={product.slug} className="w-[85vw] shrink-0 sm:w-[calc(50%-10px)] lg:w-[calc(25%-15px)] snap-start">
+          <div key={product.slug} className="flex flex-col w-[85vw] shrink-0 sm:w-[calc(50%-10px)] lg:w-[calc(25%-15px)] snap-start">
             <ProductCard product={product} />
           </div>
         ))}
