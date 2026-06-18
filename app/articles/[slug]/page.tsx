@@ -7,6 +7,7 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { ProductCard } from "@/components/ProductCard";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { ShareButtons } from "@/components/ShareButtons";
+import { AmbientBackground } from "@/components/AmbientBackground";
 import { getArticle, getArticleProducts, getArticles, getRelatedArticles } from "@/lib/content";
 import { site } from "@/lib/site";
 
@@ -67,6 +68,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   return (
     <>
+      <AmbientBackground />
       <ReadingProgress />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <article>
