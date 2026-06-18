@@ -1,4 +1,5 @@
 ---
+date: 2026-06-18T19:11:20+05:30
 name: Toaster Lamp
 description: Desk Decor Toaster Lamp, Rechargeable Small Lamp with Smile Face
   Toast Bread Cute Toaster Shape Room Decor Night Light for Bedroom

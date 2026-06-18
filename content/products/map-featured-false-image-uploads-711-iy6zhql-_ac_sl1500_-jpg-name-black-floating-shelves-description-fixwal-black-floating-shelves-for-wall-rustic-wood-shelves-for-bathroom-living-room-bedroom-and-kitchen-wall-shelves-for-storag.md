@@ -1,4 +1,5 @@
 ---
+date: 2026-06-14T22:10:18+05:30
 name: Black Floating Shelves
 description: Fixwal Black Floating Shelves for Wall, Rustic Wood Shelves for
   Bathroom, Living Room, Bedroom and Kitchen, Wall Shelves for Storage, Books,

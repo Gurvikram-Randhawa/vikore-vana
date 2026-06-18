@@ -41,7 +41,7 @@ collections:
     summary: "{{name}} — {{category}}"
     fields:
       - { label: Product Name, name: name, widget: string }
-      - { label: Date Added, name: date, widget: datetime, required: false }
+      - { label: Date Added, name: date, widget: datetime, required: true }
       - { label: Product Description, name: description, widget: text }
       - { label: Product Image Upload, name: image, widget: image }
       - { label: Affiliate Link, name: affiliate, widget: string }

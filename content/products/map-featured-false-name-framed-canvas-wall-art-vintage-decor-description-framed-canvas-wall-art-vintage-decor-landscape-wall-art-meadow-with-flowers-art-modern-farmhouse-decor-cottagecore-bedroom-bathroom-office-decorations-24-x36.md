@@ -1,4 +1,5 @@
 ---
+date: 2026-06-15T10:52:49+05:30
 name: Framed Canvas Wall Art Vintage Decor
 description: Framed Canvas Wall Art Vintage Decor, Landscape Wall Art, Meadow
   with Flowers Art, Modern Farmhouse Decor, Cottagecore Bedroom Bathroom Office

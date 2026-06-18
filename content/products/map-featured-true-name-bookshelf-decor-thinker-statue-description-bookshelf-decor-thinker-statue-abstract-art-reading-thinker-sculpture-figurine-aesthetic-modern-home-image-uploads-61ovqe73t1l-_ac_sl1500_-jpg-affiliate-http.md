@@ -1,4 +1,5 @@
 ---
+date: 2026-06-18T19:04:47+05:30
 name: Bookshelf Decor Thinker Statue
 description: Bookshelf Decor Thinker Statue - Abstract Art Reading Thinker
   Sculpture Figurine Aesthetic, Modern Home

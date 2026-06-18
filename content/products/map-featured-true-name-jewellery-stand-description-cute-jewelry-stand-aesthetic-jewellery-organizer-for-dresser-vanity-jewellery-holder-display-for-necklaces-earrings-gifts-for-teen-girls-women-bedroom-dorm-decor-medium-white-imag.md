@@ -1,4 +1,5 @@
 ---
+date: 2026-06-18T19:21:14+05:30
 name: Jewellery Stand
 description: Cute Jewelry Stand, Aesthetic Jewellery Organizer for Dresser
   Vanity, Jewellery Holder Display for Necklaces Earrings, Gifts for Teen Girls

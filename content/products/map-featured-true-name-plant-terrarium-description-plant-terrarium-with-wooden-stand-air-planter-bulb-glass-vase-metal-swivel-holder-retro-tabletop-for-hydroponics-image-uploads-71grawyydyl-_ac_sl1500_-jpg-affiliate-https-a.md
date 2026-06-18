@@ -1,4 +1,5 @@
 ---
+date: 2026-06-18T19:49:51+05:30
 name: Plant Terrarium
 description: Plant Terrarium with Wooden Stand, Air Planter Bulb Glass Vase
   Metal Swivel Holder Retro Tabletop for Hydroponics

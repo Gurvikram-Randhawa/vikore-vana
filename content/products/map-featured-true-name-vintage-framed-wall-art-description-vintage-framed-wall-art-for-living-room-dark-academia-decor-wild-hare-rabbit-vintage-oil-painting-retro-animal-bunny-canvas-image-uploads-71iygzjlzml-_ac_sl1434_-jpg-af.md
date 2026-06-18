@@ -1,4 +1,5 @@
 ---
+date: 2026-06-18T19:55:24+05:30
 name: Vintage Framed Wall Art
 description: Vintage Framed Wall Art for Living Room, Dark Academia Decor Wild
   Hare Rabbit Vintage Oil Painting, Retro Animal Bunny Canvas

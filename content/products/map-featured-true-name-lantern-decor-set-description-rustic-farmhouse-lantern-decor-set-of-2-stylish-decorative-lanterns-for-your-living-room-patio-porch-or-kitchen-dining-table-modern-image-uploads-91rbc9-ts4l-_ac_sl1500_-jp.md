@@ -1,4 +1,5 @@
 ---
+date: 2026-06-18T19:51:24+05:30
 name: Lantern Decor Set
 description: Rustic Farmhouse Lantern Decor Set of 2 - Stylish Decorative
   Lanterns for Your Living Room, Patio & Porch or Kitchen Dining Table - Modern

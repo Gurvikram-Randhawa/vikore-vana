@@ -1,4 +1,5 @@
 ---
+date: 2026-06-18T19:18:35+05:30
 name: Boho Hanging Wall Baskets
 description: >
   Honeydak Boho Decor Hanging Wall Baskets for Kitchen 3 Pack Teardrop Baskets
