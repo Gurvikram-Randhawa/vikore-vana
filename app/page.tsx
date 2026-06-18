@@ -106,7 +106,7 @@ export default function HomePage() {
 
             return (
               <ScrollReveal key={category} delay={i * 80} distance={35}>
-                <Link href={category === "Shop All Products" ? "/products" : `/categories?category=${categorySlug(category)}`} className="category-tile card-hover-glow relative group flex flex-col justify-between rounded-xl border border-black/5 bg-white p-5 md:p-7 shadow-sm dark:border-white/10 dark:bg-white/5">
+                <Link href={category === "Shop All Products" ? "/products" : `/search?category=${categorySlug(category)}`} className="category-tile card-hover-glow relative group flex flex-col justify-between rounded-xl border border-black/5 bg-white p-5 md:p-7 shadow-sm dark:border-white/10 dark:bg-white/5">
                   <div className="flex items-start justify-between">
                     <div>
                       <span className="text-xs font-semibold uppercase tracking-[0.24em] text-cedar">Vikore Edit</span>
