@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Search, Grid2x2, Sofa, BedDouble, Coffee, Monitor, TreePine, Sparkles, Lamp, Package, Armchair, Bath, BoxSelect, Droplets } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -17,6 +17,27 @@ function matches(item: Item, query: string, category: string) {
   const categoryMatch = category === "all" || categorySlug(item.category) === category;
   return categoryMatch && haystack.includes(query.toLowerCase());
 }
+
+function getCategoryIcon(category: string) {
+  switch (category.toLowerCase()) {
+    case "living room": return <Sofa size={15} />;
+    case "bedroom": return <BedDouble size={15} />;
+    case "kitchen": 
+    case "dining": return <Coffee size={15} />;
+    case "bathroom": return <Droplets size={15} />;
+    case "small spaces": return <BoxSelect size={15} />;
+    case "office": return <Monitor size={15} />;
+    case "outdoor": return <TreePine size={15} />;
+    case "luxury decor":
+    case "decor":
+    case "home decor": return <Sparkles size={15} />;
+    case "lighting": return <Lamp size={15} />;
+    case "furniture": return <Armchair size={15} />;
+    case "all": return <Grid2x2 size={15} />;
+    default: return <Package size={15} />;
+  }
+}
+
 
 export function FilteredArticles({ articles }: { articles: Article[] }) {
   const [query, setQuery] = useState("");
@@ -54,12 +75,14 @@ function FilterShell({
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-smoke" size={18} />
           <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search inspiration, rooms, products..." className="min-h-12 w-full rounded-full border border-black/10 bg-transparent pl-11 pr-4 text-sm outline-none focus:border-cedar dark:border-white/15" />
         </label>
-        <div className="flex max-w-full gap-2 overflow-x-auto pb-1">
-          <button onClick={() => setCategory("all")} className={`min-h-12 shrink-0 rounded-full px-4 text-sm ${category === "all" ? "bg-ink text-white dark:bg-linen dark:text-ink" : "bg-linen text-ink dark:bg-white/10 dark:text-linen"}`}>
+        <div className="flex max-w-full gap-2.5 overflow-x-auto pb-2 pt-1 no-scrollbar">
+          <button onClick={() => setCategory("all")} className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${category === "all" ? "bg-ink text-white shadow-md dark:bg-white dark:text-ink" : "bg-white border border-black/10 text-ink hover:bg-black/5 dark:bg-[#221f1c] dark:border-white/10 dark:text-bone dark:hover:bg-white/5"}`}>
+            {getCategoryIcon("all")}
             All
           </button>
           {site.categories.map((item) => (
-            <button key={item} onClick={() => setCategory(categorySlug(item))} className={`min-h-12 shrink-0 rounded-full px-4 text-sm ${category === categorySlug(item) ? "bg-ink text-white dark:bg-linen dark:text-ink" : "bg-linen text-ink dark:bg-white/10 dark:text-linen"}`}>
+            <button key={item} onClick={() => setCategory(categorySlug(item))} className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${category === categorySlug(item) ? "bg-ink text-white shadow-md dark:bg-white dark:text-ink" : "bg-white border border-black/10 text-ink hover:bg-black/5 dark:bg-[#221f1c] dark:border-white/10 dark:text-bone dark:hover:bg-white/5"}`}>
+              {getCategoryIcon(item)}
               {item}
             </button>
           ))}
@@ -108,12 +131,14 @@ export function UnifiedSearch({ articles, products }: { articles: Article[]; pro
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-smoke" size={18} />
           <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search inspiration, rooms, products..." className="min-h-12 w-full rounded-full border border-black/10 bg-transparent pl-11 pr-4 text-sm outline-none focus:border-cedar dark:border-white/15" />
         </label>
-        <div className="flex max-w-full gap-2 overflow-x-auto pb-1">
-          <button onClick={() => setCategory("all")} className={`min-h-12 shrink-0 rounded-full px-4 text-sm ${category === "all" ? "bg-ink text-white dark:bg-linen dark:text-ink" : "bg-linen text-ink dark:bg-white/10 dark:text-linen"}`}>
+        <div className="flex max-w-full gap-2.5 overflow-x-auto pb-2 pt-1 no-scrollbar">
+          <button onClick={() => setCategory("all")} className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${category === "all" ? "bg-ink text-white shadow-md dark:bg-white dark:text-ink" : "bg-white border border-black/10 text-ink hover:bg-black/5 dark:bg-[#221f1c] dark:border-white/10 dark:text-bone dark:hover:bg-white/5"}`}>
+            {getCategoryIcon("all")}
             All
           </button>
           {site.categories.map((item) => (
-            <button key={item} onClick={() => setCategory(categorySlug(item))} className={`min-h-12 shrink-0 rounded-full px-4 text-sm ${category === categorySlug(item) ? "bg-ink text-white dark:bg-linen dark:text-ink" : "bg-linen text-ink dark:bg-white/10 dark:text-linen"}`}>
+            <button key={item} onClick={() => setCategory(categorySlug(item))} className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${category === categorySlug(item) ? "bg-ink text-white shadow-md dark:bg-white dark:text-ink" : "bg-white border border-black/10 text-ink hover:bg-black/5 dark:bg-[#221f1c] dark:border-white/10 dark:text-bone dark:hover:bg-white/5"}`}>
+              {getCategoryIcon(item)}
               {item}
             </button>
           ))}

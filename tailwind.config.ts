@@ -19,6 +19,20 @@ const config: Config = {
       },
       boxShadow: {
         soft: "0 22px 60px rgba(42, 37, 32, 0.08)"
+      },
+      animation: {
+        "float-slow": "floatSlow 4s ease-in-out infinite",
+        marquee: "marquee 25s linear infinite"
+      },
+      keyframes: {
+        floatSlow: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" }
+        },
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-100%)" }
+        }
       }
     }
   },

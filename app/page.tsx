@@ -1,14 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { FurnishEasyHero } from "@/components/FurnishEasyHero";
+import { MarqueeText } from "@/components/MarqueeText";
+import { CoreValues } from "@/components/CoreValues";
+import { FaqSection } from "@/components/FaqSection";
 import { FeaturedArticlesList } from "@/components/FeaturedArticlesList";
 import { TrendingProductsCarousel } from "@/components/TrendingProductsCarousel";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import { ReviewsSection } from "@/components/ReviewsSection";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { getArticles, getProducts } from "@/lib/content";
 import { categorySlug, site } from "@/lib/site";
 
-const heroImage = "/hero.jpg";
 
 export const dynamic = "force-dynamic";
 
@@ -23,26 +27,11 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Hero — cinematic entrance */}
-      <section className="container-premium grid min-h-[calc(100svh-4rem)] items-center gap-6 py-6 md:gap-10 md:grid-cols-[0.95fr_1.05fr] md:py-16">
-        <div className="hero-stagger order-2 md:order-1">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.28em] text-cedar">Editorial interiors for aesthetic living</p>
-          <h1 className="max-w-3xl font-serif text-2xl leading-tight tracking-tighter text-ink sm:text-3xl md:text-5xl lg:text-6xl dark:text-linen">
-            Your Home Shapes.<br />How You Feel.<br />Make Every Corner Matter.
-          </h1>
-          <p className="mt-4 max-w-xl text-sm leading-7 text-smoke sm:text-base sm:leading-8 md:mt-6 md:text-lg dark:text-bone">
-            Discover refined home decor ideas, small-space styling, furniture edits, and shoppable design inspiration curated for calm, beautiful spaces.
-          </p>
-          <Link href="/categories" className="btn-shimmer mt-8 inline-flex min-h-12 items-center gap-3 rounded-full bg-ink px-6 text-sm font-medium text-white transition hover:bg-cedar dark:bg-linen dark:text-ink">
-            Explore Ideas <ArrowRight size={18} />
-          </Link>
-        </div>
-        <div className="order-1 md:order-2">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-bone shadow-soft sm:aspect-[5/4] md:aspect-[4/5]">
-            <Image src={heroImage} alt="Warm minimalist living room with sculptural furniture" fill priority sizes="(min-width: 768px) 50vw, 100vw" className="image-fade object-cover" />
-          </div>
-        </div>
-      </section>
+      {/* Hero — Furnish-Easy Style */}
+      <FurnishEasyHero />
+
+      {/* Philosophy Marquee */}
+      <MarqueeText />
 
       {/* Featured Articles */}
       <section className="container-premium py-8 md:py-12">
@@ -71,7 +60,7 @@ export default function HomePage() {
             <TrendingProductsCarousel products={products} />
           </ScrollReveal>
           <ScrollReveal delay={300}>
-            <div className="-mt-8 pb-4 flex justify-center sm:hidden">
+            <div className="-mt-2 pb-6 flex justify-center sm:hidden">
               <Link href="/products" className="rounded-full bg-ink px-6 py-2.5 text-sm font-medium text-white transition hover:bg-cedar dark:bg-white dark:text-ink dark:hover:bg-bone shadow-sm hover:shadow-md">
                 Shop More
               </Link>
@@ -79,6 +68,9 @@ export default function HomePage() {
           </ScrollReveal>
         </div>
       </section>
+
+      {/* Core Values */}
+      <CoreValues />
 
       {/* Featured Categories */}
       <section className="container-premium py-8 md:py-10">
@@ -123,6 +115,14 @@ export default function HomePage() {
           })}
         </div>
       </section>
+
+
+
+      {/* Reviews */}
+      <ReviewsSection />
+
+      {/* FAQ */}
+      <FaqSection />
 
       {/* Newsletter */}
       <section className="container-premium py-12 md:py-16">

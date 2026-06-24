@@ -3,11 +3,42 @@
 import { useEffect, useRef, useState } from "react";
 import { ProductCard } from "@/components/ProductCard";
 import type { Product } from "@/lib/content";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Grid2x2, Sofa, BedDouble, Coffee, Monitor, TreePine, Sparkles, Lamp, Package, Armchair } from "lucide-react";
+
+function getCategoryIcon(category: string) {
+  switch (category.toLowerCase()) {
+    case "living room": return <Sofa size={15} />;
+    case "bedroom": return <BedDouble size={15} />;
+    case "dining":
+    case "kitchen": return <Coffee size={15} />;
+    case "office": return <Monitor size={15} />;
+    case "outdoor": return <TreePine size={15} />;
+    case "decor":
+    case "home decor": return <Sparkles size={15} />;
+    case "lighting": return <Lamp size={15} />;
+    case "furniture": return <Armchair size={15} />;
+    case "all": return <Grid2x2 size={15} />;
+    default: return <Package size={15} />;
+  }
+}
 
 export function TrendingProductsCarousel({ products }: { products: Product[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showHint, setShowHint] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const categories = ["All", ...Array.from(new Set(products.map(p => p.category)))];
+
+  const filteredProducts = activeCategory === "All" 
+    ? products 
+    : products.filter(p => p.category === activeCategory);
+
+  // Reset scroll position when category changes
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({ left: 0, behavior: "smooth" });
+    }
+  }, [activeCategory]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -19,7 +50,7 @@ export function TrendingProductsCarousel({ products }: { products: Product[] }) 
     let hintTimeout: ReturnType<typeof setTimeout>;
 
     const startAutoScroll = () => {
-      if (intervalId || !isVisible || isInteracting) return;
+      if (intervalId || !isVisible || isInteracting || filteredProducts.length <= 1) return;
       
       intervalId = setInterval(() => {
         if (!container || !isVisible || isInteracting) return;
@@ -36,7 +67,7 @@ export function TrendingProductsCarousel({ products }: { products: Product[] }) 
         } else {
           container.scrollBy({ left: scrollAmount, behavior: "smooth" });
         }
-      }, 2000);
+      }, 3000); // Slower auto-scroll for better UX
     };
 
     const stopAutoScroll = () => {
@@ -94,30 +125,60 @@ export function TrendingProductsCarousel({ products }: { products: Product[] }) 
       container.removeEventListener("touchstart", handleInteractStart);
       container.removeEventListener("touchend", handleInteractEnd);
     };
-  }, []);
+  }, [filteredProducts.length]);
 
   return (
     <div className="relative">
+      {/* Category Pill Filters */}
+      <div className="mb-8 flex items-center gap-2.5 overflow-x-auto pb-2 no-scrollbar">
+        {categories.map((category) => {
+          const isActive = activeCategory === category;
+          return (
+            <button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
+                isActive
+                  ? "bg-ink text-white shadow-md dark:bg-white dark:text-ink"
+                  : "bg-white border border-black/10 text-ink hover:bg-black/5 dark:bg-[#221f1c] dark:border-white/10 dark:text-bone dark:hover:bg-white/5"
+              }`}
+            >
+              {getCategoryIcon(category)}
+              {category}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Carousel */}
       <div 
         ref={containerRef}
-        className="flex gap-5 overflow-x-auto pb-20 no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing"
+        className="flex gap-5 overflow-x-auto pb-12 no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing"
         style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}
       >
-        {products.map((product) => (
-          <div key={product.slug} className="flex flex-col w-[85vw] shrink-0 sm:w-[calc(50%-10px)] lg:w-[calc(25%-15px)] snap-start">
-            <ProductCard product={product} />
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <div key={product.slug} className="flex flex-col w-[85vw] shrink-0 sm:w-[calc(50%-10px)] lg:w-[calc(25%-15px)] snap-start transition-all duration-500">
+              <ProductCard product={product} />
+            </div>
+          ))
+        ) : (
+          <div className="w-full py-12 text-center text-smoke dark:text-bone/60">
+            No products found in this category.
           </div>
-        ))}
+        )}
       </div>
 
       {/* Premium Scroll Hint Overlay */}
-      <div 
-        className={`pointer-events-none absolute right-4 top-[40%] flex -translate-y-1/2 transform items-center justify-center rounded-full bg-ink/80 p-4 text-white shadow-xl backdrop-blur-md transition-all duration-1000 ease-out dark:bg-white/90 dark:text-ink sm:right-8 ${
-          showHint ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
-        }`}
-      >
-        <ArrowRight size={24} className="animate-pulse" />
-      </div>
+      {filteredProducts.length > 1 && (
+        <div 
+          className={`pointer-events-none absolute right-4 top-[60%] flex -translate-y-1/2 transform items-center justify-center rounded-full bg-ink/80 p-4 text-white shadow-xl backdrop-blur-md transition-all duration-1000 ease-out dark:bg-white/90 dark:text-ink sm:right-8 ${
+            showHint ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
+          }`}
+        >
+          <ArrowRight size={24} className="animate-pulse" />
+        </div>
+      )}
     </div>
   );
 }
