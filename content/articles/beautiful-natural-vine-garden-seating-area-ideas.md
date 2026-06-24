@@ -6,7 +6,7 @@ description: >
   magical outdoor escape.
 category: Indoor Plants
 date: 2026-06-24T18:59:00.000+05:30
-cover: https://pin.it/1pXAnp3LY
+cover: /uploads/beautiful-natural-vine-garden-seating-area.jpg
 featured: true
 draft: false
 ---
