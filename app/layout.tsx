@@ -1,14 +1,26 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Great_Vibes, Cormorant_Garamond, Jost, Alex_Brush, Sacramento } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { SwarmBackground } from "@/components/SwarmBackground";
 import { site } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
+const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "--font-calligraphy", display: "swap" });
+const cormorant = Cormorant_Garamond({ 
+  weight: ["300", "400", "500", "600"], 
+  style: ["normal", "italic"],
+  subsets: ["latin"], 
+  variable: "--font-cormorant", 
+  display: "swap" 
+});
+const jost = Jost({ weight: "300", subsets: ["latin"], variable: "--font-jost", display: "swap" });
+const alexBrush = Alex_Brush({ weight: "400", subsets: ["latin"], variable: "--font-alex-brush", display: "swap" });
+const sacramento = Sacramento({ weight: "400", subsets: ["latin"], variable: "--font-sacramento", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -43,8 +55,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           content="f62176cdc2626f54e31126000d5c7504"
         />
       </head>
-      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${playfair.variable} ${greatVibes.variable} ${cormorant.variable} ${jost.variable} ${alexBrush.variable} ${sacramento.variable} font-sans antialiased`}>
         <ThemeProvider>
+          <SwarmBackground />
           <Header />
           <main>{children}</main>
           <Footer />

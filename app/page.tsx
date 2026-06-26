@@ -1,17 +1,15 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { FurnishEasyHero } from "@/components/FurnishEasyHero";
-import { MarqueeText } from "@/components/MarqueeText";
 import { CoreValues } from "@/components/CoreValues";
 import { FaqSection } from "@/components/FaqSection";
 import { FeaturedArticlesList } from "@/components/FeaturedArticlesList";
+import { FeaturedCategories } from "@/components/FeaturedCategories";
 import { TrendingProductsCarousel } from "@/components/TrendingProductsCarousel";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { ReviewsSection } from "@/components/ReviewsSection";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { getArticles, getProducts } from "@/lib/content";
-import { categorySlug, site } from "@/lib/site";
+import { site } from "@/lib/site";
 
 
 export const dynamic = "force-dynamic";
@@ -30,91 +28,77 @@ export default function HomePage() {
       {/* Hero — Furnish-Easy Style */}
       <FurnishEasyHero />
 
-      {/* Philosophy Marquee */}
-      <MarqueeText />
-
       {/* Featured Articles */}
-      <section className="container-premium py-8 md:py-12">
+      <section className="container-premium py-10 sm:py-14 md:py-16">
         <ScrollReveal>
-          <div className="mb-8">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-cedar">Latest Guides</p>
-            <h2 className="font-serif text-3xl text-ink md:text-5xl dark:text-linen">Featured Articles</h2>
+          <div className="mb-10 sm:mb-12 md:mb-14 text-center">
+            <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-cedar/50" />
+              <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-cedar dark:text-[#cba677]">
+                Latest Guides
+              </p>
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-cedar/50" />
+            </div>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1]">
+              Featured <span className="italic text-[#b89569] dark:text-[#cba677]">Articles</span>
+            </h2>
           </div>
         </ScrollReveal>
         <FeaturedArticlesList articles={sortedArticles} />
       </section>
 
       {/* Trending Products */}
-      <section className="bg-linen pt-10 pb-6 md:py-16 dark:bg-[#201d1a]">
+      <section className="py-10 sm:py-14 md:py-16 overflow-x-hidden w-full">
         <div className="container-premium">
           <ScrollReveal>
-            <div className="mb-8 flex items-end justify-between gap-5">
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-cedar">Affiliate Finds</p>
-                <h2 className="font-serif text-3xl text-ink md:text-5xl dark:text-linen">Trending Products</h2>
+            <div className="mb-10 sm:mb-12 md:mb-14 text-center">
+              <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
+                <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-cedar/50" />
+                <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-cedar dark:text-[#cba677]">
+                  Curated Finds
+                </p>
+                <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-cedar/50" />
               </div>
-              <Link href="/products" className="hidden text-sm font-medium text-cedar sm:inline">Shop all</Link>
+              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1] mb-4 sm:mb-5">
+                Trending <span className="italic text-[#b89569] dark:text-[#cba677]">Products</span>
+              </h2>
+              <p className="text-smoke dark:text-bone/80 text-sm sm:text-base leading-relaxed max-w-md mx-auto font-light">
+                Handpicked pieces that balance beauty and purpose.
+              </p>
             </div>
           </ScrollReveal>
+        </div>
+
+        {/* Carousel Strip - edge-to-edge */}
+        <div className="w-full overflow-x-hidden">
           <ScrollReveal delay={200} distance={60}>
             <TrendingProductsCarousel products={products} />
           </ScrollReveal>
+        </div>
+
+        {/* Below Carousel Link */}
+        <div className="container-premium mt-10">
           <ScrollReveal delay={300}>
-            <div className="-mt-2 pb-6 flex justify-center sm:hidden">
-              <Link href="/products" className="rounded-full bg-ink px-6 py-2.5 text-sm font-medium text-white transition hover:bg-cedar dark:bg-white dark:text-ink dark:hover:bg-bone shadow-sm hover:shadow-md">
-                Shop More
+            <div className="flex justify-center">
+              <Link
+                href="/products"
+                className="group inline-flex items-center justify-center gap-2 h-11 px-8 rounded-full 
+                  border border-[#b8935a] text-[#b8935a] font-sans text-xs font-semibold uppercase tracking-[2px]
+                  transition-all duration-300 hover:bg-[#b8935a] hover:text-white hover:shadow-[0_4px_14px_rgba(184,147,90,0.25)]"
+              >
+                Shop All Products
+                <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
               </Link>
             </div>
           </ScrollReveal>
         </div>
       </section>
 
+      {/* Featured Categories */}
+      <FeaturedCategories categories={site.categoryTiles} />
+
       {/* Core Values */}
       <CoreValues />
-
-      {/* Featured Categories */}
-      <section className="container-premium py-8 md:py-10">
-        <ScrollReveal>
-          <div className="mb-8 flex items-end justify-between gap-5">
-            <h2 className="font-serif text-3xl text-ink md:text-5xl dark:text-linen">Featured Categories</h2>
-            <Link href="/categories" className="hidden text-sm font-medium text-cedar sm:inline">View all</Link>
-          </div>
-        </ScrollReveal>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {site.categoryTiles.map((category, i) => {
-            const descriptions: Record<string, string> = {
-              "Living Room": "Curated pieces and layouts designed to anchor your home with calm elegance.",
-              "Bedroom": "Soft textures and serene styling ideas for your most personal sanctuary.",
-              "Kitchen": "Functional beauty and refined aesthetics to elevate your culinary space.",
-              "Bathroom": "Minimalist details and soothing elements for a spa-like daily retreat.",
-              "Small Spaces": "Clever design solutions maximizing impact without sacrificing breathing room.",
-              "Home Decor": "Artful accents and meaningful objects that bring quiet character to any room.",
-              "Lighting": "Thoughtful illumination that sets the mood and shapes your spatial experience.",
-              "Indoor Plants": "Organic textures and natural vitality to breathe life into your interiors.",
-              "Luxury Decor": "Premium materials and timeless craftsmanship for an undeniably elevated aesthetic.",
-              "Shop All Products": "Browse every curated affiliate find beautifully arranged in one polished collection."
-            };
-            const desc = descriptions[category] || "Fresh inspiration, curated product finds, and refined styling ideas.";
-
-            return (
-              <ScrollReveal key={category} delay={i * 80} distance={35}>
-                <Link href={category === "Shop All Products" ? "/products" : `/search?category=${categorySlug(category)}`} className="category-tile card-hover-glow relative group flex flex-col justify-between rounded-xl border border-black/5 bg-white p-5 md:p-7 shadow-sm dark:border-white/10 dark:bg-white/5">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <span className="text-xs font-semibold uppercase tracking-[0.24em] text-cedar">Vikore Edit</span>
-                      <h3 className="mt-3 font-serif text-2xl md:mt-4 md:text-3xl text-ink dark:text-linen">{category}</h3>
-                    </div>
-                    <span className="tile-arrow mt-1 text-cedar">
-                      <ArrowRight size={20} />
-                    </span>
-                  </div>
-                  <p className="mt-4 text-sm leading-relaxed text-smoke dark:text-bone">{desc}</p>
-                </Link>
-              </ScrollReveal>
-            );
-          })}
-        </div>
-      </section>
 
 
 
@@ -125,7 +109,7 @@ export default function HomePage() {
       <FaqSection />
 
       {/* Newsletter */}
-      <section className="container-premium py-12 md:py-16">
+      <section className="container-premium py-10 sm:py-14 md:py-16">
         <ScrollReveal distance={50} duration={900}>
           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-bone to-oat px-6 py-12 text-center shadow-soft sm:px-12 md:py-16 dark:from-[#2a2622] dark:to-ink">
             {/* Subtle dot pattern overlay for texture */}

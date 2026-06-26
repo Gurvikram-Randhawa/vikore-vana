@@ -64,6 +64,7 @@ const reviews = [
 export function ReviewsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
   const totalSlides = reviews.length;
 
   useEffect(() => {
@@ -80,6 +81,32 @@ export function ReviewsSection() {
     container.addEventListener("scroll", handleScroll, { passive: true });
     return () => container.removeEventListener("scroll", handleScroll);
   }, [totalSlides]);
+
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      const nextIndex = (activeIndex + 1) % totalSlides;
+      
+      const container = containerRef.current;
+      if (container) {
+        const child = container.children[0] as HTMLElement;
+        if (child) {
+          const itemWidth = child.offsetWidth;
+          const gap = parseInt(window.getComputedStyle(container).gap || "0");
+          const targetScrollLeft = nextIndex * (itemWidth + gap);
+          const maxScrollLeft = container.scrollWidth - container.clientWidth;
+          
+          if (targetScrollLeft > maxScrollLeft + 5) {
+            // Loop back to 0
+            container.scrollTo({ left: 0, behavior: "smooth" });
+          } else {
+            container.scrollTo({ left: targetScrollLeft, behavior: "smooth" });
+          }
+        }
+      }
+    }, 2500); // auto-slide every 2.5 seconds
+    return () => clearInterval(interval);
+  }, [activeIndex, totalSlides, isHovered]);
 
   const scrollToReview = (index: number) => {
     const container = containerRef.current;
@@ -99,19 +126,23 @@ export function ReviewsSection() {
   };
 
   return (
-    <section className="bg-linen py-16 md:py-24 dark:bg-[#1a1816]">
+    <section className="py-10 sm:py-14 md:py-16">
       <div className="container-premium overflow-hidden">
         <ScrollReveal>
-          <div className="mb-10 md:mb-14 text-center sm:text-left flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-            <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-[#b89569] dark:text-[#cba677]">Reviews</p>
-              <h2 className="font-serif text-3xl text-ink md:text-5xl dark:text-linen">
-                Loved by 10,000+ <span className="text-[#b89569] italic dark:text-[#cba677]">Happy Homes</span>
-              </h2>
+          <div className="mb-10 sm:mb-12 md:mb-14 flex flex-col items-center justify-center text-center">
+            <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
+              <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-[#b89569] dark:text-[#cba677]">
+                Community Reviews
+              </p>
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
             </div>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-ink dark:text-linen leading-[1.1] mb-6">
+              Loved by 10,000+ <span className="text-[#b89569] italic dark:text-[#cba677]">Homes</span>
+            </h2>
             
             {/* Desktop Navigation Dots */}
-            <div className="hidden sm:flex items-center gap-2 pb-2">
+            <div className="hidden sm:flex items-center gap-2">
               {reviews.map((_, i) => (
                 <button
                   key={i}
@@ -127,11 +158,13 @@ export function ReviewsSection() {
             </div>
           </div>
         </ScrollReveal>
-
+ 
         <ScrollReveal delay={150} distance={40}>
           <div className="relative -mx-4 px-4 sm:mx-0 sm:px-0">
             <div 
               ref={containerRef}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
               className="flex gap-4 sm:gap-6 overflow-x-auto pb-8 pt-4 no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing"
               style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}
             >

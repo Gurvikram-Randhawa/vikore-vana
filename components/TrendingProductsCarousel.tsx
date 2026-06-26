@@ -1,184 +1,207 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { ProductCard } from "@/components/ProductCard";
+import { useEffect, useRef } from "react";
+import Image from "next/image";
 import type { Product } from "@/lib/content";
-import { ArrowRight, Grid2x2, Sofa, BedDouble, Coffee, Monitor, TreePine, Sparkles, Lamp, Package, Armchair } from "lucide-react";
 
-function getCategoryIcon(category: string) {
-  switch (category.toLowerCase()) {
-    case "living room": return <Sofa size={15} />;
-    case "bedroom": return <BedDouble size={15} />;
-    case "dining":
-    case "kitchen": return <Coffee size={15} />;
-    case "office": return <Monitor size={15} />;
-    case "outdoor": return <TreePine size={15} />;
-    case "decor":
-    case "home decor": return <Sparkles size={15} />;
-    case "lighting": return <Lamp size={15} />;
-    case "furniture": return <Armchair size={15} />;
-    case "all": return <Grid2x2 size={15} />;
-    default: return <Package size={15} />;
+function getShortName(name: string) {
+  let short = name.split(/[,\-|(|;]/)[0].trim();
+  const words = short.split(/\s+/);
+  if (words.length > 4) {
+    short = words.slice(0, 4).join(" ");
   }
+  return short;
 }
 
 export function TrendingProductsCarousel({ products }: { products: Product[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [showHint, setShowHint] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("All");
-
-  const categories = ["All", ...Array.from(new Set(products.map(p => p.category)))];
-
-  const filteredProducts = activeCategory === "All" 
-    ? products 
-    : products.filter(p => p.category === activeCategory);
-
-  // Reset scroll position when category changes
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTo({ left: 0, behavior: "smooth" });
-    }
-  }, [activeCategory]);
+  const isInteractingRef = useRef(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dragDistanceRef = useRef(0);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    let intervalId: ReturnType<typeof setInterval> | null = null;
-    let isVisible = false;
-    let isInteracting = false;
-    let hintTimeout: ReturnType<typeof setTimeout>;
+    let animationFrameId: number;
+    let lastTime = performance.now();
+    const speed = 0.065; // Pixels per millisecond
 
-    const startAutoScroll = () => {
-      if (intervalId || !isVisible || isInteracting || filteredProducts.length <= 1) return;
-      
-      intervalId = setInterval(() => {
-        if (!container || !isVisible || isInteracting) return;
-        
-        const itemWidth = (container.children[0] as HTMLElement)?.offsetWidth || 0;
-        const gap = parseInt(window.getComputedStyle(container).gap) || 0;
-        const scrollAmount = itemWidth + gap;
+    const scrollStep = (time: number) => {
+      const delta = time - lastTime;
+      lastTime = time;
 
-        const maxScroll = container.scrollWidth - container.clientWidth;
+      if (!container) return;
 
-        if (container.scrollLeft >= maxScroll - 10) { 
-          // Reached the end, snap back to start
-          container.scrollTo({ left: 0, behavior: "smooth" });
-        } else {
-          container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      if (!isInteractingRef.current) {
+        container.scrollLeft += speed * delta;
+
+        const halfWidth = container.scrollWidth / 2;
+        if (container.scrollLeft >= halfWidth) {
+          container.scrollLeft -= halfWidth;
+        } else if (container.scrollLeft < 0) {
+          container.scrollLeft += halfWidth;
         }
-      }, 3000); // Slower auto-scroll for better UX
-    };
-
-    const stopAutoScroll = () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-        intervalId = null;
       }
+
+      animationFrameId = requestAnimationFrame(scrollStep);
     };
 
-    // Intersection Observer to start/stop based on visibility
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        isVisible = entry.isIntersecting;
-        if (isVisible) {
-          startAutoScroll();
-          // Show hint when visible, hide after 3 seconds
-          if (!isInteracting && container.scrollLeft === 0) {
-            setShowHint(true);
-            hintTimeout = setTimeout(() => setShowHint(false), 3000);
-          }
-        } else {
-          stopAutoScroll();
-          setShowHint(false);
-          clearTimeout(hintTimeout);
-        }
-      });
-    }, { threshold: 0.2 });
-
-    observer.observe(container);
-
-    // Pause on hover or touch
-    const handleInteractStart = () => {
-      isInteracting = true;
-      setShowHint(false);
-      clearTimeout(hintTimeout);
-      stopAutoScroll();
-    };
-    
-    const handleInteractEnd = () => {
-      isInteracting = false;
-      startAutoScroll();
-    };
-
-    container.addEventListener("mouseenter", handleInteractStart);
-    container.addEventListener("mouseleave", handleInteractEnd);
-    container.addEventListener("touchstart", handleInteractStart, { passive: true });
-    container.addEventListener("touchend", handleInteractEnd, { passive: true });
+    animationFrameId = requestAnimationFrame((time) => {
+      lastTime = time;
+      scrollStep(time);
+    });
 
     return () => {
-      stopAutoScroll();
-      observer.disconnect();
-      clearTimeout(hintTimeout);
-      container.removeEventListener("mouseenter", handleInteractStart);
-      container.removeEventListener("mouseleave", handleInteractEnd);
-      container.removeEventListener("touchstart", handleInteractStart);
-      container.removeEventListener("touchend", handleInteractEnd);
+      cancelAnimationFrame(animationFrameId);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
     };
-  }, [filteredProducts.length]);
+  }, []);
+
+  if (!products || products.length === 0) {
+    return (
+      <div className="w-full py-12 text-center text-smoke dark:text-bone/60">
+        No products found.
+      </div>
+    );
+  }
+
+  // Duplicate the array to create a seamless infinite loop
+  const duplicatedProducts = [...products, ...products];
+
+  const handleInteractionStart = () => {
+    isInteractingRef.current = true;
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  };
+
+  const handleInteractionEnd = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+    }, 1500); // 1.5 seconds delay before resuming
+  };
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    handleInteractionStart();
+    dragDistanceRef.current = 0;
+    const startX = e.pageX - container.offsetLeft;
+    const scrollLeft = container.scrollLeft;
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      if (!isInteractingRef.current) return;
+      const x = moveEvent.pageX - container.offsetLeft;
+      const walk = (x - startX) * 1.25; // Scroll speed modifier
+      container.scrollLeft = scrollLeft - walk;
+      dragDistanceRef.current = Math.abs(x - startX);
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      // Wait slightly so click handler can run before interaction finishes
+      setTimeout(() => {
+        handleInteractionEnd();
+      }, 50);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  };
 
   return (
-    <div className="relative">
-      {/* Category Pill Filters */}
-      <div className="mb-8 flex items-center gap-2.5 overflow-x-auto pb-2 no-scrollbar">
-        {categories.map((category) => {
-          const isActive = activeCategory === category;
+    <div className="w-full overflow-hidden relative">
+      {/* Carousel Container */}
+      <div
+        ref={containerRef}
+        className="w-full overflow-x-auto py-4 flex no-scrollbar select-none cursor-grab active:cursor-grabbing"
+        style={{
+          scrollBehavior: "auto",
+          WebkitOverflowScrolling: "touch",
+        }}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleInteractionStart}
+        onTouchEnd={handleInteractionEnd}
+      >
+        {duplicatedProducts.map((product, i) => {
+          const shortName = getShortName(product.name);
           return (
-            <button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
-                isActive
-                  ? "bg-ink text-white shadow-md dark:bg-white dark:text-ink"
-                  : "bg-white border border-black/10 text-ink hover:bg-black/5 dark:bg-[#221f1c] dark:border-white/10 dark:text-bone dark:hover:bg-white/5"
-              }`}
+            <a
+              key={`${product.slug}-${i}`}
+              href={product.affiliate}
+              target="_blank"
+              rel="nofollow sponsored noopener noreferrer"
+              className="block select-none pointer-events-auto cursor-pointer shrink-0 transition-all duration-300 hover:scale-[1.02] bg-[#fdf6f0] dark:bg-[#25211e] border border-[#b8935a]/20 dark:border-[#b8935a]/15 shadow-[0_4px_16px_rgba(184,147,90,0.08)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_24px_rgba(184,147,90,0.16)] dark:hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] w-[190px] md:w-[270px] h-[345px] md:h-[440px]"
+              style={{
+                borderRadius: "16px",
+                overflow: "hidden",
+                marginRight: "16px",
+              }}
+              draggable={false}
+              onClick={(e) => {
+                // Prevent click navigation if they were dragging
+                if (dragDistanceRef.current > 5) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
             >
-              {getCategoryIcon(category)}
-              {category}
-            </button>
+              <div className="flex flex-col h-full justify-between pb-3">
+                <div>
+                  {/* 1. PRODUCT IMAGE */}
+                  <div
+                    className="relative bg-white flex items-center justify-center border-b border-[#b8935a]/10 dark:border-[#b8935a]/10 h-[160px] md:h-[220px] p-3 md:p-5"
+                  >
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        sizes="(min-width: 768px) 270px, 190px"
+                        className="object-contain"
+                        draggable={false}
+                      />
+                    </div>
+                  </div>
+
+                  {/* 2. CATEGORY LABEL */}
+                  <p
+                    className="font-sans font-medium uppercase text-[#b8935a] text-[9.5px] md:text-[11px] tracking-[1.5px] px-3.5 pt-3 md:pt-4 pb-1"
+                  >
+                    {product.category}
+                  </p>
+
+                  {/* 3. PRODUCT NAME */}
+                  <h3
+                    className="font-serif font-medium text-[#1c1c1c] dark:text-[#fdf6f0] leading-tight line-clamp-2 px-3.5 mt-1 sm:mt-1.5 text-[15px] md:text-[18px]"
+                  >
+                    {shortName}
+                  </h3>
+
+                  {/* 4. PRODUCT DESCRIPTION */}
+                  <p className="font-sans text-[11px] md:text-[12.5px] leading-normal text-[#66615b] dark:text-bone/60 line-clamp-2 px-3.5 mt-2 md:mt-2.5">
+                    {product.description}
+                  </p>
+                </div>
+
+                {/* 5. VIEW PRODUCT BUTTON (styled div) */}
+                <div className="mx-3.5 h-8 md:h-9.5 rounded-full bg-[#b85c37] text-white dark:bg-[#c8653b] font-sans text-[10px] md:text-[11.5px] font-semibold uppercase tracking-[1.5px] flex items-center justify-center transition-all duration-300 group-hover:bg-[#9a4d2c] dark:group-hover:bg-[#b0532b] hover:shadow-[0_4px_12px_rgba(184,92,55,0.25)]">
+                  View Product
+                </div>
+              </div>
+            </a>
           );
         })}
       </div>
-
-      {/* Carousel */}
-      <div 
-        ref={containerRef}
-        className="flex gap-5 overflow-x-auto pb-12 no-scrollbar snap-x snap-mandatory cursor-grab active:cursor-grabbing"
-        style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}
-      >
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
-            <div key={product.slug} className="flex flex-col w-[85vw] shrink-0 sm:w-[calc(50%-10px)] lg:w-[calc(25%-15px)] snap-start transition-all duration-500">
-              <ProductCard product={product} />
-            </div>
-          ))
-        ) : (
-          <div className="w-full py-12 text-center text-smoke dark:text-bone/60">
-            No products found in this category.
-          </div>
-        )}
-      </div>
-
-      {/* Premium Scroll Hint Overlay */}
-      {filteredProducts.length > 1 && (
-        <div 
-          className={`pointer-events-none absolute right-4 top-[60%] flex -translate-y-1/2 transform items-center justify-center rounded-full bg-ink/80 p-4 text-white shadow-xl backdrop-blur-md transition-all duration-1000 ease-out dark:bg-white/90 dark:text-ink sm:right-8 ${
-            showHint ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
-          }`}
-        >
-          <ArrowRight size={24} className="animate-pulse" />
-        </div>
-      )}
     </div>
   );
 }

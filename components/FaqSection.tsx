@@ -31,13 +31,19 @@ export function FaqSection() {
   };
 
   return (
-    <section className="bg-bone py-16 md:py-24 dark:bg-[#1a1816]">
+    <section className="py-10 sm:py-14 md:py-16">
       <div className="container-premium max-w-4xl">
         <ScrollReveal>
-          <div className="text-center mb-12 md:mb-16">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-cedar">Support & Information</p>
-            <h2 className="font-serif text-3xl md:text-5xl text-ink dark:text-linen">
-              Frequently Asked Questions
+          <div className="mb-10 sm:mb-12 md:mb-14 text-center">
+            <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-cedar/50" />
+              <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-cedar dark:text-[#cba677]">
+                Support & Information
+              </p>
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-cedar/50" />
+            </div>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1]">
+              Frequently Asked <span className="italic text-[#b89569] dark:text-[#cba677]">Questions</span>
             </h2>
           </div>
         </ScrollReveal>
@@ -50,8 +56,8 @@ export function FaqSection() {
                 <div 
                   className={`rounded-2xl transition-all duration-300 ${
                     isOpen 
-                      ? "bg-white dark:bg-[#221f1c] shadow-soft border border-transparent dark:border-white/5" 
-                      : "bg-transparent border border-black/10 hover:border-black/20 dark:border-white/10 dark:hover:border-white/20"
+                      ? "bg-[#fdf6f0]/70 dark:bg-[#25211e]/70 backdrop-blur-md shadow-[0_4px_16px_rgba(184,147,90,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.25)] border border-[#b8935a]/20 dark:border-[#b8935a]/15" 
+                      : "bg-transparent border border-black/10 hover:border-[#b8935a]/50 dark:border-white/10 dark:hover:border-[#b8935a]/40"
                   }`}
                 >
                   <button 

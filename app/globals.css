@@ -65,6 +65,23 @@ body {
   }
 }
 
+/* ── Floating Calligraphy Animation ──────────────────────── */
+
+@keyframes floatCalligraphy {
+  0%, 100% {
+    transform: translateY(0px);
+    filter: drop-shadow(0 28px 48px rgba(184, 149, 105, 0.28)) drop-shadow(0 8px 16px rgba(184, 149, 105, 0.15));
+  }
+  50% {
+    transform: translateY(-20px);
+    filter: drop-shadow(0 48px 72px rgba(184, 149, 105, 0.10)) drop-shadow(0 16px 32px rgba(184, 149, 105, 0.08));
+  }
+}
+
+.float-calligraphy {
+  animation: floatCalligraphy 5.5s ease-in-out infinite;
+}
+
 /* ── Premium Hero Animations ──────────────────────────── */
 
 .hero-stagger > * {
@@ -259,6 +276,39 @@ main {
   opacity: 1;
 }
 
+/* ── Value Card Float ─────────────────────────────────── */
+
+.value-float-card {
+  animation: valueFloat 5s ease-in-out infinite;
+}
+
+@keyframes valueFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ── Mobile Scroll Focus ──────────────────────────────── */
+
+.value-focus-layer {
+  transition: transform 0.4s ease-out, opacity 0.4s ease-out, filter 0.4s ease-out;
+}
+
+@media (max-width: 767px) {
+  .value-focus-layer {
+    transform: scale(var(--focus-scale, 1));
+    opacity: var(--focus-opacity, 1);
+    filter: blur(var(--focus-blur, 0px));
+  }
+}
+
+@media (min-width: 768px) {
+  .value-focus-layer {
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}
+
 /* ── Prose Styles ─────────────────────────────────────── */
 
 .prose-vana {
@@ -308,4 +358,40 @@ main {
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
+
+/* ── Theme Switch Sweep Animations ──────────────────────── */
+@keyframes sweep-ltr-enter {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+@keyframes sweep-ltr-exit {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  }
+}
+
+@keyframes sweep-rtl-enter {
+  0% {
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+@keyframes sweep-rtl-exit {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  }
+}
+
 

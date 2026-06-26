@@ -4,23 +4,74 @@ import { ArrowUpRight } from "lucide-react";
 import type { Article } from "@/lib/content";
 
 export function ArticleCard({ article, large = false }: { article: Article; large?: boolean }) {
+  // Format date beautifully (e.g. Oct 24, 2023)
+  const formattedDate = article.date
+    ? new Date(article.date).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "";
+
+  // Compute dynamic reading time based on words count (200 wpm average)
+  const wordsPerMinute = 200;
+  const words = article.body ? article.body.split(/\s+/).length : 0;
+  const readingTime = Math.max(1, Math.ceil(words / wordsPerMinute));
+
   return (
-    <article className="group">
-      <Link href={`/articles/${article.slug}`} className="block">
-        <div className={`img-zoom-container relative overflow-hidden rounded-lg bg-bone ${large ? "aspect-[4/3]" : "aspect-[5/4]"}`}>
-          <Image src={article.cover} alt="" fill sizes={large ? "(min-width: 768px) 55vw, 100vw" : "(min-width: 1024px) 33vw, 100vw"} className="object-cover transition duration-700 group-hover:scale-105" />
-          {/* Subtle gradient overlay on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+    <article className="group flex flex-col h-full bg-[#fdf6f0]/70 dark:bg-[#25211e]/70 backdrop-blur-sm border border-[#b8935a]/20 dark:border-[#b8935a]/15 rounded-2xl shadow-[0_4px_16px_rgba(184,147,90,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.25)] hover:shadow-[0_12px_32px_rgba(184,147,90,0.14)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500 overflow-hidden">
+      <Link href={`/articles/${article.slug}`} className="flex flex-col h-full">
+        {/* Cinematic Cover Image */}
+        <div className={`relative overflow-hidden w-full ${large ? "aspect-[16/10]" : "aspect-[16/11]"} bg-bone/35 dark:bg-black/10 border-b border-[#b8935a]/10 dark:border-[#b8935a]/10`}>
+          <Image
+            src={article.cover}
+            alt=""
+            fill
+            sizes={large ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 1024px) 33vw, 100vw"}
+            className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+          />
+          {/* Elegant Category Badge */}
+          <div className="absolute top-4 left-4 bg-[#fdf6f0]/95 dark:bg-[#25211e]/95 border border-[#b8935a]/30 px-3 py-1.5 rounded-full shadow-[0_2px_8px_rgba(184,147,90,0.12)] transition-colors duration-300">
+            <span className="font-sans text-[8.5px] sm:text-[9px] tracking-[2px] uppercase text-[#b8935a] dark:text-[#cba677] font-bold">
+              {article.category}
+            </span>
+          </div>
+
+          {/* Floating Action Circle (Hover triggered) */}
+          <div className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-[#fdf6f0]/95 dark:bg-[#25211e]/95 border border-[#b8935a]/30 flex items-center justify-center shadow-md transition-all duration-300 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+            <ArrowUpRight size={14} className="text-[#b85c37] dark:text-[#c8653b] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </div>
         </div>
-        <div className="mt-3 md:mt-5">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-cedar">{article.category}</p>
-          <h3 className={`${large ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"} font-serif leading-tight text-ink dark:text-linen`}>{article.title}</h3>
-          <p className="mt-2 md:mt-3 line-clamp-3 text-xs md:text-sm leading-relaxed md:leading-7 text-smoke dark:text-bone">{article.description}</p>
-          <span className="link-underline mt-4 md:mt-5 inline-flex items-center gap-2 text-xs md:text-sm font-medium text-ink dark:text-linen">
-            Read More <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </span>
+
+        {/* Card Body Contents */}
+        <div className="flex flex-col flex-grow p-5 md:p-6">
+          {/* Metadata Row */}
+          <div className="flex items-center gap-2.5 text-[#9c8b7a] dark:text-[#cba677]/60 text-[10px] sm:text-[11px] font-sans font-medium uppercase tracking-widest mb-3">
+            {formattedDate && (
+              <>
+                <span>{formattedDate}</span>
+                <span className="h-1 w-1 rounded-full bg-[#b8935a]/30" />
+              </>
+            )}
+            <span>{readingTime} min read</span>
+          </div>
+
+          {/* Title */}
+          <h3
+            className={`font-serif font-medium text-[#1c1c1c] dark:text-[#fdf6f0] group-hover:text-[#b85c37] dark:group-hover:text-[#c8653b] transition-colors duration-400 leading-snug ${
+              large ? "text-xl md:text-2xl lg:text-[27px]" : "text-lg md:text-xl lg:text-2xl"
+            }`}
+          >
+            {article.title}
+          </h3>
+
+          {/* Description */}
+          <p className="mt-3 text-[#66615b] dark:text-bone/70 font-sans text-[13px] md:text-[14px] leading-relaxed line-clamp-3 font-light">
+            {article.description}
+          </p>
         </div>
       </Link>
     </article>
   );
 }
+

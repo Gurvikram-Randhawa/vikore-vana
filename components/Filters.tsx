@@ -22,7 +22,7 @@ function getCategoryIcon(category: string) {
   switch (category.toLowerCase()) {
     case "living room": return <Sofa size={15} />;
     case "bedroom": return <BedDouble size={15} />;
-    case "kitchen": 
+    case "kitchen":
     case "dining": return <Coffee size={15} />;
     case "bathroom": return <Droplets size={15} />;
     case "small spaces": return <BoxSelect size={15} />;
@@ -70,19 +70,43 @@ function FilterShell({
 }) {
   return (
     <>
-      <div className="mb-10 grid gap-4 rounded-lg border border-black/5 bg-white p-4 shadow-soft md:grid-cols-[1fr_auto] dark:border-white/10 dark:bg-white/5">
+      <div className="mb-10 grid gap-4 rounded-2xl border border-[#b8935a]/20 bg-[#fdf6f0]/70 p-4 sm:p-5 shadow-[0_4px_20px_rgba(184,147,90,0.06)] backdrop-blur-md md:grid-cols-[1fr_auto] dark:border-[#b8935a]/15 dark:bg-[#25211e]/70 dark:shadow-[0_4px_24px_rgba(0,0,0,0.25)]">
         <label className="relative block">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-smoke" size={18} />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search inspiration, rooms, products..." className="min-h-12 w-full rounded-full border border-black/10 bg-transparent pl-11 pr-4 text-sm outline-none focus:border-cedar dark:border-white/15" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#b8935a]" size={18} />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search here"
+            className="min-h-12 w-full rounded-full border border-[#b8935a]/25 bg-white/40 pl-11 pr-4 text-sm text-ink outline-none transition-all placeholder-[#9c8b7a]/70 focus:border-[#b8935a] focus:bg-white/70 focus:shadow-[0_0_0_3px_rgba(184,147,90,0.12)] dark:border-white/10 dark:bg-black/15 dark:text-linen dark:placeholder-bone/50 dark:focus:border-[#cba677] dark:focus:bg-black/25"
+          />
         </label>
         <div className="flex max-w-full gap-2.5 overflow-x-auto pb-2 pt-1 no-scrollbar">
-          <button onClick={() => setCategory("all")} className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${category === "all" ? "bg-ink text-white shadow-md dark:bg-white dark:text-ink" : "bg-white border border-black/10 text-ink hover:bg-black/5 dark:bg-[#221f1c] dark:border-white/10 dark:text-bone dark:hover:bg-white/5"}`}>
-            {getCategoryIcon("all")}
+          <button
+            onClick={() => setCategory("all")}
+            className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[1.5px] transition-all duration-300 ${category === "all"
+              ? "bg-[#b8935a] border border-[#b8935a] text-white shadow-[0_4px_14px_rgba(184,147,90,0.3)] dark:bg-[#cba677] dark:border-[#cba677] dark:text-ink"
+              : "bg-white/50 border border-[#b8935a]/15 text-[#66615b] hover:bg-white/80 dark:bg-black/15 dark:border-white/10 dark:text-bone/80 dark:hover:bg-white/5"
+              }`}
+            style={{ fontFamily: "var(--font-jost), sans-serif" }}
+          >
+            <span className={category === "all" ? "text-white dark:text-ink" : "text-[#b8935a]"}>
+              {getCategoryIcon("all")}
+            </span>
             All
           </button>
           {site.categories.map((item) => (
-            <button key={item} onClick={() => setCategory(categorySlug(item))} className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${category === categorySlug(item) ? "bg-ink text-white shadow-md dark:bg-white dark:text-ink" : "bg-white border border-black/10 text-ink hover:bg-black/5 dark:bg-[#221f1c] dark:border-white/10 dark:text-bone dark:hover:bg-white/5"}`}>
-              {getCategoryIcon(item)}
+            <button
+              key={item}
+              onClick={() => setCategory(categorySlug(item))}
+              className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[1.5px] transition-all duration-300 ${category === categorySlug(item)
+                ? "bg-[#b8935a] border border-[#b8935a] text-white shadow-[0_4px_14px_rgba(184,147,90,0.3)] dark:bg-[#cba677] dark:border-[#cba677] dark:text-ink"
+                : "bg-white/50 border border-[#b8935a]/15 text-[#66615b] hover:bg-white/80 dark:bg-black/15 dark:border-white/10 dark:text-bone/80 dark:hover:bg-white/5"
+                }`}
+              style={{ fontFamily: "var(--font-jost), sans-serif" }}
+            >
+              <span className={category === categorySlug(item) ? "text-white dark:text-ink" : "text-[#b8935a]"}>
+                {getCategoryIcon(item)}
+              </span>
               {item}
             </button>
           ))}
@@ -126,19 +150,43 @@ export function UnifiedSearch({ articles, products }: { articles: Article[]; pro
 
   return (
     <>
-      <div className="mb-10 grid gap-4 rounded-lg border border-black/5 bg-white p-4 shadow-soft md:grid-cols-[1fr_auto] dark:border-white/10 dark:bg-white/5">
+      <div className="mb-10 grid gap-4 rounded-2xl border border-[#b8935a]/20 bg-[#fdf6f0]/70 p-4 sm:p-5 shadow-[0_4px_20px_rgba(184,147,90,0.06)] backdrop-blur-md md:grid-cols-[1fr_auto] dark:border-[#b8935a]/15 dark:bg-[#25211e]/70 dark:shadow-[0_4px_24px_rgba(0,0,0,0.25)]">
         <label className="relative block">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-smoke" size={18} />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search inspiration, rooms, products..." className="min-h-12 w-full rounded-full border border-black/10 bg-transparent pl-11 pr-4 text-sm outline-none focus:border-cedar dark:border-white/15" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#b8935a]" size={18} />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search inspiration, rooms, products..."
+            className="min-h-12 w-full rounded-full border border-[#b8935a]/25 bg-white/40 pl-11 pr-4 text-sm text-ink outline-none transition-all placeholder-[#9c8b7a]/70 focus:border-[#b8935a] focus:bg-white/70 focus:shadow-[0_0_0_3px_rgba(184,147,90,0.12)] dark:border-white/10 dark:bg-black/15 dark:text-linen dark:placeholder-bone/50 dark:focus:border-[#cba677] dark:focus:bg-black/25"
+          />
         </label>
         <div className="flex max-w-full gap-2.5 overflow-x-auto pb-2 pt-1 no-scrollbar">
-          <button onClick={() => setCategory("all")} className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${category === "all" ? "bg-ink text-white shadow-md dark:bg-white dark:text-ink" : "bg-white border border-black/10 text-ink hover:bg-black/5 dark:bg-[#221f1c] dark:border-white/10 dark:text-bone dark:hover:bg-white/5"}`}>
-            {getCategoryIcon("all")}
+          <button
+            onClick={() => setCategory("all")}
+            className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[1.5px] transition-all duration-300 ${category === "all"
+              ? "bg-[#b8935a] border border-[#b8935a] text-white shadow-[0_4px_14px_rgba(184,147,90,0.3)] dark:bg-[#cba677] dark:border-[#cba677] dark:text-ink"
+              : "bg-white/50 border border-[#b8935a]/15 text-[#66615b] hover:bg-white/80 dark:bg-black/15 dark:border-white/10 dark:text-bone/80 dark:hover:bg-white/5"
+              }`}
+            style={{ fontFamily: "var(--font-jost), sans-serif" }}
+          >
+            <span className={category === "all" ? "text-white dark:text-ink" : "text-[#b8935a]"}>
+              {getCategoryIcon("all")}
+            </span>
             All
           </button>
           {site.categories.map((item) => (
-            <button key={item} onClick={() => setCategory(categorySlug(item))} className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300 ${category === categorySlug(item) ? "bg-ink text-white shadow-md dark:bg-white dark:text-ink" : "bg-white border border-black/10 text-ink hover:bg-black/5 dark:bg-[#221f1c] dark:border-white/10 dark:text-bone dark:hover:bg-white/5"}`}>
-              {getCategoryIcon(item)}
+            <button
+              key={item}
+              onClick={() => setCategory(categorySlug(item))}
+              className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[1.5px] transition-all duration-300 ${category === categorySlug(item)
+                ? "bg-[#b8935a] border border-[#b8935a] text-white shadow-[0_4px_14px_rgba(184,147,90,0.3)] dark:bg-[#cba677] dark:border-[#cba677] dark:text-ink"
+                : "bg-white/50 border border-[#b8935a]/15 text-[#66615b] hover:bg-white/80 dark:bg-black/15 dark:border-white/10 dark:text-bone/80 dark:hover:bg-white/5"
+                }`}
+              style={{ fontFamily: "var(--font-jost), sans-serif" }}
+            >
+              <span className={category === categorySlug(item) ? "text-white dark:text-ink" : "text-[#b8935a]"}>
+                {getCategoryIcon(item)}
+              </span>
               {item}
             </button>
           ))}

@@ -7,7 +7,7 @@ const signatureFont = Great_Vibes({ weight: "400", subsets: ["latin"], display: 
 
 export function Footer() {
   return (
-    <footer className="mt-16 md:mt-24 border-t border-black/5 bg-linen py-8 md:py-12 dark:border-white/10 dark:bg-[#201d1a]">
+    <footer className="mt-10 md:mt-16 border-t border-black/5 bg-linen py-8 md:py-12 dark:border-white/10 dark:bg-[#201d1a]">
       <div className="container-premium grid gap-8 md:gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <Link href="/" className="font-serif text-2xl md:text-3xl text-ink dark:text-linen transition-colors duration-300 hover:text-cedar">
