@@ -85,7 +85,7 @@ export function SwarmBackground() {
       ctx.clearRect(0, 0, w, h);
 
       // Autonomous slow clock — particles drift at all times
-      const clock = now * 0.00006; // very slow: full lap ~17 000 ms
+      const clock = now * 0.000095; // slightly faster drift when stationary
 
       // Scroll adds an extra offset on top of the autonomous drift
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -104,28 +104,28 @@ export function SwarmBackground() {
 
         const { x, y } = knotPoint(t, w, h, gRx, gRy);
 
-        const glowR = Math.max(w, h) * (0.18 + 0.05 * Math.sin(time * 3 + i));
+        const glowR = Math.max(w, h) * (0.28 + 0.08 * Math.sin(time * 3 + i));
 
         const hueBase = isDark
           ? 28 + (i / NUM_GLOWS) * 20
-          : 24 + (i / NUM_GLOWS) * 16;
+          : 22 + (i / NUM_GLOWS) * 22;
 
         const pulse = 0.5 + 0.5 * Math.sin(time * 4 + i * 1.3);
 
         const alpha = isDark
-          ? 0.12 + pulse * 0.08
-          : 0.16 + pulse * 0.09;
+          ? 0.18 + pulse * 0.08
+          : 0.35 + pulse * 0.15;
 
         const grad = ctx.createRadialGradient(x, y, 0, x, y, glowR);
 
         if (isDark) {
-          grad.addColorStop(0,   `hsla(${hueBase}, 80%, 68%, ${alpha})`);
-          grad.addColorStop(0.4, `hsla(${hueBase}, 65%, 50%, ${alpha * 0.5})`);
-          grad.addColorStop(1,   `hsla(${hueBase}, 50%, 35%, 0)`);
+          grad.addColorStop(0,   `hsla(${hueBase}, 70%, 62%, ${alpha})`);
+          grad.addColorStop(0.4, `hsla(${hueBase}, 55%, 46%, ${alpha * 0.5})`);
+          grad.addColorStop(1,   `hsla(${hueBase}, 40%, 32%, 0)`);
         } else {
-          grad.addColorStop(0,   `hsla(${hueBase}, 70%, 50%, ${alpha})`);
-          grad.addColorStop(0.4, `hsla(${hueBase}, 60%, 44%, ${alpha * 0.45})`);
-          grad.addColorStop(1,   `hsla(${hueBase}, 45%, 38%, 0)`);
+          grad.addColorStop(0,   `hsla(${hueBase}, 95%, 75%, ${alpha})`);
+          grad.addColorStop(0.4, `hsla(${hueBase}, 90%, 84%, ${alpha * 0.5})`);
+          grad.addColorStop(1,   `hsla(${hueBase}, 80%, 93%, 0)`);
         }
 
         ctx.beginPath();
@@ -154,7 +154,7 @@ export function SwarmBackground() {
         width: "100vw",
         height: "100vh",
         zIndex: -1,
-        filter: "blur(6px)",
+        filter: "blur(30px)",
         opacity: 1,
       }}
     />

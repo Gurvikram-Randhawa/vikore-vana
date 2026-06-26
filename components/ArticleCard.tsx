@@ -58,7 +58,7 @@ export function ArticleCard({ article, large = false }: { article: Article; larg
 
           {/* Title */}
           <h3
-            className={`font-serif font-medium text-[#1c1c1c] dark:text-[#fdf6f0] group-hover:text-[#b85c37] dark:group-hover:text-[#c8653b] transition-colors duration-400 leading-snug ${
+            className={`font-serif font-medium text-[#1c1c1c] dark:text-[#fdf6f0] transition-colors duration-400 leading-snug ${
               large ? "text-xl md:text-2xl lg:text-[27px]" : "text-lg md:text-xl lg:text-2xl"
             }`}
           >

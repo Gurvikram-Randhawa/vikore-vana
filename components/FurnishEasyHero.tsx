@@ -79,7 +79,7 @@ export function FurnishEasyHero() {
             {/* Stats */}
             <div className="mt-10 flex items-center justify-center gap-8 border-t border-black/5 pt-8 dark:border-white/10">
               <div>
-                <div className="font-serif text-2xl font-semibold text-ink dark:text-white">10K+</div>
+                <div className="font-serif text-2xl font-semibold text-ink dark:text-white">1K+</div>
                 <div className="mt-1 text-xs font-semibold uppercase tracking-wider text-smoke dark:text-bone/60">Happy Homes</div>
               </div>
               <div className="h-10 w-px bg-black/10 dark:bg-white/10" />

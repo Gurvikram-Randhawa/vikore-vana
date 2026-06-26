@@ -140,7 +140,7 @@ export function TrendingProductsCarousel({ products }: { products: Product[] }) 
               href={product.affiliate}
               target="_blank"
               rel="nofollow sponsored noopener noreferrer"
-              className="block select-none pointer-events-auto cursor-pointer shrink-0 transition-all duration-300 hover:scale-[1.02] bg-[#fdf6f0] dark:bg-[#25211e] border border-[#b8935a]/20 dark:border-[#b8935a]/15 shadow-[0_4px_16px_rgba(184,147,90,0.08)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_24px_rgba(184,147,90,0.16)] dark:hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] w-[190px] md:w-[270px] h-[345px] md:h-[440px]"
+              className="block select-none pointer-events-auto cursor-pointer shrink-0 transition-all duration-300 hover:scale-[1.02] border border-[#b8935a]/20 dark:border-[#b8935a]/15 shadow-[0_4px_16px_rgba(184,147,90,0.08)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_24px_rgba(184,147,90,0.16)] dark:hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] w-[190px] md:w-[270px] h-[345px] md:h-[440px]"
               style={{
                 borderRadius: "16px",
                 overflow: "hidden",
@@ -155,47 +155,44 @@ export function TrendingProductsCarousel({ products }: { products: Product[] }) 
                 }
               }}
             >
-              <div className="flex flex-col h-full justify-between pb-3">
-                <div>
-                  {/* 1. PRODUCT IMAGE */}
-                  <div
-                    className="relative bg-white flex items-center justify-center border-b border-[#b8935a]/10 dark:border-[#b8935a]/10 h-[160px] md:h-[220px] p-3 md:p-5"
-                  >
-                    <div className="relative w-full h-full">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        sizes="(min-width: 768px) 270px, 190px"
-                        className="object-contain"
-                        draggable={false}
-                      />
-                    </div>
+              <div className="flex flex-col h-full">
+                {/* 1. PRODUCT IMAGE */}
+                <div className="relative bg-white flex items-center justify-center border-b border-[#b8935a]/10 dark:border-[#b8935a]/10 h-[160px] md:h-[220px] p-3 md:p-5 shrink-0">
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      sizes="(min-width: 768px) 270px, 190px"
+                      className="object-contain"
+                      draggable={false}
+                    />
                   </div>
-
-                  {/* 2. CATEGORY LABEL */}
-                  <p
-                    className="font-sans font-medium uppercase text-[#b8935a] text-[9.5px] md:text-[11px] tracking-[1.5px] px-3.5 pt-3 md:pt-4 pb-1"
-                  >
-                    {product.category}
-                  </p>
-
-                  {/* 3. PRODUCT NAME */}
-                  <h3
-                    className="font-serif font-medium text-[#1c1c1c] dark:text-[#fdf6f0] leading-tight line-clamp-2 px-3.5 mt-1 sm:mt-1.5 text-[15px] md:text-[18px]"
-                  >
-                    {shortName}
-                  </h3>
-
-                  {/* 4. PRODUCT DESCRIPTION */}
-                  <p className="font-sans text-[11px] md:text-[12.5px] leading-normal text-[#66615b] dark:text-bone/60 line-clamp-2 px-3.5 mt-2 md:mt-2.5">
-                    {product.description}
-                  </p>
                 </div>
 
-                {/* 5. VIEW PRODUCT BUTTON (styled div) */}
-                <div className="mx-3.5 h-8 md:h-9.5 rounded-full bg-[#b85c37] text-white dark:bg-[#c8653b] font-sans text-[10px] md:text-[11.5px] font-semibold uppercase tracking-[1.5px] flex items-center justify-center transition-all duration-300 group-hover:bg-[#9a4d2c] dark:group-hover:bg-[#b0532b] hover:shadow-[0_4px_12px_rgba(184,92,55,0.25)]">
-                  View Product
+                {/* GLASSMORPHISM WRAPPER FOR TEXT */}
+                <div className="flex flex-col flex-grow justify-between bg-white/60 dark:bg-[#1e1a17]/70 backdrop-blur-xl pb-3">
+                  <div>
+                    {/* 2. CATEGORY LABEL */}
+                    <p className="font-sans font-medium uppercase text-[#b8935a] text-[9.5px] md:text-[11px] tracking-[1.5px] px-3.5 pt-3 md:pt-4 pb-1">
+                      {product.category}
+                    </p>
+
+                    {/* 3. PRODUCT NAME */}
+                    <h3 className="font-serif font-medium text-[#1c1c1c] dark:text-[#fdf6f0] leading-tight line-clamp-2 px-3.5 mt-1 sm:mt-1.5 text-[15px] md:text-[18px]">
+                      {shortName}
+                    </h3>
+
+                    {/* 4. PRODUCT DESCRIPTION */}
+                    <p className="font-sans text-[11px] md:text-[12.5px] leading-normal text-[#66615b] dark:text-bone/60 line-clamp-2 px-3.5 mt-2 md:mt-2.5">
+                      {product.description}
+                    </p>
+                  </div>
+
+                  {/* 5. VIEW PRODUCT BUTTON (styled div) */}
+                  <div className="mx-3.5 h-8 md:h-9.5 rounded-full bg-[#b85c37] text-white dark:bg-[#c8653b] font-sans text-[10px] md:text-[11.5px] font-semibold uppercase tracking-[1.5px] flex items-center justify-center transition-all duration-300 group-hover:bg-[#9a4d2c] dark:group-hover:bg-[#b0532b] hover:shadow-[0_4px_12px_rgba(184,92,55,0.25)]">
+                    View Product
+                  </div>
                 </div>
               </div>
             </a>

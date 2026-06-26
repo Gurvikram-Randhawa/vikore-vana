@@ -129,7 +129,7 @@ export function ReviewsSection() {
     <section className="py-10 sm:py-14 md:py-16">
       <div className="container-premium overflow-hidden">
         <ScrollReveal>
-          <div className="mb-10 sm:mb-12 md:mb-14 flex flex-col items-center justify-center text-center">
+          <div className="mb-4 sm:mb-5 md:mb-6 flex flex-col items-center justify-center text-center">
             <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
               <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
               <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-[#b89569] dark:text-[#cba677]">
@@ -138,7 +138,7 @@ export function ReviewsSection() {
               <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-ink dark:text-linen leading-[1.1] mb-6">
-              Loved by 10,000+ <span className="text-[#b89569] italic dark:text-[#cba677]">Homes</span>
+              Loved by 1,000+ <span className="text-[#b89569] italic dark:text-[#cba677]">Homes</span>
             </h2>
             
             {/* Desktop Navigation Dots */}

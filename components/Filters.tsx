@@ -80,16 +80,16 @@ function FilterShell({
             className="min-h-12 w-full rounded-full border border-[#b8935a]/25 bg-white/40 pl-11 pr-4 text-sm text-ink outline-none transition-all placeholder-[#9c8b7a]/70 focus:border-[#b8935a] focus:bg-white/70 focus:shadow-[0_0_0_3px_rgba(184,147,90,0.12)] dark:border-white/10 dark:bg-black/15 dark:text-linen dark:placeholder-bone/50 dark:focus:border-[#cba677] dark:focus:bg-black/25"
           />
         </label>
-        <div className="flex max-w-full gap-2.5 overflow-x-auto pb-2 pt-1 no-scrollbar">
+        <div className="flex max-w-full items-center gap-1.5 rounded-full p-1 bg-[#b8935a]/8 dark:bg-white/5 border border-[#b8935a]/20 dark:border-white/10 backdrop-blur-md overflow-x-auto no-scrollbar">
           <button
             onClick={() => setCategory("all")}
-            className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[1.5px] transition-all duration-300 ${category === "all"
-              ? "bg-[#b8935a] border border-[#b8935a] text-white shadow-[0_4px_14px_rgba(184,147,90,0.3)] dark:bg-[#cba677] dark:border-[#cba677] dark:text-ink"
-              : "bg-white/50 border border-[#b8935a]/15 text-[#66615b] hover:bg-white/80 dark:bg-black/15 dark:border-white/10 dark:text-bone/80 dark:hover:bg-white/5"
+            className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2 text-[11px] font-semibold uppercase tracking-[1.5px] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${category === "all"
+              ? "bg-[#b8935a] text-white shadow-[0_2px_8px_rgba(184,147,90,0.25)] dark:bg-[#cba677] dark:text-ink dark:shadow-[0_2px_8px_rgba(203,166,119,0.25)]"
+              : "text-[#7c7267] hover:text-[#b8935a] hover:bg-[#b8935a]/10 dark:text-bone/60 dark:hover:text-[#cba677] dark:hover:bg-white/5"
               }`}
             style={{ fontFamily: "var(--font-jost), sans-serif" }}
           >
-            <span className={category === "all" ? "text-white dark:text-ink" : "text-[#b8935a]"}>
+            <span className={category === "all" ? "text-white dark:text-ink" : "text-[#b8935a] dark:text-[#cba677]"}>
               {getCategoryIcon("all")}
             </span>
             All
@@ -98,13 +98,13 @@ function FilterShell({
             <button
               key={item}
               onClick={() => setCategory(categorySlug(item))}
-              className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[1.5px] transition-all duration-300 ${category === categorySlug(item)
-                ? "bg-[#b8935a] border border-[#b8935a] text-white shadow-[0_4px_14px_rgba(184,147,90,0.3)] dark:bg-[#cba677] dark:border-[#cba677] dark:text-ink"
-                : "bg-white/50 border border-[#b8935a]/15 text-[#66615b] hover:bg-white/80 dark:bg-black/15 dark:border-white/10 dark:text-bone/80 dark:hover:bg-white/5"
+              className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2 text-[11px] font-semibold uppercase tracking-[1.5px] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${category === categorySlug(item)
+                ? "bg-[#b8935a] text-white shadow-[0_2px_8px_rgba(184,147,90,0.25)] dark:bg-[#cba677] dark:text-ink dark:shadow-[0_2px_8px_rgba(203,166,119,0.25)]"
+                : "text-[#7c7267] hover:text-[#b8935a] hover:bg-[#b8935a]/10 dark:text-bone/60 dark:hover:text-[#cba677] dark:hover:bg-white/5"
                 }`}
               style={{ fontFamily: "var(--font-jost), sans-serif" }}
             >
-              <span className={category === categorySlug(item) ? "text-white dark:text-ink" : "text-[#b8935a]"}>
+              <span className={category === categorySlug(item) ? "text-white dark:text-ink" : "text-[#b8935a] dark:text-[#cba677]"}>
                 {getCategoryIcon(item)}
               </span>
               {item}
@@ -160,16 +160,16 @@ export function UnifiedSearch({ articles, products }: { articles: Article[]; pro
             className="min-h-12 w-full rounded-full border border-[#b8935a]/25 bg-white/40 pl-11 pr-4 text-sm text-ink outline-none transition-all placeholder-[#9c8b7a]/70 focus:border-[#b8935a] focus:bg-white/70 focus:shadow-[0_0_0_3px_rgba(184,147,90,0.12)] dark:border-white/10 dark:bg-black/15 dark:text-linen dark:placeholder-bone/50 dark:focus:border-[#cba677] dark:focus:bg-black/25"
           />
         </label>
-        <div className="flex max-w-full gap-2.5 overflow-x-auto pb-2 pt-1 no-scrollbar">
+        <div className="flex max-w-full items-center gap-1.5 rounded-full p-1 bg-[#b8935a]/8 dark:bg-white/5 border border-[#b8935a]/20 dark:border-white/10 backdrop-blur-md overflow-x-auto no-scrollbar">
           <button
             onClick={() => setCategory("all")}
-            className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[1.5px] transition-all duration-300 ${category === "all"
-              ? "bg-[#b8935a] border border-[#b8935a] text-white shadow-[0_4px_14px_rgba(184,147,90,0.3)] dark:bg-[#cba677] dark:border-[#cba677] dark:text-ink"
-              : "bg-white/50 border border-[#b8935a]/15 text-[#66615b] hover:bg-white/80 dark:bg-black/15 dark:border-white/10 dark:text-bone/80 dark:hover:bg-white/5"
+            className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2 text-[11px] font-semibold uppercase tracking-[1.5px] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${category === "all"
+              ? "bg-[#b8935a] text-white shadow-[0_2px_8px_rgba(184,147,90,0.25)] dark:bg-[#cba677] dark:text-ink dark:shadow-[0_2px_8px_rgba(203,166,119,0.25)]"
+              : "text-[#7c7267] hover:text-[#b8935a] hover:bg-[#b8935a]/10 dark:text-bone/60 dark:hover:text-[#cba677] dark:hover:bg-white/5"
               }`}
             style={{ fontFamily: "var(--font-jost), sans-serif" }}
           >
-            <span className={category === "all" ? "text-white dark:text-ink" : "text-[#b8935a]"}>
+            <span className={category === "all" ? "text-white dark:text-ink" : "text-[#b8935a] dark:text-[#cba677]"}>
               {getCategoryIcon("all")}
             </span>
             All
@@ -178,13 +178,13 @@ export function UnifiedSearch({ articles, products }: { articles: Article[]; pro
             <button
               key={item}
               onClick={() => setCategory(categorySlug(item))}
-              className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold uppercase tracking-[1.5px] transition-all duration-300 ${category === categorySlug(item)
-                ? "bg-[#b8935a] border border-[#b8935a] text-white shadow-[0_4px_14px_rgba(184,147,90,0.3)] dark:bg-[#cba677] dark:border-[#cba677] dark:text-ink"
-                : "bg-white/50 border border-[#b8935a]/15 text-[#66615b] hover:bg-white/80 dark:bg-black/15 dark:border-white/10 dark:text-bone/80 dark:hover:bg-white/5"
+              className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2 text-[11px] font-semibold uppercase tracking-[1.5px] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${category === categorySlug(item)
+                ? "bg-[#b8935a] text-white shadow-[0_2px_8px_rgba(184,147,90,0.25)] dark:bg-[#cba677] dark:text-ink dark:shadow-[0_2px_8px_rgba(203,166,119,0.25)]"
+                : "text-[#7c7267] hover:text-[#b8935a] hover:bg-[#b8935a]/10 dark:text-bone/60 dark:hover:text-[#cba677] dark:hover:bg-white/5"
                 }`}
               style={{ fontFamily: "var(--font-jost), sans-serif" }}
             >
-              <span className={category === categorySlug(item) ? "text-white dark:text-ink" : "text-[#b8935a]"}>
+              <span className={category === categorySlug(item) ? "text-white dark:text-ink" : "text-[#b8935a] dark:text-[#cba677]"}>
                 {getCategoryIcon(item)}
               </span>
               {item}
