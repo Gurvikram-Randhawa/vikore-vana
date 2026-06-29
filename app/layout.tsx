@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SwarmBackground } from "@/components/SwarmBackground";
+import { EntranceReveal } from "@/components/EntranceReveal";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body className={`${inter.variable} ${playfair.variable} ${greatVibes.variable} ${cormorant.variable} ${jost.variable} ${alexBrush.variable} ${sacramento.variable} font-sans antialiased`}>
+        <EntranceReveal />
         <ThemeProvider>
           <SwarmBackground />
           <Header />

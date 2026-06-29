@@ -59,10 +59,10 @@ export default function HomePage() {
                 </p>
                 <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-cedar/50" />
               </div>
-              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1] mb-4 sm:mb-5">
+              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1] mb-4">
                 Trending <span className="italic text-[#b89569] dark:text-[#cba677]">Products</span>
               </h2>
-              <p className="text-smoke dark:text-bone/80 text-sm sm:text-base leading-relaxed max-w-md mx-auto font-light">
+              <p className="text-[#9c8b7a] dark:text-bone/80 text-sm max-w-sm mx-auto">
                 Handpicked pieces that balance beauty and purpose.
               </p>
             </div>

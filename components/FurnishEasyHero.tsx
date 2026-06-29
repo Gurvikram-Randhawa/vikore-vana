@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Star } from "lucide-react";
+import { IsometricRoom3D } from "@/components/IsometricRoom3D";
 
 export function FurnishEasyHero() {
   return (
@@ -11,10 +11,14 @@ export function FurnishEasyHero() {
           {/* ── Left / Top on mobile ─────────────────────────────── */}
           <div className="order-1 flex flex-col items-center text-center hero-stagger">
 
-            {/* Brand label — small calligraphy, centered on mobile, left on desktop */}
-            <div className="mb-5 flex items-center justify-center gap-4">
+            {/* Brand label — height centered between top and headline, shifted slightly up */}
+            <div
+              className="-mt-2 mb-12 md:-mt-4 md:mb-20 flex items-center justify-center gap-4 w-full"
+              style={{ animation: "heroTextReveal 0.6s ease 2.2s both" }}
+            >
               <div className="h-px flex-1 max-w-[64px] bg-gradient-to-r from-transparent to-[#b89569]/40 dark:to-[#cba677]/30" />
               <span
+                id="hero-vikore-vana"
                 className="text-[2.2rem] md:text-[3rem] leading-none text-[#b89569] dark:text-[#cba677] pb-1.5"
                 style={{ fontFamily: "var(--font-calligraphy), cursive" }}
               >
@@ -35,7 +39,7 @@ export function FurnishEasyHero() {
                 className="text-[9.5vw] sm:text-[48px] md:text-[64px] lg:text-[84px] text-[#b89569] dark:text-[#cba677] leading-[0.8] mt-2 lg:mt-4 whitespace-nowrap"
                 style={{ fontFamily: "var(--font-calligraphy)" }}
               >
-                it's a feeling you create.
+                it&apos;s a feeling you create.
               </span>
             </h1>
 
@@ -47,16 +51,11 @@ export function FurnishEasyHero() {
               Curated pieces to help you build it.
             </p>
 
-            {/* Lifestyle image — mobile only, sits between headline and CTAs */}
-            <div className="mt-3 overflow-hidden rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.28)] lg:hidden">
-              <Image
-                src="/new-hero.png"
-                alt="Warm minimal living space"
-                width={900}
-                height={560}
-                className="w-full object-cover"
-                priority
-              />
+            {/* 3D Room — mobile only, sits between headline and CTAs */}
+            <div className="mt-3 lg:hidden w-full flex justify-center overflow-visible">
+              <div className="w-[100vw] aspect-square relative -mx-4">
+                <IsometricRoom3D />
+              </div>
             </div>
 
             {/* CTA buttons — always side by side */}
@@ -92,23 +91,10 @@ export function FurnishEasyHero() {
             </div>
           </div>
 
-          {/* ── Right — desktop image only ───────────────────────── */}
-          <div className="order-2 hidden lg:block relative hero-image-reveal">
-
-            {/* Soft glow behind image */}
-            <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-[#b89569]/10 to-transparent dark:from-[#cba677]/8 blur-2xl pointer-events-none" />
-
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] shadow-[0_24px_60px_rgba(0,0,0,0.10)] dark:shadow-[0_24px_60px_rgba(0,0,0,0.35)] border border-white/40 dark:border-white/8 group">
-              <Image
-                src="/new-hero.png"
-                alt="Warm minimal living space"
-                fill
-                priority
-                sizes="(min-width: 1024px) 45vw, 0vw"
-                className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.03]"
-              />
-              {/* Subtle vignette overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/12 via-transparent to-transparent pointer-events-none" />
+          {/* ── Right — 3D Room (desktop only) ─────────────────── */}
+          <div className="order-2 hidden lg:block relative hero-image-reveal w-[115%] -ml-[15%]">
+            <div className="relative aspect-[5/4] w-full">
+              <IsometricRoom3D />
             </div>
           </div>
 
