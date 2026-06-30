@@ -2,8 +2,9 @@
 // Auto-generated from temp_room.html
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { Play } from "lucide-react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
@@ -13,6 +14,8 @@ import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass.js";
 
 export function IsometricRoom3D() {
   const mountRef = useRef<HTMLDivElement>(null);
+  const interactiveRef = useRef(true);
+  const startLoopRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -29,12 +32,13 @@ export function IsometricRoom3D() {
     const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const EPS = 0.001;
     const RW = 8, RH = 4.2, RD = 7; // Room dimensions
-    const SHADOW_RES = 1024;
+    const isMobile = width < 768; // Moved up for global use
+    const SHADOW_RES = isMobile ? 512 : 1024;
 
     // ============================================================
     // RENDERER & CORE
     // ============================================================
-    const pr = window.devicePixelRatio || 1;
+    const pr = window.devicePixelRatio || 1; // Max clarity on all screens
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance', alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(pr);
@@ -53,7 +57,6 @@ export function IsometricRoom3D() {
     // ============================================================
     // CAMERA
     // ============================================================
-    const isMobile = width < 768;
     const camera = new THREE.PerspectiveCamera(isMobile ? 38 : 26, width / height, 0.1, 100);
     // Cinematic intro start position
     const camIntro = new THREE.Vector3(13.5, 10, 14.5);
@@ -85,8 +88,9 @@ export function IsometricRoom3D() {
     composer.setPixelRatio(pr);
     composer.addPass(new RenderPass(scene, camera));
 
+    const bloomRes = isMobile ? new THREE.Vector2(width / 2, height / 2) : new THREE.Vector2(width, height);
     const bloom = new UnrealBloomPass(
-      new THREE.Vector2(width, height),
+      bloomRes,
       0.18, 0.6, 0.85
     );
     composer.addPass(bloom);
@@ -1423,23 +1427,7 @@ export function IsometricRoom3D() {
     }
 
     // ============================================================
-    // DUST PARTICLES
-    // ============================================================
-    function buildDustParticles() {
-      const count = 80;
-      const positions = new Float32Array(count * 3);
-      for (let i = 0; i < count; i++) {
-        positions[i * 3] = (Math.random() - 0.5) * RW * 0.8;
-        positions[i * 3 + 1] = 0.5 + Math.random() * (RH - 1);
-        positions[i * 3 + 2] = (Math.random() - 0.5) * RD * 0.8;
-      }
-      const geo = new THREE.BufferGeometry();
-      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      const mat = new THREE.PointsMaterial({ color: '#F5EDE0', size: 0.015, transparent: true, opacity: 0.35, sizeAttenuation: true });
-      const points = new THREE.Points(geo, mat);
-      scene.add(points);
-      animData.dustParticles = points;
-    }
+    // (Dust particles removed per request)
 
     // ============================================================
     // LIGHTING SYSTEM
@@ -1748,7 +1736,7 @@ export function IsometricRoom3D() {
         buildDogHouse();
         buildDog();
         // buildOliveTree(); // removed per user request
-        buildDustParticles();
+        // buildDustParticles(); (removed)
         setupLighting();
 
         // Photo frame with cursive brand name on left wall
@@ -1848,8 +1836,19 @@ export function IsometricRoom3D() {
         renderer.domElement.addEventListener('pointerdown', handleInteraction);
         renderer.domElement.addEventListener('touchstart', handleInteraction, { passive: true });
 
+        let framesRendered = 0;
+        let isLooping = true;
+        
         function animate() {
+          if (!isLooping) return;
           animId = requestAnimationFrame(animate);
+          
+          framesRendered++;
+          if (!interactiveRef.current && framesRendered > 5) {
+            isLooping = false; // Completely stop the loop
+            return;
+          }
+
           const dt = clock.getDelta();
           const t = clock.getElapsedTime();
 
@@ -1905,8 +1904,8 @@ export function IsometricRoom3D() {
             });
           }
 
-          // Curtain movement
-          if (!REDUCED) {
+          // Curtain movement (disabled on mobile for performance)
+          if (!REDUCED && !isMobile) {
             animData.curtainMeshes.forEach((curtain, ci) => {
               const pos = curtain.geometry.attributes.position;
               for (let i = 0; i < pos.count; i++) {
@@ -2014,23 +2013,20 @@ export function IsometricRoom3D() {
             }
           }
 
-          // Dust particles
-          if (animData.dustParticles && !REDUCED) {
-            const dPos = animData.dustParticles.geometry.attributes.position;
-            for (let i = 0; i < dPos.count; i++) {
-              let y = dPos.getY(i);
-              y += dt * 0.02;
-              if (y > RH - 0.5) y = 0.5;
-              dPos.setY(i, y);
-              dPos.setX(i, dPos.getX(i) + Math.sin(t * 0.3 + i) * dt * 0.005);
-              dPos.setZ(i, dPos.getZ(i) + Math.cos(t * 0.2 + i * 0.7) * dt * 0.003);
-            }
-            dPos.needsUpdate = true;
-          }
+          // (Dust particles removed)
 
           controls.update();
           composer.render();
         }
+        
+        startLoopRef.current = () => {
+          if (!isLooping) {
+            isLooping = true;
+            clock.getDelta(); // Flush the massive delta time accumulated while paused
+            animate();
+          }
+        };
+
         animate();
 
         const ro = new ResizeObserver(() => {
@@ -2051,8 +2047,13 @@ export function IsometricRoom3D() {
           controls.dispose();
           renderer.dispose();
           composer.dispose();
+          if (container && renderer.domElement && container.contains(renderer.domElement)) {
+            container.removeChild(renderer.domElement);
+          }
         };
       }, []);
 
-  return <div ref={mountRef} className="w-full h-full relative z-10 pointer-events-auto" />;
+  return (
+    <div ref={mountRef} className="w-full h-full relative z-10 pointer-events-auto" />
+  );
 }

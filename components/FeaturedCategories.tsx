@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 interface CategoryItem {
   name: string;
@@ -138,49 +138,17 @@ const categoryData: CategoryItem[] = [
   },
 ];
 
-function CategoryCard({
-  item,
-  index,
-  isActive,
-}: {
-  item: CategoryItem;
-  index: number;
-  isActive: boolean;
-}) {
-  const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
+function CategoryCard({ item }: { item: CategoryItem }) {
   return (
-    <div
-      ref={ref}
-      className={`h-full transition-all duration-700 ease-out ${
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      }`}
-      style={{ transitionDelay: `${index * 50}ms` }}
-    >
+    <div className="h-full">
       <Link
         href={`/search?category=${item.slug}`}
         className="group flex flex-col justify-center items-center h-full min-h-[125px] sm:min-h-[145px] md:min-h-[195px] rounded-[20px] p-4 sm:p-5 md:p-8 text-center
           bg-[#fdf6f0]/60 dark:bg-[#25211e]/60 backdrop-blur-md
-          border border-[#b8935a]/20 dark:border-[#b8935a]/15"
-        style={{
-          boxShadow: isActive
-            ? "0 18px 44px rgba(0,0,0,0.13), 0 6px 14px rgba(0,0,0,0.08)"
-            : "0 4px 12px rgba(184,147,90,0.08)",
-          transform: isActive ? "translateY(-12px) scale(1.03)" : "translateY(0) scale(1)",
-          transition: "transform 0.6s cubic-bezier(0.34, 1.46, 0.64, 1), box-shadow 0.5s ease",
-        }}
+          border border-[#b8935a]/20 dark:border-[#b8935a]/15
+          shadow-[0_4px_12px_rgba(184,147,90,0.08)]
+          hover:-translate-y-1.5 hover:shadow-[0_12px_24px_rgba(184,147,90,0.15)]
+          transition-all duration-300"
       >
         <div className="flex flex-col items-center">
           {/* SVG ILLUSTRATION */}
@@ -202,98 +170,58 @@ function CategoryCard({
 }
 
 export function FeaturedCategories({ categories }: { categories?: string[] }) {
-  const [headerVisible, setHeaderVisible] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const totalCards = categoryData.slice(0, 8).length;
-
-  useEffect(() => {
-    const el = headerRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setHeaderVisible(true); },
-      { threshold: 0.3 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const sectionRef = useRef<HTMLElement>(null);
-
-  // Tie active card index directly to scroll position through the section
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-
-      // Calculate progress of section moving through viewport
-      const start = windowHeight; 
-      const end = -rect.height;   
-      const total = start - end;
-      const current = start - rect.top;
-      const progress = current / total;
-
-      // When section is in the middle 60% of the screen, animate through the cards
-      if (progress > 0.2 && progress < 0.8) {
-        const p = (progress - 0.2) / 0.6;
-        const idx = Math.floor(p * totalCards);
-        setActiveIndex(Math.min(Math.max(idx, 0), totalCards - 1));
-      } else {
-        setActiveIndex(-1); // No card active when outside optimal viewing area
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [totalCards]);
-
   return (
-    <section ref={sectionRef} className="relative overflow-hidden py-10 sm:py-14 md:py-16">
+    <section className="relative overflow-hidden py-10 sm:py-14 md:py-16">
       <div className="container-premium relative z-10">
         {/* Header */}
-        <div
-          ref={headerRef}
-          className={`mb-10 sm:mb-12 md:mb-14 text-center transition-all duration-1000 ${
-            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
-            <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-cedar/50" />
-            <p
-              className="text-[0.6rem] sm:text-[0.65rem] font-medium uppercase tracking-[0.3em] sm:tracking-[0.35em] text-cedar dark:text-[#cba677]"
-              style={{ fontFamily: "var(--font-jost), sans-serif" }}
-            >
-              Explore by Room
-            </p>
-            <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-cedar/50" />
-          </div>
+        <ScrollReveal>
+          <div className="mb-10 sm:mb-12 md:mb-14 text-center">
+            <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-cedar/50" />
+              <p
+                className="text-[0.6rem] sm:text-[0.65rem] font-medium uppercase tracking-[0.3em] sm:tracking-[0.35em] text-cedar dark:text-[#cba677]"
+                style={{ fontFamily: "var(--font-jost), sans-serif" }}
+              >
+                Explore by Room
+              </p>
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-cedar/50" />
+            </div>
 
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1]">
-            Featured <span className="italic text-[#b89569] dark:text-[#cba677]">Categories</span>
-          </h2>
-        </div>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1]">
+              Featured <span className="italic text-[#b89569] dark:text-[#cba677]">Categories</span>
+            </h2>
+          </div>
+        </ScrollReveal>
 
         {/* Category grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5 max-w-5xl mx-auto">
-          {categoryData.slice(0, 8).map((item, i) => (
-            <CategoryCard key={item.slug} item={item} index={i} isActive={activeIndex === i} />
+          {categoryData.slice(0, 8).map((item, index) => (
+            <ScrollReveal 
+              key={item.slug} 
+              delay={index * 100} 
+              distance={80}
+              duration={1200}
+              direction={index % 2 === 0 ? "right" : "left"}
+            >
+              <CategoryCard item={item} />
+            </ScrollReveal>
           ))}
         </div>
 
         {/* View all categories button */}
-        <div className="mt-10 flex justify-center">
-          <Link
-            href="/categories"
-            className="group inline-flex items-center justify-center gap-2 h-11 px-8 rounded-full 
-              border border-[#b8935a] text-[#b8935a] font-sans text-xs font-semibold uppercase tracking-[2px]
-              transition-all duration-300 hover:bg-[#b8935a] hover:text-white hover:shadow-[0_4px_14px_rgba(184,147,90,0.25)]"
-          >
-            View All Categories
-            <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </Link>
-        </div>
+        <ScrollReveal delay={300}>
+          <div className="mt-10 flex justify-center">
+            <Link
+              href="/categories"
+              className="group inline-flex items-center justify-center gap-2 h-11 px-8 rounded-full 
+                border border-[#b8935a] text-[#b8935a] font-sans text-xs font-semibold uppercase tracking-[2px]
+                transition-all duration-300 hover:bg-[#b8935a] hover:text-white hover:shadow-[0_4px_14px_rgba(184,147,90,0.25)]"
+            >
+              View All Categories
+              <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </Link>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

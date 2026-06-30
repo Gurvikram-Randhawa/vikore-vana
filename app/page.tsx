@@ -4,7 +4,7 @@ import { CoreValues } from "@/components/CoreValues";
 import { FaqSection } from "@/components/FaqSection";
 import { FeaturedArticlesList } from "@/components/FeaturedArticlesList";
 import { FeaturedCategories } from "@/components/FeaturedCategories";
-import { TrendingProductsCarousel } from "@/components/TrendingProductsCarousel";
+import { ProductCard } from "@/components/ProductCard";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { ReviewsSection } from "@/components/ReviewsSection";
 import { ScrollReveal } from "@/components/ScrollReveal";
@@ -17,35 +17,13 @@ export const dynamic = "force-dynamic";
 export default function HomePage() {
   const articles = getArticles();
   const products = getProducts();
-  const sortedArticles = [
-    ...articles.filter((a) => a.featured),
-    ...articles.filter((a) => !a.featured),
-  ];
+  const sortedArticles = [...articles].sort(() => 0.5 - Math.random());
 
 
   return (
     <>
       {/* Hero — Furnish-Easy Style */}
       <FurnishEasyHero />
-
-      {/* Featured Articles */}
-      <section className="container-premium py-10 sm:py-14 md:py-16">
-        <ScrollReveal>
-          <div className="mb-10 sm:mb-12 md:mb-14 text-center">
-            <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
-              <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-cedar/50" />
-              <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-cedar dark:text-[#cba677]">
-                Latest Guides
-              </p>
-              <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-cedar/50" />
-            </div>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1]">
-              Featured <span className="italic text-[#b89569] dark:text-[#cba677]">Articles</span>
-            </h2>
-          </div>
-        </ScrollReveal>
-        <FeaturedArticlesList articles={sortedArticles} />
-      </section>
 
       {/* Trending Products */}
       <section className="py-10 sm:py-14 md:py-16 overflow-x-hidden w-full">
@@ -69,11 +47,21 @@ export default function HomePage() {
           </ScrollReveal>
         </div>
 
-        {/* Carousel Strip - edge-to-edge */}
-        <div className="w-full overflow-x-hidden">
-          <ScrollReveal delay={200} distance={60}>
-            <TrendingProductsCarousel products={products} />
-          </ScrollReveal>
+        {/* Product Grid */}
+        <div className="w-full max-w-[1536px] mx-auto px-3 sm:px-4 lg:px-8 mt-6 sm:mt-8">
+            <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-2 lg:grid-cols-5">
+              {[...products].sort(() => 0.5 - Math.random()).slice(0, 10).map((product, index) => (
+                <ScrollReveal 
+                  key={product.slug} 
+                  delay={index * 150} 
+                  distance={100} 
+                  duration={1000} 
+                  direction="up"
+                >
+                  <ProductCard product={product} />
+                </ScrollReveal>
+              ))}
+            </div>
         </div>
 
         {/* Below Carousel Link */}
@@ -96,6 +84,28 @@ export default function HomePage() {
 
       {/* Featured Categories */}
       <FeaturedCategories categories={site.categoryTiles} />
+
+      {/* Featured Articles */}
+      <section className="container-premium py-10 sm:py-14 md:py-16">
+        <ScrollReveal>
+          <div className="mb-10 sm:mb-12 md:mb-14 text-center">
+            <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-cedar/50" />
+              <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-cedar dark:text-[#cba677]">
+                Latest Guides
+              </p>
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-cedar/50" />
+            </div>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1]">
+              Featured <span className="italic text-[#b89569] dark:text-[#cba677]">Articles</span>
+            </h2>
+          </div>
+        </ScrollReveal>
+        <FeaturedArticlesList articles={sortedArticles} />
+      </section>
+
+      {/* Core Values / Approach */}
+      <CoreValues />
 
       {/* Reviews */}
       <ReviewsSection />
@@ -164,9 +174,6 @@ export default function HomePage() {
           </ScrollReveal>
         </div>
       </section>
-
-      {/* Core Values / Approach */}
-      <CoreValues />
     </>
   );
 }

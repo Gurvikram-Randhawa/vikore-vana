@@ -40,7 +40,7 @@ export function Header() {
   return (
     <>
       <header className={`sticky top-0 z-50 border-b border-[#b8935a]/15 bg-[#fffaf4]/85 backdrop-blur-md dark:border-white/5 dark:bg-[#181614]/85 transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
-        <div className="container-premium py-2 md:h-16 md:py-0 flex flex-col md:flex-row justify-center md:justify-between items-center gap-2 md:gap-4">
+        <div className="container-premium py-1 md:h-16 md:py-0 flex flex-col md:flex-row justify-center md:justify-between items-center gap-1.5 md:gap-4">
           <div className="flex items-center justify-between w-full md:w-auto md:flex-1 md:justify-start">
             <Link href="/" className="flex items-center gap-2 font-serif text-base md:text-lg tracking-[0.8px] font-semibold text-ink whitespace-nowrap dark:text-linen font-bold">
               <span className="relative overflow-hidden w-8 h-8 md:w-9 md:h-9 rounded-full border border-[#b8935a]/30 dark:border-white/10 shadow-sm flex items-center justify-center shrink-0">

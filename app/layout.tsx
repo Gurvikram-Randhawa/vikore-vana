@@ -6,7 +6,11 @@ import { Header } from "@/components/Header";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SwarmBackground } from "@/components/SwarmBackground";
 import { EntranceReveal } from "@/components/EntranceReveal";
+import { QuizPopup } from "@/components/QuizPopup";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { Preloader } from "@/components/Preloader";
 import { site } from "@/lib/site";
+import { getProducts } from "@/lib/content";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -57,13 +61,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body className={`${inter.variable} ${playfair.variable} ${greatVibes.variable} ${cormorant.variable} ${jost.variable} ${alexBrush.variable} ${sacramento.variable} font-sans antialiased`}>
+        <Preloader />
         <EntranceReveal />
-        <ThemeProvider>
-          <SwarmBackground />
-          <Header />
-          <main>{children}</main>
-          <Footer />
-        </ThemeProvider>
+        <SmoothScroll>
+          <ThemeProvider>
+            <SwarmBackground />
+            <Header />
+            <main>{children}</main>
+            <Footer />
+            <QuizPopup allProducts={getProducts()} />
+          </ThemeProvider>
+        </SmoothScroll>
 
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}

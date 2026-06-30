@@ -1,10 +1,46 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowRight, Star } from "lucide-react";
+import { ArrowRight, Star, Sparkles, Loader2 } from "lucide-react";
 import { IsometricRoom3D } from "@/components/IsometricRoom3D";
 
 export function FurnishEasyHero() {
+  const [showMagic, setShowMagic] = useState(false);
+  const [isMounting, setIsMounting] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (showMagic) {
+      // Defer the heavy WebGL mounting by 50ms to allow the browser to paint the loading UI first!
+      const timer = setTimeout(() => setIsMounting(true), 150);
+      return () => clearTimeout(timer);
+    } else {
+      setIsMounting(false);
+    }
+  }, [showMagic]);
+
+  useEffect(() => {
+    if (!showMagic) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting) {
+          setShowMagic(false);
+        }
+      },
+      { threshold: 0 } // Unmount as soon as it leaves the viewport
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [showMagic]);
+
   return (
-    <section className="overflow-hidden pt-8 pb-8 md:pt-10 md:pb-12">
+    <section className="overflow-hidden pt-5 md:pt-6 pb-8 md:pb-12" ref={containerRef}>
       <div className="container-premium max-w-[1400px]">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-16 xl:gap-24 items-center">
 
@@ -53,8 +89,38 @@ export function FurnishEasyHero() {
 
             {/* 3D Room — mobile only, sits between headline and CTAs */}
             <div className="mt-3 lg:hidden w-full flex justify-center overflow-visible">
-              <div className="w-[100vw] aspect-square relative -mx-4">
-                <IsometricRoom3D />
+              <div className="w-[100vw] aspect-square relative -mx-4 flex items-center justify-center">
+                {!showMagic ? (
+                  <button 
+                    onClick={() => setShowMagic(true)}
+                    className="group relative flex flex-col items-center justify-center gap-3 w-[85%] h-[85%] rounded-[2.5rem] border border-[#b89569]/30 bg-gradient-to-br from-[#fdf6f0] to-[#f5ebd9] dark:from-[#25211e] dark:to-[#1a1715] shadow-[0_8px_32px_rgba(184,149,105,0.15)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden transition-all duration-500 active:scale-[0.98]"
+                  >
+                    <div className="absolute inset-0 bg-[#b89569]/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="w-16 h-16 rounded-full bg-[#b89569] flex items-center justify-center text-white shadow-[0_4px_16px_rgba(184,149,105,0.4)] group-hover:scale-110 transition-transform duration-500">
+                      <Sparkles className="w-7 h-7" />
+                    </div>
+                    <span className="font-serif text-2xl text-ink dark:text-linen font-medium tracking-wide mt-2">
+                      See the Magic
+                    </span>
+                    <span className="text-[10px] uppercase tracking-[2.5px] font-bold text-[#b89569] dark:text-[#cba677]">
+                      Interactive 3D Room
+                    </span>
+                  </button>
+                ) : !isMounting ? (
+                  <div className="flex flex-col items-center justify-center gap-4 w-[85%] h-[85%] rounded-[2.5rem] bg-gradient-to-br from-[#fdf6f0] to-[#f5ebd9] dark:from-[#25211e] dark:to-[#1a1715] animate-pulse">
+                    <Loader2 className="w-10 h-10 animate-spin text-[#b89569]" />
+                    <span className="font-serif text-lg text-ink/70 dark:text-linen/70 font-medium">
+                      Crafting your room...
+                    </span>
+                  </div>
+                ) : (
+                  <div className="w-full h-full animate-in fade-in zoom-in-95 duration-1000 ease-out fill-mode-both relative">
+                    <IsometricRoom3D />
+                    <span className="absolute bottom-4 left-0 right-0 text-center text-[10px] text-[#b89569] dark:text-[#cba677] uppercase tracking-widest font-bold animate-pulse pointer-events-none">
+                      Drag to interact with room
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
