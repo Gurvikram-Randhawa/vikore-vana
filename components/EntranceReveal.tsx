@@ -7,8 +7,8 @@ export function EntranceReveal() {
   const [phase, setPhase] = useState<"intro" | "fadeout" | "done">("intro");
 
   useEffect(() => {
-    // Show splash for 1.5s, then start fadeout
-    const t1 = setTimeout(() => setPhase("fadeout"), 1500);
+    // Show splash for slightly longer to ensure mobile devices finish hydration and can show the text
+    const t1 = setTimeout(() => setPhase("fadeout"), 2200);
     return () => clearTimeout(t1);
   }, []);
 
@@ -32,16 +32,16 @@ export function EntranceReveal() {
         >
           <motion.div
             className="flex flex-col items-center gap-5"
-            initial={{ opacity: 0, y: 12, filter: "blur(8px)" }}
+            initial={{ opacity: 0, y: 20 }}
             animate={
               phase === "fadeout"
-                ? { opacity: 0, y: -30, filter: "blur(6px)" }
-                : { opacity: 1, y: 0, filter: "blur(0px)" }
+                ? { opacity: 0, y: -20 }
+                : { opacity: 1, y: 0 }
             }
             transition={
               phase === "fadeout"
-                ? { duration: 0.7, ease: "easeIn" }
-                : { duration: 0.9, ease: "easeOut", delay: 0.1 }
+                ? { duration: 0.6, ease: "easeIn" }
+                : { duration: 0.8, ease: "easeOut", delay: 0.2 }
             }
           >
             <span

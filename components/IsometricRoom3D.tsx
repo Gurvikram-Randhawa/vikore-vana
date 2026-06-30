@@ -34,14 +34,16 @@ export function IsometricRoom3D() {
     // ============================================================
     // RENDERER & CORE
     // ============================================================
-    const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance', alpha: true });
+    const pr = window.devicePixelRatio || 1;
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance', alpha: true });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(pr);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.setClearColor(0x000000, 0); // Ensure clear color is transparent
     renderer.domElement.style.touchAction = 'none';
     container.appendChild(renderer.domElement);
 
@@ -75,7 +77,12 @@ export function IsometricRoom3D() {
     // ============================================================
     // POST-PROCESSING
     // ============================================================
-    const composer = new EffectComposer(renderer);
+    const renderTarget = new THREE.WebGLRenderTarget(width * pr, height * pr, {
+      samples: 4, // Hardware MSAA for perfectly smooth edges
+      type: THREE.HalfFloatType // Preserves high dynamic range colors
+    });
+    const composer = new EffectComposer(renderer, renderTarget);
+    composer.setPixelRatio(pr);
     composer.addPass(new RenderPass(scene, camera));
 
     const bloom = new UnrealBloomPass(
@@ -104,15 +111,14 @@ export function IsometricRoom3D() {
       vec2 uv=(vUv-vec2(0.5))*vec2(offset);
       float v=1.0-dot(uv,uv);
       c.rgb*=mix(1.0,smoothstep(0.0,1.0,v),darkness);
-      c.r+=warmth; c.b-=warmth*0.5;
+      c.r+=warmth * c.a; c.b-=warmth*0.5 * c.a;
       gl_FragColor=c;
     }`
     };
     const vignettePass = new ShaderPass(vignetteShader);
     composer.addPass(vignettePass);
 
-    const smaa = new SMAAPass(width, height);
-    composer.addPass(smaa);
+    // SMAAPass removed in favor of hardware MSAA for superior clarity
 
     // ============================================================
     // ENVIRONMENT (procedural HDRI)
@@ -204,7 +210,7 @@ export function IsometricRoom3D() {
       const c = document.createElement('canvas');
       c.width = 256; c.height = 256;
       const x = c.getContext('2d');
-      x.fillStyle = '#F0EBE3'; x.fillRect(0, 0, 256, 256);
+      x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, 256, 256);
       const d = x.getImageData(0, 0, 256, 256);
       for (let i = 0; i < d.data.length; i += 4) {
         const n = (Math.random() - 0.5) * 5;
@@ -374,8 +380,8 @@ export function IsometricRoom3D() {
     // MATERIALS LIBRARY (PBR)
     // ============================================================
     const MAT = {
-      wall: new THREE.MeshStandardMaterial({ map: makeWallTex(), color: '#F0EBE3', roughness: 0.95, metalness: 0 }),
-      wallPanel: new THREE.MeshStandardMaterial({ color: '#EDE5D8', roughness: 0.88, metalness: 0 }),
+      wall: new THREE.MeshStandardMaterial({ map: makeWallTex(), color: '#FDFBF7', roughness: 0.95, metalness: 0 }),
+      wallPanel: new THREE.MeshStandardMaterial({ color: '#F0EBE1', roughness: 0.88, metalness: 0 }),
       floor: new THREE.MeshStandardMaterial({ map: makeFloorTex(), roughness: 0.65, metalness: 0.03 }),
       ceiling: new THREE.MeshStandardMaterial({ color: '#F5F0E8', roughness: 0.98, metalness: 0 }),
       walnut: new THREE.MeshStandardMaterial({ color: '#3E2B1C', roughness: 0.5, metalness: 0.05 }),
@@ -472,7 +478,7 @@ export function IsometricRoom3D() {
       candleLight: null, flameMesh: null, fireLight: null, fireMesh: null,
       sunLight: null, leaves: [], curtainMeshes: [],
       dustParticles: null, introProgress: 0, introDone: false,
-      breathOffset: 0
+      breathOffset: 0, wallCandleLights: [], wallFlameMeshes: []
     };
 
     // ============================================================
@@ -481,14 +487,26 @@ export function IsometricRoom3D() {
     function buildRoom() {
       const hw = RW / 2, hd = RD / 2;
 
+      // Exterior material (unlit, shaded off-white) to match wall color without glowing
+      const matExt = new THREE.MeshBasicMaterial({ color: '#C8C0B8' });
+
       // Floor
-      const fl = box(RW, 0.1, RD, MAT.floor, 0, -0.05, 0);
+      const flGeo = new THREE.BoxGeometry(RW, 0.1, RD);
+      const fl = new THREE.Mesh(flGeo, [matExt, matExt, MAT.floor, matExt, matExt, matExt]);
+      fl.position.set(0, -0.05, 0);
       fl.receiveShadow = true; scene.add(fl);
 
       // Back wall
-      scene.add(box(RW, RH, 0.14, MAT.wall, 0, RH / 2, -hd - 0.07));
+      const bwGeo = new THREE.BoxGeometry(RW, RH, 0.14);
+      const bw = new THREE.Mesh(bwGeo, [matExt, matExt, matExt, matExt, MAT.wall, matExt]);
+      bw.position.set(0, RH / 2, -hd - 0.07);
+      bw.castShadow = true; bw.receiveShadow = true; scene.add(bw);
+
       // Left wall
-      scene.add(box(0.14, RH, RD, MAT.wall, -hw - 0.07, RH / 2, 0));
+      const lwGeo = new THREE.BoxGeometry(0.14, RH, RD);
+      const lw = new THREE.Mesh(lwGeo, [MAT.wall, matExt, matExt, matExt, matExt, matExt]);
+      lw.position.set(-hw - 0.07, RH / 2, 0);
+      lw.castShadow = true; lw.receiveShadow = true; scene.add(lw);
 
       // Floating ceiling with gap
       // Ceiling removed
@@ -496,20 +514,9 @@ export function IsometricRoom3D() {
       // Ceiling beams
       // Beams removed
 
-      // Hidden LED strip (back edge of ceiling)
-      const ledGeo = new THREE.BoxGeometry(RW - 0.4, 0.015, 0.03);
-      const ledBack = new THREE.Mesh(ledGeo, MAT.led);
-      ledBack.position.set(0, RH - 0.085, -hd + 0.2);
-      scene.add(ledBack);
-      const ledLeft = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.015, RD - 0.4), MAT.led);
-      ledLeft.position.set(-hw + 0.2, RH - 0.085, 0);
-      scene.add(ledLeft);
+      // Hidden LED strips removed to prevent back-side glow
 
-      // LED light emission
-      const ledL1 = new THREE.RectAreaLight('#F5E0B8', 1.5, RW - 0.4, 0.5);
-      ledL1.position.set(0, RH - 0.12, -hd + 0.3);
-      ledL1.lookAt(0, RH - 0.5, 0);
-      scene.add(ledL1);
+      // LED light emission removed completely to fix hotspots on the walls
 
       // Crown moulding — 3-layer profile
       const crownY = RH - 0.15;
@@ -527,26 +534,6 @@ export function IsometricRoom3D() {
       // Baseboard top cap
       scene.add(box(RW, 0.02, 0.05, MAT.cream, 0, 0.17, -hd + 0.025));
       scene.add(box(0.05, 0.02, RD, MAT.cream, -hw + 0.025, 0.17, 0));
-
-      // Wall panel mouldings (back wall) — 4 raised panels
-      const panelW = 1.4, panelH = 2.0, panelD = 0.02;
-      const panelY = 0.35;
-      const panelSpacing = (RW - panelW * 4) / 5;
-      for (let i = 0; i < 4; i++) {
-        const px = -RW / 2 + panelSpacing + panelW / 2 + i * (panelW + panelSpacing);
-        // Outer frame
-        scene.add(box(panelW + 0.06, panelH + 0.06, 0.015, MAT.cream, px, panelY + panelH / 2, -hd + 0.08));
-        // Inner panel (slightly recessed look via darker shade)
-        scene.add(box(panelW, panelH, 0.01, MAT.wallPanel, px, panelY + panelH / 2, -hd + 0.085));
-      }
-
-      // Chair rail
-      scene.add(box(RW, 0.03, 0.025, MAT.cream, 0, 0.95, -hd + 0.065));
-
-      // Marble feature wall strip (lower back wall, wainscoting)
-      scene.add(box(RW, 0.7, 0.015, MAT.marbleDk, 0, 0.35, -hd + 0.075));
-      // Marble cap rail
-      scene.add(box(RW, 0.025, 0.035, MAT.marble, 0, 0.71, -hd + 0.065));
     }
 
     // ============================================================
@@ -827,7 +814,7 @@ export function IsometricRoom3D() {
         new THREE.Vector2(0.025, 0.32), new THREE.Vector2(0.035, 0.34),
       ];
       const legGeo = new THREE.LatheGeometry(legPts, 12);
-      [[-0.56, 0.17, 0.28], [0.56, 0.17, 0.28], [-0.56, 0.17, -0.28], [0.56, 0.17, -0.28]].forEach(p => {
+      [[-0.56, 0, 0.28], [0.56, 0, 0.28], [-0.56, 0, -0.28], [0.56, 0, -0.28]].forEach(p => {
         const l = new THREE.Mesh(legGeo, MAT.walnut); l.position.set(...p); l.castShadow = true; g.add(l);
       });
 
@@ -924,16 +911,158 @@ export function IsometricRoom3D() {
         }
       }
 
-      // Cabinet LED strip under top shelf
-      const ledStrip = new THREE.Mesh(new THREE.BoxGeometry(w - 0.1, 0.008, 0.015), MAT.led);
-      ledStrip.position.set(0, h - 0.005, d / 2 - 0.02);
-      g.add(ledStrip);
-      const cabLed = new THREE.PointLight('#F5E0B8', 0.6, 1.5, 2);
-      cabLed.position.set(0, h - 0.05, d / 2);
-      g.add(cabLed);
+      // Cabinet LED strip removed
 
       g.position.set(-RW / 2 + 0.45, 0, -RD / 2 + 0.3);
       scene.add(g);
+    }
+
+    // ============================================================
+    // DOG HOUSE
+    // ============================================================
+    function buildDogHouse() {
+      const g = new THREE.Group();
+      const w = 0.8, h = 0.6, d = 0.7;
+      
+      // Base
+      g.add(box(w, 0.04, d, MAT.dkWood, 0, 0.02, 0));
+      
+      // Side walls (Cream)
+      g.add(box(0.04, h, d, MAT.cream, -w/2 + 0.02, h/2 + 0.04, 0));
+      g.add(box(0.04, h, d, MAT.cream, w/2 - 0.02, h/2 + 0.04, 0));
+      
+      // Back wall
+      g.add(box(w - 0.08, h, 0.04, MAT.cream, 0, h/2 + 0.04, -d/2 + 0.02));
+      
+      // Front frame (Doorway)
+      g.add(box(0.2, h, 0.04, MAT.cream, -w/2 + 0.1 + 0.04, h/2 + 0.04, d/2 - 0.02));
+      g.add(box(0.2, h, 0.04, MAT.cream, w/2 - 0.1 - 0.04, h/2 + 0.04, d/2 - 0.02));
+      g.add(box(w - 0.4 - 0.08, 0.15, 0.04, MAT.cream, 0, h - 0.075 + 0.04, d/2 - 0.02));
+      
+      // Classic slanting triangular roof
+      const roofH = 0.25;
+      const gableShape = new THREE.Shape();
+      gableShape.moveTo(-w/2, 0);
+      gableShape.lineTo(w/2, 0);
+      gableShape.lineTo(0, roofH);
+      gableShape.lineTo(-w/2, 0);
+      
+      const extrudeSettings = { depth: 0.04, bevelEnabled: false };
+      const gableGeo = new THREE.ExtrudeGeometry(gableShape, extrudeSettings);
+      
+      const gableFront = new THREE.Mesh(gableGeo, MAT.cream);
+      gableFront.position.set(0, h + 0.04, d/2 - 0.04);
+      g.add(gableFront);
+      
+      const gableBack = new THREE.Mesh(gableGeo, MAT.cream);
+      gableBack.position.set(0, h + 0.04, -d/2);
+      g.add(gableBack);
+
+      const pitchAngle = Math.atan2(roofH, w/2);
+      const roofSideW = Math.sqrt(roofH*roofH + (w/2)*(w/2)) + 0.12; // Overhang
+      
+      const pitchL = box(roofSideW, 0.04, d + 0.12, MAT.walnut, 0, 0, 0);
+      pitchL.rotation.z = pitchAngle;
+      pitchL.position.set(-w/4 - 0.03, h + 0.04 + roofH/2 + 0.01, 0);
+      g.add(pitchL);
+      
+      const pitchR = box(roofSideW, 0.04, d + 0.12, MAT.walnut, 0, 0, 0);
+      pitchR.rotation.z = -pitchAngle;
+      pitchR.position.set(w/4 + 0.03, h + 0.04 + roofH/2 + 0.01, 0);
+      g.add(pitchR);
+      
+      // Plush dog bed inside
+      const bed = cylM(0.25, 0.25, 0.08, MAT.fabric, 0, 0.08, 0.05, 16);
+      bed.scale.z = 0.8;
+      g.add(bed);
+
+      // Cute small food bowl outside
+      g.add(cylM(0.08, 0.06, 0.04, MAT.ceramic, 0.45, 0.02, 0.3, 16));
+      g.add(cylM(0.07, 0.07, 0.01, new THREE.MeshStandardMaterial({color: '#554433'}), 0.45, 0.035, 0.3, 16)); // kibble
+      
+      // Position near the left wall exactly under the brand name (z = 0)
+      // Rotate so the entrance faces the room center (+X)
+      g.rotation.y = Math.PI / 2;
+      g.position.set(-3.5, 0, 0); 
+      
+      scene.add(g);
+    }
+
+    // ============================================================
+    // ANIMATED DOG
+    // ============================================================
+    function buildDog() {
+      const g = new THREE.Group();
+      
+      const dogMat = new THREE.MeshStandardMaterial({ color: '#FDFBF7', roughness: 0.95 });
+      const darkMat = new THREE.MeshStandardMaterial({ color: '#3A2E20', roughness: 0.9 });
+      
+      // Body
+      const body = box(0.18, 0.18, 0.35, dogMat, 0, 0.2, 0);
+      g.add(body);
+      
+      // Head
+      const headG = new THREE.Group();
+      const head = box(0.16, 0.16, 0.16, dogMat, 0, 0, 0);
+      headG.add(head);
+      const snout = box(0.1, 0.08, 0.1, dogMat, 0, -0.02, 0.1);
+      headG.add(snout);
+      const nose = box(0.04, 0.03, 0.02, darkMat, 0, 0.01, 0.16);
+      headG.add(nose);
+      
+      // Ears
+      const earL = box(0.02, 0.1, 0.06, darkMat, -0.09, 0.02, -0.04);
+      earL.rotation.z = 0.2;
+      headG.add(earL);
+      const earR = box(0.02, 0.1, 0.06, darkMat, 0.09, 0.02, -0.04);
+      earR.rotation.z = -0.2;
+      headG.add(earR);
+      
+      headG.position.set(0, 0.32, 0.18);
+      g.add(headG);
+      
+      // Legs (pivots at top)
+      const legGeo = new THREE.BoxGeometry(0.05, 0.16, 0.05);
+      legGeo.translate(0, -0.08, 0);
+      
+      const legFL = new THREE.Mesh(legGeo, dogMat);
+      legFL.position.set(-0.07, 0.15, 0.12);
+      g.add(legFL);
+      
+      const legFR = new THREE.Mesh(legGeo, dogMat);
+      legFR.position.set(0.07, 0.15, 0.12);
+      g.add(legFR);
+      
+      const legBL = new THREE.Mesh(legGeo, dogMat);
+      legBL.position.set(-0.07, 0.15, -0.12);
+      g.add(legBL);
+      
+      const legBR = new THREE.Mesh(legGeo, dogMat);
+      legBR.position.set(0.07, 0.15, -0.12);
+      g.add(legBR);
+      
+      // Tail
+      const tailGeo = new THREE.BoxGeometry(0.03, 0.18, 0.03);
+      tailGeo.translate(0, 0.09, 0);
+      const tail = new THREE.Mesh(tailGeo, dogMat);
+      tail.position.set(0, 0.25, -0.16);
+      tail.rotation.x = -Math.PI / 4;
+      g.add(tail);
+      
+      g.position.set(-3.5, 0, 0); // Start at doghouse
+      g.rotation.y = Math.PI / 2;
+      
+      g.traverse(c => { if ((c as any).isMesh) { (c as any).castShadow = true; (c as any).receiveShadow = true; } });
+      scene.add(g);
+      
+      (animData as any).dog = {
+        group: g, head: headG, tail: tail,
+        legs: [legFL, legFR, legBL, legBR],
+        state: 'sleep',
+        timer: 0,
+        pathIndex: 0,
+        startX: -3.5, startZ: 0
+      };
     }
 
     // ============================================================
@@ -988,7 +1117,7 @@ export function IsometricRoom3D() {
       cap.rotation.x = -Math.PI / 2; cap.position.set(0, 2.01, 0); g.add(cap);
       g.add(torusM(0.26, 0.008, MAT.goldTrim, 0, 1.63, 0, 24));
       g.add(torusM(0.1, 0.006, MAT.goldTrim, 0, 2.01, 0, 20));
-      const pl = new THREE.PointLight('#F5E6C8', 1.8, 5.5, 1.5);
+      const pl = new THREE.PointLight('#F5E6C8', 0.8, 5.5, 1.5);
       pl.position.set(0, 1.72, 0); pl.castShadow = true;
       pl.shadow.mapSize.set(SHADOW_RES, SHADOW_RES); pl.shadow.radius = 5;
       g.add(pl);
@@ -1163,44 +1292,94 @@ export function IsometricRoom3D() {
     // ============================================================
     // PLANTS
     // ============================================================
-    function buildPlant() {
+    function buildPlantStand() {
       const g = new THREE.Group();
-      const pp = [
-        new THREE.Vector2(EPS, 0), new THREE.Vector2(0.12, 0),
-        new THREE.Vector2(0.15, 0.02), new THREE.Vector2(0.17, 0.06),
-        new THREE.Vector2(0.185, 0.14), new THREE.Vector2(0.2, 0.22),
-        new THREE.Vector2(0.22, 0.28), new THREE.Vector2(0.21, 0.3),
-        new THREE.Vector2(0.23, 0.32), new THREE.Vector2(0.21, 0.34),
-      ];
-      const potMat = new THREE.MeshStandardMaterial({ color: '#3E2B1C', roughness: 0.6, metalness: 0.05 });
-      g.add(lathe(pp, potMat, 0, 0, 0, 24));
-      g.add(new THREE.Mesh(cyl(0.22, 0.21, 0.012, 24), MAT.goldTrim).translateY(0.345));
-      g.add(cylM(0.13, 0.14, 0.02, potMat, 0, 0.01, 0, 20));
-      const soil = new THREE.Mesh(new THREE.CircleGeometry(Math.max(EPS, 0.19), 20), new THREE.MeshStandardMaterial({ color: '#2C1E14', roughness: 1 }));
-      soil.rotation.x = -Math.PI / 2; soil.position.y = 0.335; g.add(soil);
-      g.add(cylM(0.02, 0.028, 0.9, MAT.dkWood, 0, 0.78, 0, 8));
-      const ld = [
-        { x: 0, y: 1.25, z: 0, sx: 0.2, sy: 0.28, sz: 0.04, rx: 0, rz: 0 },
-        { x: 0.15, y: 1.18, z: 0.09, sx: 0.18, sy: 0.24, sz: 0.035, rx: 0.28, rz: -0.2 },
-        { x: -0.15, y: 1.15, z: 0.07, sx: 0.17, sy: 0.23, sz: 0.035, rx: -0.22, rz: 0.25 },
-        { x: 0.09, y: 1.3, z: -0.12, sx: 0.19, sy: 0.25, sz: 0.035, rx: -0.35, rz: -0.15 },
-        { x: -0.12, y: 1.27, z: -0.1, sx: 0.18, sy: 0.23, sz: 0.035, rx: 0.25, rz: 0.2 },
-        { x: 0.2, y: 1.02, z: 0.05, sx: 0.16, sy: 0.2, sz: 0.03, rx: 0.45, rz: -0.3 },
-        { x: -0.2, y: 0.99, z: -0.05, sx: 0.15, sy: 0.19, sz: 0.03, rx: -0.4, rz: 0.35 },
-        { x: 0.05, y: 1.35, z: 0.08, sx: 0.14, sy: 0.18, sz: 0.03, rx: 0.15, rz: -0.1 },
-        { x: -0.05, y: 1.38, z: -0.06, sx: 0.15, sy: 0.2, sz: 0.03, rx: -0.1, rz: 0.12 },
-        { x: 0.18, y: 1.07, z: -0.14, sx: 0.17, sy: 0.19, sz: 0.03, rx: -0.42, rz: -0.25 },
-        { x: -0.17, y: 1.1, z: 0.12, sx: 0.16, sy: 0.18, sz: 0.03, rx: 0.3, rz: 0.28 },
-      ];
-      ld.forEach((l, i) => {
-        const lf = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 1), 10, 7), i % 2 === 0 ? MAT.leaf : MAT.leafD);
-        lf.scale.set(l.sx, l.sy, l.sz);
-        lf.position.set(l.x, l.y, l.z);
-        lf.rotation.x = l.rx; lf.rotation.z = l.rz;
-        lf.castShadow = true; g.add(lf);
-        animData.leaves.push(lf);
+      
+      // Stand Structure (Black steel with wood/marble shelves)
+      const w = 0.5, d = 0.5, h = 1.8;
+      
+      // 4 Legs
+      const legR = 0.015;
+      g.add(cylM(legR, legR, h, MAT.blackSteel, -w/2, h/2, -d/2));
+      g.add(cylM(legR, legR, h, MAT.blackSteel, w/2, h/2, -d/2));
+      g.add(cylM(legR, legR, h, MAT.blackSteel, -w/2, h/2, d/2));
+      g.add(cylM(legR, legR, h, MAT.blackSteel, w/2, h/2, d/2));
+      
+      // 3 Shelves
+      const sy = [0.3, 1.0, 1.7];
+      sy.forEach(y => {
+        g.add(box(w + 0.04, 0.02, d + 0.04, MAT.walnut, 0, y, 0));
+        // Small gold trim lip
+        g.add(box(w + 0.04, 0.04, 0.01, MAT.goldTrim, 0, y + 0.01, -d/2 - 0.02));
+        g.add(box(w + 0.04, 0.04, 0.01, MAT.goldTrim, 0, y + 0.01, d/2 + 0.02));
+        g.add(box(0.01, 0.04, d + 0.04, MAT.goldTrim, -w/2 - 0.02, y + 0.01, 0));
+        g.add(box(0.01, 0.04, d + 0.04, MAT.goldTrim, w/2 + 0.02, y + 0.01, 0));
       });
-      g.position.set(-2.8, 0, 2.0);
+
+      // --- Top Shelf Plant (Fern) ---
+      const pot1 = cylM(0.14, 0.1, 0.18, MAT.cream, 0, 1.7 + 0.09, 0);
+      g.add(pot1);
+      for(let i=0; i<12; i++) {
+        const lf = new THREE.Mesh(new THREE.ConeGeometry(Math.max(EPS, 0.04), 0.4, 4), MAT.leaf);
+        lf.position.set(0, 1.7 + 0.18, 0);
+        const a = (i/12)*Math.PI*2;
+        const euler = new THREE.Euler(Math.PI/2.5, a, 0, 'YXZ');
+        lf.rotation.copy(euler);
+        lf.position.x = Math.sin(a)*0.1;
+        lf.position.z = Math.cos(a)*0.1;
+        lf.position.y += 0.1;
+        lf.castShadow = true;
+        g.add(lf);
+        animData.leaves.push(lf);
+      }
+      
+      // --- Middle Shelf Plant (Trailing Vines) ---
+      const pot2 = box(0.2, 0.18, 0.2, MAT.bFrame, 0, 1.0 + 0.09, 0);
+      g.add(pot2);
+      for(let i=0; i<8; i++) {
+        const vineLen = 0.5 + Math.random()*0.4;
+        const vine = cylM(0.006, 0.006, vineLen, MAT.leaf, 0, 1.0 + 0.18 - vineLen/2, 0);
+        const a = (i/8)*Math.PI*2;
+        vine.position.x = Math.sin(a)*0.12;
+        vine.position.z = Math.cos(a)*0.12;
+        for(let j=0; j<6; j++) {
+           const lf = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.035), 4, 4), MAT.leafD);
+           lf.position.set(
+             vine.position.x + (Math.random()-0.5)*0.06, 
+             vine.position.y + vineLen/2 - j*(vineLen/6) - 0.05, 
+             vine.position.z + (Math.random()-0.5)*0.06
+           );
+           lf.castShadow = true;
+           g.add(lf);
+           animData.leaves.push(lf);
+        }
+        vine.castShadow = true;
+        g.add(vine);
+      }
+
+      // --- Bottom Shelf Plant (Snake Plant) ---
+      const pot3 = cylM(0.16, 0.13, 0.22, MAT.goldTrim, 0.1, 0.3 + 0.11, 0.1);
+      g.add(pot3);
+      for(let i=0; i<7; i++) {
+        const lf = new THREE.Mesh(new THREE.ConeGeometry(Math.max(EPS, 0.035), 0.5, 4), MAT.leafD);
+        lf.position.set(0.1 + (Math.random()-0.5)*0.08, 0.3 + 0.22 + 0.2, 0.1 + (Math.random()-0.5)*0.08);
+        lf.rotation.set((Math.random()-0.5)*0.15, Math.random()*Math.PI, (Math.random()-0.5)*0.15);
+        lf.castShadow = true;
+        g.add(lf);
+        animData.leaves.push(lf);
+      }
+
+      // Small secondary pot on bottom shelf
+      const pot4 = cylM(0.1, 0.08, 0.14, MAT.cream, -0.15, 0.3 + 0.07, -0.1);
+      g.add(pot4);
+      const smallLeaf = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.1), 6, 6), MAT.leaf);
+      smallLeaf.position.set(-0.15, 0.3 + 0.14 + 0.05, -0.1);
+      smallLeaf.castShadow = true;
+      g.add(smallLeaf);
+      animData.leaves.push(smallLeaf);
+
+      // Keep near the left wall under right candle lamp
+      g.position.set(-3.5, 0, 1.8);
       scene.add(g);
     }
 
@@ -1281,15 +1460,18 @@ export function IsometricRoom3D() {
       scene.add(sun);
       animData.sunLight = sun;
 
-      // Window spotlight — exterior daylight
-      const winL = new THREE.SpotLight('#FFF8F0', 2.5, 10, Math.PI / 3.2, 0.5, 1.5);
-      winL.position.set(-8, 2.5, 0.3);
-      winL.target.position.set(2, 0, 0);
-      winL.castShadow = true;
-      winL.shadow.mapSize.set(SHADOW_RES, SHADOW_RES);
-      winL.shadow.radius = 8;
-      scene.add(winL); scene.add(winL.target);
+      // Premium Gallery Spotlight for Brand Name (Light removed per request, keeping only the physical fixture)
 
+      // Physical brass wall fixture
+      const fixtureG = new THREE.Group();
+      fixtureG.add(cylM(0.04, 0.04, 0.04, MAT.brass, -3.98, 3.6, 0, 16).rotateZ(Math.PI / 2)); // Wall mount
+      fixtureG.add(cylM(0.015, 0.015, 1.0, MAT.brass, -3.5, 3.6, 0, 8).rotateZ(Math.PI / 2)); // Extended arm
+      const housing = cylM(0.06, 0.08, 0.2, MAT.brass, 0, 0, 0, 16);
+      housing.position.set(-3.0, 3.6, 0);
+      housing.lookAt(-4.0, 1.8, 0); // Aim fixture at text
+      housing.rotateX(-Math.PI / 2); // Point wide opening towards target
+      fixtureG.add(housing);
+      scene.add(fixtureG);
       // Bounce fill from floor
       const bounce = new THREE.HemisphereLight('#E8DDD0', '#3E2B1C', 0.15);
       scene.add(bounce);
@@ -1300,205 +1482,577 @@ export function IsometricRoom3D() {
 
       // Rim from behind
       const rim = new THREE.DirectionalLight('#E8DDD0', 0.12);
-      rim.position.set(-1, 4, -6); scene.add(rim);
+      rim.position.set(-1, 4, -6);
+      scene.add(rim);
     }
 
-    // ============================================================
-    // BUILD SCENE
-    // ============================================================
-    buildRoom();
-    // buildWindow(); // removed per user request
-    buildFireplace();
-    buildRug();
-    buildArt();
-    buildSofa();
-    buildCoffeeTable();
-    buildBookcase();
-    buildDisplayCabinet();
-    buildFloorLamp();
-    buildArmchair();
-    buildOttoman();
-    buildConsoleTable();
-    buildSideTable();
-    buildFloatingShelves();
-    buildPlant();
-    // buildOliveTree(); // removed per user request
-    buildDustParticles();
-    setupLighting();
+    function buildLeftWallMoulding() {
+      const g = new THREE.Group();
 
-    // Wall text — VIKORE VANA on left wall
-    (function buildWallText() {
-      const c = document.createElement('canvas');
-      c.width = 512; c.height = 512;
-      const ctx = c.getContext('2d');
-      ctx.clearRect(0, 0, 512, 512);
-      // Bold black text
-      ctx.fillStyle = '#1A1410';
-      ctx.font = '700 120px "Cormorant Garamond", Georgia, serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('VIKORE', 256, 200);
-      ctx.fillText('VANA', 256, 330);
+      // Wainscoting backing board (covers lower half of wall, length 7.0 matches wall exactly)
+      g.add(box(0.015, 1.4, 7.0, MAT.floor, -3.99, 0.7, 0));
 
-      const tex = new THREE.CanvasTexture(c);
-      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-      const mat = new THREE.MeshStandardMaterial({
-        map: tex,
-        transparent: true,
-        roughness: 0.85,
-        metalness: 0,
-      });
-      const plane = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 2.4), mat);
-      plane.position.set(-RW / 2 + 0.01, 2.4, 0);
-      plane.rotation.y = Math.PI / 2;
-      scene.add(plane);
-    })();
+      // Chair rail (top border of wainscoting)
+      g.add(box(0.045, 0.06, 7.0, MAT.floor, -3.9775, 1.4, 0));
+      // Baseboard
+      g.add(box(0.05, 0.15, 7.0, MAT.floor, -3.975, 0.075, 0));
 
-    // ============================================================
-    // CINEMATIC INTRO
-    // ============================================================
-    const introDuration = 3.0;
-    let introStart = -1;
+      // Rectangular frames and raised panels
+      function buildPanel(cz) {
+        // Raised inner panel
+        g.add(box(0.025, 1.0, 1.1, MAT.floor, -3.985, 0.75, cz));
 
-    function easeInOutCubic(t) {
-      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    }
-
-    function updateIntro(dt) {
-      if (animData.introDone) return;
-      if (introStart < 0) introStart = clock.getElapsedTime();
-      const elapsed = clock.getElapsedTime() - introStart;
-      const progress = Math.min(elapsed / introDuration, 1);
-      const eased = easeInOutCubic(progress);
-
-      camera.position.lerpVectors(camIntro, camEnd, eased);
-      controls.target.copy(camTarget);
-      controls.update();
-
-      if (progress >= 1) {
-        animData.introDone = true;
-        controls.enabled = true;
-        if (!REDUCED) controls.autoRotate = true;
-
-
-      }
-    }
-
-    // ============================================================
-    // ANIMATION LOOP
-    // ============================================================
-    let animId;
-    function animate() {
-      animId = requestAnimationFrame(animate);
-      const dt = clock.getDelta();
-      const t = clock.getElapsedTime();
-
-      // Intro
-      if (!animData.introDone) { updateIntro(dt); }
-
-      // Camera breathing
-      if (animData.introDone && !REDUCED) {
-        animData.breathOffset += dt * 0.3;
-        const breathY = Math.sin(animData.breathOffset) * 0.03;
-        const breathX = Math.cos(animData.breathOffset * 0.7) * 0.015;
-        camera.position.y += breathY * 0.01;
-        camera.position.x += breathX * 0.01;
+        // Frame around the raised panel
+        const cx = -3.96; // Protruding frame
+        const fw = 1.2, fh = 1.1, th = 0.04, d = 0.02;
+        g.add(box(d, th, fw + th, MAT.floor, cx, 0.75 + fh / 2, cz)); // Top
+        g.add(box(d, th, fw + th, MAT.floor, cx, 0.75 - fh / 2, cz)); // Bottom
+        g.add(box(d, fh - th, th, MAT.floor, cx, 0.75, cz - fw / 2)); // Left
+        g.add(box(d, fh - th, th, MAT.floor, cx, 0.75, cz + fw / 2)); // Right
       }
 
-      // Candle flicker
-      if (animData.candleLight && !REDUCED) {
-        animData.candleLight.intensity = 0.55 + 0.22 * Math.sin(t * 9.3) + 0.14 * Math.sin(t * 15.1) + 0.08 * Math.sin(t * 24.7);
-        if (animData.flameMesh) {
-          animData.flameMesh.scale.x = 0.6 + 0.07 * Math.sin(t * 11);
-          animData.flameMesh.scale.z = 0.6 + 0.07 * Math.sin(t * 11 + 1);
-          animData.flameMesh.position.x = Math.sin(t * 7) * 0.0015;
-          animData.flameMesh.position.z = Math.cos(t * 7) * 0.0015;
+      // Create 5 symmetric panels along the lower wall (fitting within z = -3.5 to 3.5)
+      // 7.0 width / 5 = 1.4 spacing between centers
+      const zPositions = [-2.8, -1.4, 0, 1.4, 2.8];
+      zPositions.forEach(cz => buildPanel(cz));
+
+      scene.add(g);
+    }
+
+    function buildBackWallMoulding() {
+      const g = new THREE.Group();
+
+      // Wainscoting backing board (covers lower half of wall, length 8.0 matches wall exactly)
+      g.add(box(8.0, 1.4, 0.015, MAT.floor, 0, 0.7, -3.49));
+
+      // Chair rail (top border of wainscoting)
+      g.add(box(8.0, 0.06, 0.045, MAT.floor, 0, 1.4, -3.4775));
+      // Baseboard
+      g.add(box(8.0, 0.15, 0.05, MAT.floor, 0, 0.075, -3.475));
+
+      // Rectangular frames and raised panels
+      function buildPanel(cx) {
+        // Raised inner panel
+        g.add(box(1.3, 1.0, 0.025, MAT.floor, cx, 0.75, -3.485));
+
+        // Frame around the raised panel
+        const cz = -3.46; // Protruding frame
+        const fw = 1.4, fh = 1.1, th = 0.04, d = 0.02;
+        g.add(box(fw + th, th, d, MAT.floor, cx, 0.75 + fh / 2, cz)); // Top
+        g.add(box(fw + th, th, d, MAT.floor, cx, 0.75 - fh / 2, cz)); // Bottom
+        g.add(box(th, fh - th, d, MAT.floor, cx - fw / 2, 0.75, cz)); // Left
+        g.add(box(th, fh - th, d, MAT.floor, cx + fw / 2, 0.75, cz)); // Right
+      }
+
+      // Create 5 symmetric panels along the back wall (fitting within x = -4.0 to 4.0)
+      // 8.0 width / 5 = 1.6 spacing between centers
+      const xPositions = [-3.2, -1.6, 0, 1.6, 3.2];
+      xPositions.forEach(cx => buildPanel(cx));
+
+      scene.add(g);
+    }
+
+    function buildBackWallMoulding() {
+      const g = new THREE.Group();
+
+      // Wainscoting backing board (covers lower half of wall, length 8.0 matches wall exactly)
+      g.add(box(8.0, 1.4, 0.015, MAT.floor, 0, 0.7, -3.49));
+
+      // Chair rail (top border of wainscoting)
+      g.add(box(8.0, 0.06, 0.045, MAT.floor, 0, 1.4, -3.4775));
+      // Baseboard
+      g.add(box(8.0, 0.15, 0.05, MAT.floor, 0, 0.075, -3.475));
+
+      // Rectangular frames and raised panels
+      function buildPanel(cx) {
+        // Raised inner panel
+        g.add(box(1.3, 1.0, 0.025, MAT.floor, cx, 0.75, -3.485));
+
+        // Frame around the raised panel
+        const cz = -3.46; // Protruding frame
+        const fw = 1.4, fh = 1.1, th = 0.04, d = 0.02;
+        g.add(box(fw + th, th, d, MAT.floor, cx, 0.75 + fh / 2, cz)); // Top
+        g.add(box(fw + th, th, d, MAT.floor, cx, 0.75 - fh / 2, cz)); // Bottom
+        g.add(box(th, fh - th, d, MAT.floor, cx - fw / 2, 0.75, cz)); // Left
+        g.add(box(th, fh - th, d, MAT.floor, cx + fw / 2, 0.75, cz)); // Right
+      }
+
+      // Create 5 symmetric panels along the back wall (fitting within x = -4.0 to 4.0)
+      // 8.0 width / 5 = 1.6 spacing between centers
+      const xPositions = [-3.2, -1.6, 0, 1.6, 3.2];
+      xPositions.forEach(cx => buildPanel(cx));
+
+      scene.add(g);
+    }
+
+    function buildBrandSconces() {
+      const zs = [-1.8, 1.8]; // Left and right of the brand name
+          zs.forEach((z, i) => {
+            const g = new THREE.Group();
+            const px = -3.98;
+
+            // Brass wall plate
+            g.add(cylM(0.06, 0.06, 0.02, MAT.brass, px, 2.4, z).rotateZ(Math.PI / 2));
+
+            // Curved arm extending outwards and up
+            g.add(cylM(0.01, 0.01, 0.15, MAT.brass, px + 0.075, 2.4, z).rotateZ(Math.PI / 2));
+            g.add(cylM(0.01, 0.01, 0.08, MAT.brass, px + 0.14, 2.44, z));
+
+            // Candle base plate
+            g.add(cylM(0.04, 0.04, 0.01, MAT.brass, px + 0.14, 2.48, z));
+
+            // The wax candle
+            g.add(cylM(0.025, 0.025, 0.1, MAT.cream, px + 0.14, 2.53, z));
+
+            // The wick
+            g.add(cylM(0.002, 0.002, 0.015, MAT.blackSteel, px + 0.14, 2.585, z));
+
+            // The flame mesh (for visuals)
+            const flameMat = new THREE.MeshBasicMaterial({ color: '#FFAA55', transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
+            const flame = new THREE.Mesh(new THREE.ConeGeometry(0.008, 0.03, 8), flameMat);
+            flame.position.set(px + 0.14, 2.6, z);
+            g.add(flame);
+            animData.wallFlameMeshes.push(flame);
+
+            // Soft Glow Light (very soft)
+            const glow = new THREE.PointLight('#F5E0B8', 0.1, 2.5, 2);
+            glow.position.set(-3.82, 2.49, z);
+            g.add(glow);
+            animData.wallCandleLights.push(glow);
+
+            scene.add(g);
+          });
         }
-      }
 
-      // Fireplace flicker
-      if (animData.fireLight && !REDUCED) {
-        animData.fireLight.intensity = 1.2 + 0.5 * Math.sin(t * 6.2) + 0.3 * Math.sin(t * 10.5) + 0.2 * Math.sin(t * 17.3);
-        animData.fireLight.position.x = Math.sin(t * 4) * 0.03;
-        if (animData.fireMesh) {
-          animData.fireMesh.material.opacity = 0.7 + 0.2 * Math.sin(t * 8);
-        }
-      }
+        function buildTVConsole() {
+          const g = new THREE.Group();
 
-      // Sunlight intensity change
-      if (animData.sunLight && !REDUCED) {
-        animData.sunLight.intensity = 1.1 + 0.1 * Math.sin(t * 0.15);
-      }
+          // Console Body (Walnut)
+          const w = 2.4, h = 0.45, d = 0.45;
+          g.add(box(w, h, d, MAT.walnut, 0, h / 2, 0));
 
-      // Leaf sway
-      if (!REDUCED) {
-        animData.leaves.forEach((leaf, i) => {
-          const phase = i * 1.3;
-          leaf.rotation.x += Math.sin(t * 0.8 + phase) * 0.0003;
-          leaf.rotation.z += Math.cos(t * 0.6 + phase) * 0.0002;
-        });
-      }
+          // Marble Top
+          g.add(box(w + 0.04, 0.03, d + 0.04, MAT.marble, 0, h + 0.015, 0));
 
-      // Curtain movement
-      if (!REDUCED) {
-        animData.curtainMeshes.forEach((curtain, ci) => {
-          const pos = curtain.geometry.attributes.position;
-          for (let i = 0; i < pos.count; i++) {
-            const y = pos.getY(i), x = pos.getX(i);
-            const baseZ = Math.sin(x * 8 + y * 2) * 0.02 + Math.sin(x * 3) * 0.015;
-            pos.setZ(i, baseZ + Math.sin(t * 0.5 + y * 1.5 + ci * 2) * 0.008);
+          // Slatted/Fluted details on front AND back (since camera sees the back)
+          for (let i = -1.1; i <= 1.1; i += 0.08) {
+            g.add(box(0.03, h - 0.06, 0.02, MAT.dkWood, i, h / 2, -d / 2 - 0.01)); // Front (facing sofa)
+            g.add(box(0.03, h - 0.06, 0.02, MAT.dkWood, i, h / 2, d / 2 + 0.01)); // Back (facing camera)
           }
-          pos.needsUpdate = true;
-        });
-      }
 
-      // Dust particles
-      if (animData.dustParticles && !REDUCED) {
-        const dPos = animData.dustParticles.geometry.attributes.position;
-        for (let i = 0; i < dPos.count; i++) {
-          let y = dPos.getY(i);
-          y += dt * 0.02;
-          if (y > RH - 0.5) y = 0.5;
-          dPos.setY(i, y);
-          dPos.setX(i, dPos.getX(i) + Math.sin(t * 0.3 + i) * dt * 0.005);
-          dPos.setZ(i, dPos.getZ(i) + Math.cos(t * 0.2 + i * 0.7) * dt * 0.003);
+          // Brass Legs
+          const lw = w / 2 - 0.15;
+          const ld = d / 2 - 0.1;
+          [
+            [-lw, -ld], [lw, -ld], [-lw, ld], [lw, ld]
+          ].forEach(([lx, lz]) => {
+            g.add(cylM(0.015, 0.01, 0.1, MAT.brass, lx, -0.05, lz));
+          });
+          const consoleY = 0.1;
+
+          // The TV
+          const tvG = new THREE.Group();
+          // Base
+          tvG.add(box(0.5, 0.015, 0.25, MAT.dkWood, 0, 0.0075, 0));
+          // Neck
+          tvG.add(box(0.12, 0.08, 0.05, MAT.blackSteel, 0, 0.04 + 0.015, 0));
+
+          // Screen casing (ultra thin OLED style)
+          const tvW = 1.8, tvH = 1.0, tvD = 0.015;
+          const tvCenterY = 0.015 + 0.08 + tvH / 2;
+          tvG.add(box(tvW, tvH, tvD, MAT.blackSteel, 0, tvCenterY, 0));
+
+          // Glass screen panel (facing -Z local towards sofa)
+          const matScreen = new THREE.MeshStandardMaterial({ color: '#030303', roughness: 0.1, metalness: 0.8 });
+          tvG.add(box(tvW - 0.02, tvH - 0.02, 0.005, matScreen, 0, tvCenterY, -tvD / 2 - 0.002));
+
+          tvG.position.set(0, h + 0.03, 0); // Place on top of marble
+          g.add(tvG);
+
+          // Large Flower Pots on the floor beside console
+          const largePotMat = MAT.cream;
+          const bigFlowerMat = new THREE.MeshStandardMaterial({ color: '#F48FB1', roughness: 0.8 });
+          [-1.5, 1.5].forEach(px => {
+             const pG = new THREE.Group();
+             // Large Pot
+             pG.add(cylM(0.18, 0.12, 0.35, largePotMat, 0, 0.175, 0));
+             pG.add(cylM(0.16, 0.16, 0.02, MAT.dkWood, 0, 0.34, 0));
+             
+             // Flowers and stems
+             for(let i=0; i<8; i++) {
+                const a = (i/8)*Math.PI*2;
+                const stemH = 0.3 + Math.random()*0.2;
+                const stem = cylM(0.008, 0.008, stemH, MAT.leaf, Math.sin(a)*0.08, 0.35 + stemH/2, Math.cos(a)*0.08);
+                stem.rotation.x = Math.sin(a)*0.2;
+                stem.rotation.z = Math.cos(a)*0.2;
+                pG.add(stem);
+                
+                const fl = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.08), 12, 12), bigFlowerMat);
+                fl.position.set(
+                  stem.position.x + Math.sin(stem.rotation.z)*0.1,
+                  0.35 + stemH,
+                  stem.position.z - Math.sin(stem.rotation.x)*0.1
+                );
+                fl.scale.set(1, 0.6, 1);
+                pG.add(fl);
+                
+                const core = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.04), 8, 8), MAT.goldTrim);
+                core.position.copy(fl.position);
+                core.position.y += 0.03;
+                pG.add(core);
+             }
+
+             // Center flower
+             pG.add(cylM(0.01, 0.01, 0.4, MAT.leaf, 0, 0.35 + 0.2, 0));
+             const flC = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.1), 12, 12), bigFlowerMat);
+             flC.scale.set(1, 0.6, 1);
+             flC.position.set(0, 0.35 + 0.4, 0);
+             pG.add(flC);
+             const coreC = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.05), 8, 8), MAT.goldTrim);
+             coreC.position.set(0, 0.35 + 0.4 + 0.04, 0);
+             pG.add(coreC);
+
+             pG.position.set(px, -0.1, 0); // On the floor
+             g.add(pG);
+          });
+
+          // Position the whole assembly in front of coffee table
+          g.position.set(0.8, consoleY, 2.2);
+
+          scene.add(g);
         }
-        dPos.needsUpdate = true;
-      }
 
-      controls.update();
-      composer.render();
-    }
-    animate();
+        // ============================================================
+        // BUILD SCENE
+        // ============================================================
+        buildRoom();
+        buildLeftWallMoulding();
+        buildBackWallMoulding();
+        buildBrandSconces();
+        // buildWindow(); // removed per user request
+        buildFireplace();
+        buildRug();
+        buildArt();
+        buildSofa();
+        buildCoffeeTable();
+        buildTVConsole();
+        buildBookcase();
+        buildDisplayCabinet();
+        buildFloorLamp();
+        buildArmchair();
+        buildOttoman();
+        buildConsoleTable();
+        buildSideTable();
+        buildFloatingShelves();
+        buildPlantStand();
+        buildDogHouse();
+        buildDog();
+        // buildOliveTree(); // removed per user request
+        buildDustParticles();
+        setupLighting();
 
-    return () => {
-      cancelAnimationFrame(animId); // Note: we need to capture animId
-      ro.disconnect();
-      controls.dispose();
-      renderer.dispose();
-      composer.dispose();
-    };
+        // Photo frame with cursive brand name on left wall
+        (function buildBrandPhotoFrame() {
+          const w = 1.8, h = 1.0;
+          const fw = 0.04; // Frame width
+          const cx = -3.98; // Slightly off wall
+          const cy = 2.4;
+          const cz = 0;
 
-    // ============================================================
-    // RESIZE
-    // ============================================================
+          // 1. The Canvas / Paper
+          const c = document.createElement('canvas');
+          c.width = 1024; c.height = Math.round(1024 * (h / w));
+          const ctx = c.getContext('2d');
+          
+          // Off-white paper background
+          ctx.fillStyle = '#F8F5F0';
+          ctx.fillRect(0, 0, c.width, c.height);
+          
+          // Cursive text
+          ctx.fillStyle = '#1A1410';
+          ctx.font = 'italic 400 240px "Brush Script MT", "Lucida Handwriting", cursive';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('Vikore', c.width / 2, c.height / 2 - 120);
+          ctx.fillText('Vana', c.width / 2, c.height / 2 + 120);
 
-    const ro = new ResizeObserver(() => {
-      const w = container.clientWidth;
-      const h = container.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-      composer.setSize(w, h);
-      smaa.setSize(w, h);
-    });
-    ro.observe(container);
+          const tex = new THREE.CanvasTexture(c);
+          tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+          const mat = new THREE.MeshStandardMaterial({
+            map: tex,
+            roughness: 0.9,
+            metalness: 0.1,
+          });
+          const canvasMesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+          canvasMesh.position.set(cx + 0.015, cy, cz);
+          canvasMesh.rotation.y = Math.PI / 2;
+          scene.add(canvasMesh);
+
+          // 2. The 3D Photo Frame
+          // Outer wood frame
+          scene.add(box(0.02, fw, w + fw * 2, MAT.bFrame, cx + 0.01, cy + h / 2 + fw / 2, cz)); // Top
+          scene.add(box(0.02, fw, w + fw * 2, MAT.bFrame, cx + 0.01, cy - h / 2 - fw / 2, cz)); // Bottom
+          scene.add(box(0.02, h, fw, MAT.bFrame, cx + 0.01, cy, cz - w / 2 - fw / 2)); // Left
+          scene.add(box(0.02, h, fw, MAT.bFrame, cx + 0.01, cy, cz + w / 2 + fw / 2)); // Right
+          
+          // Inner gold liner
+          scene.add(box(0.025, 0.008, w, MAT.goldTrim, cx + 0.01, cy + h / 2 + 0.004, cz));
+          scene.add(box(0.025, 0.008, w, MAT.goldTrim, cx + 0.01, cy - h / 2 - 0.004, cz));
+          scene.add(box(0.025, h, 0.008, MAT.goldTrim, cx + 0.01, cy, cz - w / 2 - 0.004));
+          scene.add(box(0.025, h, 0.008, MAT.goldTrim, cx + 0.01, cy, cz + w / 2 + 0.004));
+        })();
+
+        // ============================================================
+        // CINEMATIC INTRO
+        // ============================================================
+        const introDuration = 3.0;
+        let introStart = -1;
+
+        function easeInOutCubic(t) {
+          return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function updateIntro(dt) {
+          if (animData.introDone) return;
+          if (introStart < 0) introStart = clock.getElapsedTime();
+          const elapsed = clock.getElapsedTime() - introStart;
+          const progress = Math.min(elapsed / introDuration, 1);
+          const eased = easeInOutCubic(progress);
+
+          camera.position.lerpVectors(camIntro, camEnd, eased);
+          controls.target.copy(camTarget);
+          controls.update();
+
+          if (progress >= 1) {
+            animData.introDone = true;
+            controls.enabled = true;
+            if (!REDUCED) controls.autoRotate = true;
 
 
-    // ============================================================
+          }
+        }
 
+        // ============================================================
+        // ANIMATION LOOP
+        // ============================================================
+        let animId;
 
-  }, []);
+        // Allow user to interrupt intro and drag immediately
+        const handleInteraction = () => {
+          if (!animData.introDone) {
+            animData.introDone = true;
+            controls.enabled = true;
+            if (!REDUCED) controls.autoRotate = true;
+          }
+        };
+        renderer.domElement.addEventListener('pointerdown', handleInteraction);
+        renderer.domElement.addEventListener('touchstart', handleInteraction, { passive: true });
 
-  return <div ref={mountRef} className="w-full h-full" />;
+        function animate() {
+          animId = requestAnimationFrame(animate);
+          const dt = clock.getDelta();
+          const t = clock.getElapsedTime();
+
+          // Intro
+          if (!animData.introDone) { updateIntro(dt); }
+
+          // Candle flicker
+          if (animData.wallCandleLights && !REDUCED) {
+            animData.wallCandleLights.forEach((glow, i) => {
+              const offset = i * 2.5; // Offset phase so they flicker differently
+              glow.intensity = 0.1 + 0.04 * Math.sin((t + offset) * 8.3) + 0.02 * Math.sin((t + offset) * 14.1);
+            });
+            animData.wallFlameMeshes.forEach((flame, i) => {
+              const offset = i * 2.5;
+              flame.scale.x = 0.8 + 0.1 * Math.sin((t + offset) * 12);
+              flame.scale.z = 0.8 + 0.1 * Math.sin((t + offset) * 12 + 1);
+              flame.position.x = -3.82 + Math.sin((t + offset) * 8) * 0.0015;
+              const baseZ = i === 0 ? -1.8 : 1.8;
+              flame.position.z = baseZ + Math.cos((t + offset) * 8) * 0.0015;
+            });
+          }
+
+          if (animData.candleLight && !REDUCED) {
+            animData.candleLight.intensity = 0.55 + 0.22 * Math.sin(t * 9.3) + 0.14 * Math.sin(t * 15.1) + 0.08 * Math.sin(t * 24.7);
+            if (animData.flameMesh) {
+              animData.flameMesh.scale.x = 0.6 + 0.07 * Math.sin(t * 11);
+              animData.flameMesh.scale.z = 0.6 + 0.07 * Math.sin(t * 11 + 1);
+              animData.flameMesh.position.x = Math.sin(t * 7) * 0.0015;
+              animData.flameMesh.position.z = Math.cos(t * 7) * 0.0015;
+            }
+          }
+
+          // Fireplace flicker
+          if (animData.fireLight && !REDUCED) {
+            animData.fireLight.intensity = 1.2 + 0.5 * Math.sin(t * 6.2) + 0.3 * Math.sin(t * 10.5) + 0.2 * Math.sin(t * 17.3);
+            animData.fireLight.position.x = Math.sin(t * 4) * 0.03;
+            if (animData.fireMesh) {
+              animData.fireMesh.material.opacity = 0.7 + 0.2 * Math.sin(t * 8);
+            }
+          }
+
+          // Sunlight intensity change
+          if (animData.sunLight && !REDUCED) {
+            animData.sunLight.intensity = 1.1 + 0.1 * Math.sin(t * 0.15);
+          }
+
+          // Leaf sway
+          if (!REDUCED) {
+            animData.leaves.forEach((leaf, i) => {
+              const phase = i * 1.3;
+              leaf.rotation.x += Math.sin(t * 0.8 + phase) * 0.0003;
+              leaf.rotation.z += Math.cos(t * 0.6 + phase) * 0.0002;
+            });
+          }
+
+          // Curtain movement
+          if (!REDUCED) {
+            animData.curtainMeshes.forEach((curtain, ci) => {
+              const pos = curtain.geometry.attributes.position;
+              for (let i = 0; i < pos.count; i++) {
+                const y = pos.getY(i), x = pos.getX(i);
+                const baseZ = Math.sin(x * 8 + y * 2) * 0.02 + Math.sin(x * 3) * 0.015;
+                pos.setZ(i, baseZ + Math.sin(t * 0.5 + y * 1.5 + ci * 2) * 0.008);
+              }
+              pos.needsUpdate = true;
+            });
+          }
+
+          // Dog animation
+          const dogData = (animData as any).dog;
+          if (dogData && !REDUCED) {
+            dogData.timer += dt;
+            const group = dogData.group;
+            
+            // Tail wag
+            dogData.tail.rotation.y = Math.sin(t * 15) * 0.4;
+            
+            // Path sequence
+            const path = [
+              { x: -3.5, z: 0, state: 'sleep', duration: 4.0 }, // Sleep in doghouse
+              { x: -2.0, z: -3.0, state: 'run', speed: 0.8 }, // Route around display cabinet & armchair
+              { x: 0.8, z: -3.0, state: 'run', speed: 0.8 }, // Run behind main sofa
+              { x: 0.8, z: -1.5, state: 'jumpSofa', duration: 1.2 }, // Jump over main sofa and land before coffee table
+              { x: 2.0, z: -1.0, state: 'run', speed: 0.8 }, // Run near bookcase
+              { x: 1.5, z: 1.5, state: 'run', speed: 0.8 }, // Run near TV
+              { x: -3.5, z: 0, state: 'run', speed: 1.0 }, // Run back home
+            ];
+            
+            const currentStep = path[dogData.pathIndex];
+            
+            if (currentStep.state === 'sleep') {
+              // Reset pose
+              dogData.legs.forEach((leg: any) => leg.rotation.x = 0);
+              dogData.head.rotation.y = Math.sin(t * 1.5) * 0.2; // gentle look around
+              if (dogData.timer > currentStep.duration) {
+                dogData.pathIndex = (dogData.pathIndex + 1) % path.length;
+                dogData.timer = 0;
+                dogData.startX = group.position.x;
+                dogData.startZ = group.position.z;
+              }
+            } else if (currentStep.state === 'run') {
+              const targetX = currentStep.x;
+              const targetZ = currentStep.z;
+              const dx = targetX - dogData.startX;
+              const dz = targetZ - dogData.startZ;
+              const dist = Math.sqrt(dx*dx + dz*dz);
+              const duration = dist / currentStep.speed;
+              
+              const progress = Math.min(1.0, dogData.timer / duration);
+              
+              group.position.x = dogData.startX + dx * progress;
+              group.position.z = dogData.startZ + dz * progress;
+              
+              const targetAngle = Math.atan2(dx, dz);
+              // Lerp rotation for smoother turns
+              const aDelta = targetAngle - group.rotation.y;
+              const normalizedDelta = Math.atan2(Math.sin(aDelta), Math.cos(aDelta));
+              group.rotation.y += normalizedDelta * Math.min(1.0, dt * 8);
+              
+              dogData.head.rotation.y = 0; // look straight ahead
+              
+              // Leg run cycle
+              const runSpeed = 12;
+              dogData.legs[0].rotation.x = Math.sin(t * runSpeed) * 0.7;
+              dogData.legs[1].rotation.x = -Math.sin(t * runSpeed) * 0.7;
+              dogData.legs[2].rotation.x = -Math.sin(t * runSpeed) * 0.7;
+              dogData.legs[3].rotation.x = Math.sin(t * runSpeed) * 0.7;
+              
+              if (progress >= 1.0) {
+                dogData.pathIndex = (dogData.pathIndex + 1) % path.length;
+                dogData.timer = 0;
+                dogData.startX = group.position.x;
+                dogData.startZ = group.position.z;
+              }
+            } else if (currentStep.state === 'jumpSofa') {
+              const targetX = currentStep.x;
+              const targetZ = currentStep.z;
+              const dx = targetX - dogData.startX;
+              const dz = targetZ - dogData.startZ;
+              
+              const progress = Math.min(1.0, dogData.timer / currentStep.duration);
+              
+              group.position.x = dogData.startX + dx * progress;
+              group.position.z = dogData.startZ + dz * progress;
+              group.position.y = 4.5 * progress * (1 - progress); // max height ~1.1 to clear sofa heavily
+              
+              const targetAngle = Math.atan2(dx, dz);
+              const aDelta = targetAngle - group.rotation.y;
+              const normalizedDelta = Math.atan2(Math.sin(aDelta), Math.cos(aDelta));
+              group.rotation.y += normalizedDelta * Math.min(1.0, dt * 10);
+              
+              // Tuck legs in during jump
+              dogData.legs.forEach((leg: any) => leg.rotation.x = Math.PI / 4);
+              
+              if (progress >= 1.0) {
+                group.position.y = 0;
+                dogData.pathIndex = (dogData.pathIndex + 1) % path.length;
+                dogData.timer = 0;
+                dogData.startX = group.position.x;
+                dogData.startZ = group.position.z;
+              }
+            }
+          }
+
+          // Dust particles
+          if (animData.dustParticles && !REDUCED) {
+            const dPos = animData.dustParticles.geometry.attributes.position;
+            for (let i = 0; i < dPos.count; i++) {
+              let y = dPos.getY(i);
+              y += dt * 0.02;
+              if (y > RH - 0.5) y = 0.5;
+              dPos.setY(i, y);
+              dPos.setX(i, dPos.getX(i) + Math.sin(t * 0.3 + i) * dt * 0.005);
+              dPos.setZ(i, dPos.getZ(i) + Math.cos(t * 0.2 + i * 0.7) * dt * 0.003);
+            }
+            dPos.needsUpdate = true;
+          }
+
+          controls.update();
+          composer.render();
+        }
+        animate();
+
+        const ro = new ResizeObserver(() => {
+          const w = container.clientWidth;
+          const h = container.clientHeight;
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+          renderer.setSize(w, h);
+          composer.setSize(w, h);
+        });
+        ro.observe(container);
+
+        return () => {
+          cancelAnimationFrame(animId);
+          renderer.domElement.removeEventListener('pointerdown', handleInteraction);
+          renderer.domElement.removeEventListener('touchstart', handleInteraction);
+          ro.disconnect();
+          controls.dispose();
+          renderer.dispose();
+          composer.dispose();
+        };
+      }, []);
+
+  return <div ref={mountRef} className="w-full h-full relative z-10 pointer-events-auto" />;
 }
