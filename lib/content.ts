@@ -13,7 +13,7 @@ export type Hotspot = {
   x: number;
   y: number;
   productName: string;
-  price: string;
+  price?: string;
   category?: string;
   slug?: string;
   affiliate?: string;

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { ShoppingBag } from "lucide-react";
 import type { Product } from "@/lib/content";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, solidBackground }: { product: Product, solidBackground?: boolean }) {
   // Generate a consistent pseudo-random rating based on the product slug
   const hash = product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
   // 10% chance of a perfect 5.0, otherwise 4.5 to 4.9
@@ -16,7 +16,7 @@ export function ProductCard({ product }: { product: Product }) {
         {/* Subtle bottom gradient for depth */}
         <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-white/60 to-transparent pointer-events-none" />
       </div>
-      <div className="p-2.5 sm:p-4 md:p-5 flex flex-col flex-grow bg-white/60 dark:bg-[#1e1a17]/70 backdrop-blur-xl">
+      <div className={`p-2.5 sm:p-4 md:p-5 flex flex-col flex-grow ${solidBackground ? 'bg-white dark:bg-[#1e1a17]' : 'bg-white/60 dark:bg-[#1e1a17]/70 backdrop-blur-xl'}`}>
         <div className="flex items-center justify-between mb-1 md:mb-1.5">
           <p className="text-[8.5px] sm:text-[9.5px] md:text-[10.5px] tracking-[1.5px] uppercase text-[#b8935a] dark:text-[#cba677]/70 font-semibold">{product.category}</p>
           <div className="flex items-center gap-0.5 text-[9px] sm:text-[10px] md:text-[11px] font-medium text-[#1c1c1c] dark:text-bone/80">

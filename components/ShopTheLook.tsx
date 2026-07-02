@@ -15,7 +15,7 @@ export function ShopTheLook({ look }: { look: Look }) {
   if (!look) return null;
 
   return (
-    <section className="py-20 md:py-32 overflow-hidden bg-[#fffaf4] dark:bg-[#181614] relative">
+    <section className="py-20 md:py-32 bg-[#fffaf4] dark:bg-[#181614] relative">
       
       {/* Subtle background glow */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#b89569]/5 dark:from-[#cba677]/5 to-transparent pointer-events-none" />
@@ -99,7 +99,7 @@ export function ShopTheLook({ look }: { look: Look }) {
                     affiliate: spot.affiliate || '',
                     date: '',
                     body: ''
-                  }} />
+                  }} solidBackground={true} />
                 </div>
               </div>
             ))}
