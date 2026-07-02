@@ -95,7 +95,7 @@ export function ShopTheLook({ look }: { look: Look }) {
                     description: '',
                     image: spot.image,
                     category: spot.category,
-                    affiliate: spot.affiliate,
+                    affiliate: spot.affiliate || '',
                     date: '',
                     body: ''
                   }} />
