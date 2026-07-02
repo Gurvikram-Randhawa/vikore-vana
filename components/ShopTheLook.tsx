@@ -81,9 +81,10 @@ export function ShopTheLook({ look }: { look: Look }) {
                 {/* The Tooltip (Glassmorphism + Product Card) */}
                 <div
                   className={`
-                    absolute left-1/2 -translate-x-1/2 w-56 md:w-64
+                    absolute w-44 sm:w-56 md:w-64
                     transition-all duration-500 ease-out z-30
-                    ${spot.y > 60 ? 'bottom-full mb-4' : 'top-full mt-4'}
+                    ${spot.x < 35 ? 'left-0' : spot.x > 65 ? 'right-0' : 'left-1/2 -translate-x-1/2'}
+                    ${spot.y > 60 ? 'bottom-full mb-3 md:mb-4' : 'top-full mt-3 md:mt-4'}
                     ${activeSpot === spot.id 
                       ? 'opacity-100 scale-100 pointer-events-auto' 
                       : `opacity-0 scale-95 pointer-events-none ${spot.y > 60 ? 'translate-y-4' : '-translate-y-4'}`}
@@ -94,7 +95,7 @@ export function ShopTheLook({ look }: { look: Look }) {
                     name: spot.productName,
                     description: '',
                     image: spot.image,
-                    category: spot.category,
+                    category: spot.category || '',
                     affiliate: spot.affiliate || '',
                     date: '',
                     body: ''

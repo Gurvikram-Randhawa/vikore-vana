@@ -14,7 +14,7 @@ export type Hotspot = {
   y: number;
   productName: string;
   price: string;
-  category: string;
+  category?: string;
   slug?: string;
   affiliate?: string;
   image: string;
