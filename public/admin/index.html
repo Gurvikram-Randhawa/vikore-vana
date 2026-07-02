@@ -103,5 +103,119 @@
         }
       });
     </script>
+    <script>
+      // Visual Hotspot Mapper for Decap CMS
+      document.addEventListener('DOMContentLoaded', () => {
+        const observer = new MutationObserver(() => {
+          // Look for labels that contain "X Coordinate"
+          const xLabels = Array.from(document.querySelectorAll('label')).filter(l => l.textContent.includes('X Coordinate (Percentage from left)'));
+          
+          xLabels.forEach(xLabel => {
+            const fieldWrapper = xLabel.parentElement;
+            if (!fieldWrapper || fieldWrapper.dataset.hasPicker) return;
+            
+            fieldWrapper.dataset.hasPicker = 'true';
+            
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.innerHTML = '📍 Pick on Image';
+            btn.style.cssText = 'display: block; margin-top: 8px; margin-bottom: 16px; padding: 8px 12px; background: #1e293b; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: background 0.2s;';
+            btn.onmouseover = () => btn.style.background = '#334155';
+            btn.onmouseout = () => btn.style.background = '#1e293b';
+            
+            btn.onclick = (e) => {
+              e.preventDefault();
+              
+              // Find the main image URL by looking for the "Main Image" label's preview image
+              const mainImageLabel = Array.from(document.querySelectorAll('label')).find(l => l.textContent.includes('Main Image'));
+              let imgSrc = '';
+              if (mainImageLabel) {
+                // The image preview is usually next to the label in the same control block
+                const controlBlock = mainImageLabel.parentElement.parentElement;
+                const img = controlBlock ? controlBlock.querySelector('img') : null;
+                if (img) imgSrc = img.src;
+              }
+              
+              if (!imgSrc) {
+                alert('Please upload and select a Main Image first (and wait for the preview to load) before placing hotspots!');
+                return;
+              }
+              
+              // Create full-screen overlay
+              const overlay = document.createElement('div');
+              overlay.style.cssText = 'position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); z-index: 999999; display: flex; align-items: center; justify-content: center; flex-direction: column; cursor: crosshair; backdrop-filter: blur(8px);';
+              
+              const title = document.createElement('h3');
+              title.textContent = 'Tap anywhere on the image to place the hotspot';
+              title.style.cssText = 'color: white; margin-bottom: 24px; font-family: ui-sans-serif, system-ui, sans-serif; font-weight: 500; font-size: 18px; text-shadow: 0 2px 10px rgba(0,0,0,0.5);';
+              
+              const imgWrapper = document.createElement('div');
+              imgWrapper.style.cssText = 'position: relative; max-width: 90vw; max-height: 80vh; border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);';
+              
+              const img = document.createElement('img');
+              img.src = imgSrc;
+              img.style.cssText = 'max-width: 100%; max-height: 80vh; display: block; object-fit: contain;';
+              
+              const closeBtn = document.createElement('button');
+              closeBtn.innerHTML = '✕ Cancel';
+              closeBtn.style.cssText = 'position: absolute; top: 24px; right: 24px; padding: 10px 20px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s;';
+              closeBtn.onmouseover = () => closeBtn.style.background = 'rgba(255,255,255,0.2)';
+              closeBtn.onmouseout = () => closeBtn.style.background = 'rgba(255,255,255,0.1)';
+              closeBtn.onclick = () => document.body.removeChild(overlay);
+              
+              imgWrapper.appendChild(img);
+              overlay.appendChild(closeBtn);
+              overlay.appendChild(title);
+              overlay.appendChild(imgWrapper);
+              
+              img.onclick = (event) => {
+                const rect = img.getBoundingClientRect();
+                const x = ((event.clientX - rect.left) / rect.width) * 100;
+                const y = ((event.clientY - rect.top) / rect.height) * 100;
+                
+                const xInput = xLabel.parentElement.querySelector('input[type="number"]');
+                
+                // Bulletproof way to find the sibling Y Coordinate label
+                const allYLabels = Array.from(document.querySelectorAll('label')).filter(l => l.textContent.includes('Y Coordinate'));
+                let yLabel = null;
+                let maxShared = 0;
+                allYLabels.forEach(y => {
+                  let p = y.parentElement;
+                  let shared = 0;
+                  while(p && p !== document.body) {
+                    if (p.contains(xLabel)) shared++;
+                    p = p.parentElement;
+                  }
+                  if (shared > maxShared) {
+                    maxShared = shared;
+                    yLabel = y;
+                  }
+                });
+                
+                const yInput = yLabel ? yLabel.parentElement.querySelector('input[type="number"]') : null;
+                
+                if (xInput && yInput) {
+                  // Set native value setter to bypass React's event pooling protection
+                  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+                  nativeInputValueSetter.call(xInput, x.toFixed(2));
+                  nativeInputValueSetter.call(yInput, y.toFixed(2));
+                  
+                  xInput.dispatchEvent(new Event('input', { bubbles: true }));
+                  yInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                
+                document.body.removeChild(overlay);
+              };
+              
+              document.body.appendChild(overlay);
+            };
+            
+            fieldWrapper.appendChild(btn);
+          });
+        });
+        
+        observer.observe(document.body, { childList: true, subtree: true });
+      });
+    </script>
   </body>
 </html>
