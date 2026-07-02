@@ -3,9 +3,11 @@ import { ShoppingBag } from "lucide-react";
 import type { Product } from "@/lib/content";
 
 export function ProductCard({ product }: { product: Product }) {
-  // Generate a consistent pseudo-random rating between 4.6 and 5.0 based on the product slug
+  // Generate a consistent pseudo-random rating based on the product slug
   const hash = product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const rating = (4.6 + (hash % 5) * 0.1).toFixed(1);
+  // 10% chance of a perfect 5.0, otherwise 4.5 to 4.9
+  const isPerfect = hash % 10 === 0;
+  const rating = isPerfect ? "5.0" : (4.5 + (hash % 5) * 0.1).toFixed(1);
 
   return (
     <article className="group flex flex-col h-full overflow-hidden rounded-2xl border border-[#b8935a]/20 dark:border-[#b8935a]/15 shadow-[0_4px_16px_rgba(184,147,90,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.25)] hover:shadow-[0_12px_32px_rgba(184,147,90,0.14)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500">

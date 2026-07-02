@@ -6,6 +6,26 @@ import { categorySlug } from "./site";
 const root = process.cwd();
 const articleDir = path.join(root, "content/articles");
 const productDir = path.join(root, "content/products");
+const looksDir = path.join(root, "content/looks");
+
+export type Hotspot = {
+  id: string;
+  x: number;
+  y: number;
+  productName: string;
+  price: string;
+  category: string;
+  slug?: string;
+  affiliate?: string;
+  image: string;
+};
+
+export type Look = {
+  id: string;
+  title: string;
+  image: string;
+  hotspots: Hotspot[];
+};
 
 export type Article = {
   slug: string;
@@ -99,8 +119,24 @@ export function getRelatedArticles(article: Article, limit = 3) {
 
 export function getArticleProducts(article: Article) {
   const products = getProducts();
-  if (!article.products?.length) return products.filter((product) => product.category === article.category).slice(0, 3);
+  if (!article.products?.length) return products.filter((product) => product.category === article.category).slice(0, 6);
   return article.products
     .map((slug) => products.find((product) => product.slug === slug))
     .filter((product): product is Product => Boolean(product));
+}
+
+export function getLooks(): Look[] {
+  if (!fs.existsSync(looksDir)) return [];
+  return fs
+    .readdirSync(looksDir)
+    .filter((file) => file.endsWith(".json"))
+    .map((file) => {
+      const raw = fs.readFileSync(path.join(looksDir, file), "utf8");
+      try {
+        return JSON.parse(raw) as Look;
+      } catch (e) {
+        return null;
+      }
+    })
+    .filter((look): look is Look => look !== null);
 }

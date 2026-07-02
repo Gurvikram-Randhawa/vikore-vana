@@ -172,7 +172,7 @@ export function FilteredProducts({ products }: { products: Product[] }) {
   const [category, setCategory] = useState("all");
   const filtered = useMemo(() => products.filter((item) => matches(item, query, category)), [products, query, category]);
 
-  return <FilterShell query={query} setQuery={setQuery} category={category} setCategory={setCategory} gridClassName="grid gap-3 sm:gap-4 md:gap-6 grid-cols-2 lg:grid-cols-3">{filtered.map((product) => <ProductCard key={product.slug} product={product} />)}</FilterShell>;
+  return <FilterShell query={query} setQuery={setQuery} category={category} setCategory={setCategory} gridClassName="grid gap-3 sm:gap-4 md:gap-6 grid-cols-2 md:grid-cols-4 lg:grid-cols-5">{filtered.map((product) => <ProductCard key={product.slug} product={product} />)}</FilterShell>;
 }
 
 function FilterShell({
@@ -244,7 +244,7 @@ export function UnifiedSearch({ articles, products }: { articles: Article[]; pro
 
       <h2 className="mb-6 mt-16 font-serif text-3xl text-ink dark:text-linen">Products ({filteredProducts.length})</h2>
       {filteredProducts.length > 0 ? (
-        <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
           {filteredProducts.map((product) => <ProductCard key={product.slug} product={product} />)}
         </div>
       ) : (

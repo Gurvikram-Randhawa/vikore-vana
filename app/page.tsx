@@ -6,9 +6,10 @@ import { FeaturedArticlesList } from "@/components/FeaturedArticlesList";
 import { FeaturedCategories } from "@/components/FeaturedCategories";
 import { ProductCard } from "@/components/ProductCard";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import { ShopTheLook } from "@/components/ShopTheLook";
 import { ReviewsSection } from "@/components/ReviewsSection";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { getArticles, getProducts } from "@/lib/content";
+import { getArticles, getProducts, getLooks } from "@/lib/content";
 import { site } from "@/lib/site";
 
 
@@ -18,6 +19,9 @@ export default function HomePage() {
   const articles = getArticles();
   const products = getProducts();
   const sortedArticles = [...articles].sort(() => 0.5 - Math.random());
+  
+  const looks = getLooks();
+  const randomLook = looks.length > 0 ? looks[Math.floor(Math.random() * looks.length)] : null;
 
 
   return (
@@ -49,7 +53,7 @@ export default function HomePage() {
 
         {/* Product Grid */}
         <div className="w-full max-w-[1536px] mx-auto px-3 sm:px-4 lg:px-8 mt-6 sm:mt-8">
-            <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-2 lg:grid-cols-5">
+            <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
               {[...products].sort(() => 0.5 - Math.random()).slice(0, 10).map((product, index) => (
                 <ScrollReveal 
                   key={product.slug} 
@@ -103,6 +107,9 @@ export default function HomePage() {
         </ScrollReveal>
         <FeaturedArticlesList articles={sortedArticles} />
       </section>
+
+      {/* Shop the Look */}
+      {randomLook && <ShopTheLook look={randomLook} />}
 
       {/* Core Values / Approach */}
       <CoreValues />

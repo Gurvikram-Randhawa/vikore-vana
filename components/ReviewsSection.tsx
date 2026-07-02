@@ -9,8 +9,8 @@ const reviews = [
     id: 1,
     rating: 5,
     text: "Vikore Vana transformed my living space. The curated decor pieces bring a sense of calm and elegance I didn't know was possible.",
-    authorName: "Emma W.",
-    authorRole: "Interior Designer · London",
+    authorName: "Emma Wright",
+    authorRole: "Homeowner, London",
     avatarColor: "bg-[#e8dccb] text-[#5c4a3d] dark:bg-[#3d3630] dark:text-[#d9c7b2]",
     avatarInitial: "E"
   },
@@ -18,8 +18,8 @@ const reviews = [
     id: 2,
     rating: 5,
     text: "Their lighting fixtures are simply breathtaking. Every piece feels intentional and beautifully crafted.",
-    authorName: "David K.",
-    authorRole: "Homeowner · New York",
+    authorName: "David Kim",
+    authorRole: "Verified Buyer, New York",
     avatarColor: "bg-[#d4e0d9] text-[#3d5246] dark:bg-[#2c3b33] dark:text-[#b4cdbd]",
     avatarInitial: "D"
   },
@@ -27,8 +27,8 @@ const reviews = [
     id: 3,
     rating: 5,
     text: "I love the focus on minimalist details. The vases and ceramics I ordered look like art pieces in my studio.",
-    authorName: "Sarah P.",
-    authorRole: "Creative Director · Berlin",
+    authorName: "Sarah Pearson",
+    authorRole: "Interior Stylist, Austin",
     avatarColor: "bg-[#e8d5d5] text-[#5e3c3c] dark:bg-[#4a2f2f] dark:text-[#d9b8b8]",
     avatarInitial: "S"
   },
@@ -36,8 +36,8 @@ const reviews = [
     id: 4,
     rating: 4,
     text: "The small-space styling ideas have been a game changer for my apartment. Highly recommend their aesthetic approach.",
-    authorName: "Marcus L.",
-    authorRole: "Architect · San Francisco",
+    authorName: "Marcus Lin",
+    authorRole: "Homeowner, San Francisco",
     avatarColor: "bg-[#d5dee8] text-[#3c4b5e] dark:bg-[#2d3a4a] dark:text-[#b8c9d9]",
     avatarInitial: "M"
   },
@@ -45,8 +45,8 @@ const reviews = [
     id: 5,
     rating: 5,
     text: "Beautiful textures and incredible craftsmanship. My bedroom feels like a serene sanctuary now.",
-    authorName: "Olivia R.",
-    authorRole: "Home Decorator · Toronto",
+    authorName: "Olivia Reed",
+    authorRole: "Verified Buyer, Toronto",
     avatarColor: "bg-[#e8e2d5] text-[#5e543c] dark:bg-[#4a422f] dark:text-[#d9ceb8]",
     avatarInitial: "O"
   },
@@ -54,8 +54,8 @@ const reviews = [
     id: 6,
     rating: 5,
     text: "The quality of the premium materials is unmatched. Vikore Vana truly understands the art of quiet luxury.",
-    authorName: "James T.",
-    authorRole: "Design Enthusiast · Sydney",
+    authorName: "James Taylor",
+    authorRole: "Homeowner, Sydney",
     avatarColor: "bg-[#e0d5e8] text-[#4f3c5e] dark:bg-[#3d2d4a] dark:text-[#c4b8d9]",
     avatarInitial: "J"
   }
@@ -138,7 +138,7 @@ export function ReviewsSection() {
               <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-ink dark:text-linen leading-[1.1] mb-6">
-              Loved by 1,000+ <span className="text-[#b89569] italic dark:text-[#cba677]">Homes</span>
+              Inspiring 2M+ <span className="text-[#b89569] italic dark:text-[#cba677]">Homes</span>
             </h2>
             
             {/* Desktop Navigation Dots */}

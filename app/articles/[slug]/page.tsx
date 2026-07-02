@@ -99,15 +99,15 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         </section>
 
-        <section className="container-premium grid gap-12 lg:grid-cols-[minmax(0,1fr)_330px]">
-          <div className="mx-auto max-w-3xl">
-            <div className="prose-vana">
+        <section className="container-premium grid gap-12 lg:gap-16 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px]">
+          <div className="w-full max-w-5xl pr-0 lg:pr-8">
+            <div className="prose-vana prose-lg xl:prose-xl">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.body}</ReactMarkdown>
             </div>
           </div>
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <h2 className="mb-4 md:mb-5 font-serif text-2xl md:text-3xl text-ink dark:text-linen">Recommended Products</h2>
-            <div className="grid gap-5">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 lg:gap-5">
               {products.map((product) => <ProductCard key={product.slug} product={product} />)}
             </div>
           </aside>

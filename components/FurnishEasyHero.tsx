@@ -142,24 +142,30 @@ export function FurnishEasyHero() {
             </div>
 
             {/* Stats */}
-            <div className="mt-10 flex items-center justify-center gap-8 border-t border-black/5 pt-8 dark:border-white/10">
+            <div className="mt-10 flex items-start justify-center gap-4 sm:gap-6 md:gap-8 border-t border-black/5 pt-8 dark:border-white/10 text-center">
               <div>
-                <div className="font-serif text-2xl font-semibold text-ink dark:text-white">1K+</div>
-                <div className="mt-1 text-xs font-semibold uppercase tracking-wider text-smoke dark:text-bone/60">Happy Homes</div>
+                <div className="font-serif text-xl sm:text-2xl font-semibold text-ink dark:text-white">2M+</div>
+                <div className="mt-1 text-[9px] sm:text-xs font-semibold uppercase tracking-wider text-smoke dark:text-bone/60 max-w-[80px] sm:max-w-[100px] mx-auto leading-relaxed">Inspired Monthly</div>
               </div>
-              <div className="h-10 w-px bg-black/10 dark:bg-white/10" />
+              <div className="h-12 w-px bg-black/10 dark:bg-white/10 shrink-0" />
               <div>
-                <div className="flex items-center gap-1 font-serif text-2xl font-semibold text-ink dark:text-white">
-                  4.9 <Star size={16} className="fill-[#b89569] text-[#b89569]" />
-                </div>
-                <div className="mt-1 text-xs font-semibold uppercase tracking-wider text-smoke dark:text-bone/60">Avg Rating</div>
+                <div className="font-serif text-xl sm:text-2xl font-semibold text-ink dark:text-white">20K+</div>
+                <div className="mt-1 text-[9px] sm:text-xs font-semibold uppercase tracking-wider text-smoke dark:text-bone/60 max-w-[80px] sm:max-w-[100px] mx-auto leading-relaxed">Saves and Counting</div>
+              </div>
+              <div className="h-12 w-px bg-black/10 dark:bg-white/10 shrink-0" />
+              <div>
+                <div className="font-serif text-xl sm:text-2xl font-semibold text-ink dark:text-white">106K</div>
+                <div className="mt-1 text-[9px] sm:text-xs font-semibold uppercase tracking-wider text-smoke dark:text-bone/60 max-w-[80px] sm:max-w-[100px] mx-auto leading-relaxed">Engaged Community</div>
               </div>
             </div>
           </div>
 
           {/* ── Right — 3D Room (desktop only) ─────────────────── */}
-          <div className="order-2 hidden lg:block relative hero-image-reveal w-[115%] -ml-[15%]">
-            <div className="relative aspect-[5/4] w-full">
+          <div className="order-2 hidden lg:flex relative hero-image-reveal w-full justify-center items-center">
+            {/* Theme-responsive ambient glow behind the room */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] aspect-square rounded-full bg-[#b89569]/50 dark:bg-[#cba677]/40 blur-[100px] xl:blur-[140px] pointer-events-none" />
+            
+            <div className="relative aspect-square w-[110%] lg:w-[130%] xl:w-[145%] 2xl:w-[160%] z-10">
               <IsometricRoom3D />
             </div>
           </div>

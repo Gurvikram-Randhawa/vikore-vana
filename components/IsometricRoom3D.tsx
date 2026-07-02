@@ -38,7 +38,8 @@ export function IsometricRoom3D() {
     // ============================================================
     // RENDERER & CORE
     // ============================================================
-    const pr = window.devicePixelRatio || 1; // Max clarity on all screens
+    // Cap pixel ratio to 2 to prevent iOS memory crashes on 3x devices (visually indistinguishable)
+    const pr = Math.min(window.devicePixelRatio || 1, 2); 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance', alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(pr);
@@ -81,7 +82,7 @@ export function IsometricRoom3D() {
     // POST-PROCESSING
     // ============================================================
     const renderTarget = new THREE.WebGLRenderTarget(width * pr, height * pr, {
-      samples: 4, // Hardware MSAA for perfectly smooth edges
+      samples: isMobile ? 2 : 4, // Hardware MSAA (reduced on mobile to prevent iOS memory crashes)
       type: THREE.HalfFloatType // Preserves high dynamic range colors
     });
     const composer = new EffectComposer(renderer, renderTarget);
@@ -1450,7 +1451,8 @@ export function IsometricRoom3D() {
 
       // Premium Gallery Spotlight for Brand Name (Light removed per request, keeping only the physical fixture)
 
-      // Physical brass wall fixture
+      // Physical brass wall fixture removed per request
+      /*
       const fixtureG = new THREE.Group();
       fixtureG.add(cylM(0.04, 0.04, 0.04, MAT.brass, -3.98, 3.6, 0, 16).rotateZ(Math.PI / 2)); // Wall mount
       fixtureG.add(cylM(0.015, 0.015, 1.0, MAT.brass, -3.5, 3.6, 0, 8).rotateZ(Math.PI / 2)); // Extended arm
@@ -1460,6 +1462,7 @@ export function IsometricRoom3D() {
       housing.rotateX(-Math.PI / 2); // Point wide opening towards target
       fixtureG.add(housing);
       scene.add(fixtureG);
+      */
       // Bounce fill from floor
       const bounce = new THREE.HemisphereLight('#E8DDD0', '#3E2B1C', 0.15);
       scene.add(bounce);
@@ -1657,48 +1660,70 @@ export function IsometricRoom3D() {
           tvG.position.set(0, h + 0.03, 0); // Place on top of marble
           g.add(tvG);
 
-          // Large Flower Pots on the floor beside console
-          const largePotMat = MAT.cream;
-          const bigFlowerMat = new THREE.MeshStandardMaterial({ color: '#F48FB1', roughness: 0.8 });
-          [-1.5, 1.5].forEach(px => {
+          // Aesthetic Flower Plant on Fancy Stands beside console
+          const standMat = MAT.brass;
+          const potMat = new THREE.MeshStandardMaterial({ color: '#2A2A2A', roughness: 0.9 }); // Matte dark charcoal pot
+          const flowerMat = new THREE.MeshStandardMaterial({ color: '#F48FB1', roughness: 0.8 }); // Pink flowers
+          
+          [-1.4, 1.4].forEach(px => {
              const pG = new THREE.Group();
-             // Large Pot
-             pG.add(cylM(0.18, 0.12, 0.35, largePotMat, 0, 0.175, 0));
-             pG.add(cylM(0.16, 0.16, 0.02, MAT.dkWood, 0, 0.34, 0));
+             
+             // Fancy Stand (4 thin legs + ring)
+             const legH = 0.45;
+             const rad = 0.12;
+             for (let i = 0; i < 4; i++) {
+               const a = (i / 4) * Math.PI * 2 + Math.PI/4;
+               pG.add(cylM(0.012, 0.008, legH, standMat, Math.sin(a)*rad, legH/2, Math.cos(a)*rad));
+             }
+             // Ring holding the pot
+             pG.add(cylM(rad + 0.02, rad + 0.02, 0.02, standMat, 0, legH - 0.1, 0));
+             
+             // Minimalist Pot
+             const potH = 0.3;
+             pG.add(cylM(0.16, 0.14, potH, potMat, 0, legH - 0.1 + potH/2, 0));
+             // Dirt
+             const dirtY = legH - 0.1 + potH - 0.01;
+             pG.add(cylM(0.14, 0.14, 0.02, MAT.dkWood, 0, dirtY, 0));
+             
+             // Flower Plant
+             const flowerG = new THREE.Group();
              
              // Flowers and stems
              for(let i=0; i<8; i++) {
                 const a = (i/8)*Math.PI*2;
                 const stemH = 0.3 + Math.random()*0.2;
-                const stem = cylM(0.008, 0.008, stemH, MAT.leaf, Math.sin(a)*0.08, 0.35 + stemH/2, Math.cos(a)*0.08);
+                const stem = cylM(0.008, 0.008, stemH, MAT.leaf, Math.sin(a)*0.08, stemH/2, Math.cos(a)*0.08);
                 stem.rotation.x = Math.sin(a)*0.2;
                 stem.rotation.z = Math.cos(a)*0.2;
-                pG.add(stem);
+                flowerG.add(stem);
                 
-                const fl = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.08), 12, 12), bigFlowerMat);
+                const fl = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.08), 12, 12), flowerMat);
                 fl.position.set(
                   stem.position.x + Math.sin(stem.rotation.z)*0.1,
-                  0.35 + stemH,
+                  stemH,
                   stem.position.z - Math.sin(stem.rotation.x)*0.1
                 );
                 fl.scale.set(1, 0.6, 1);
-                pG.add(fl);
+                flowerG.add(fl);
                 
                 const core = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.04), 8, 8), MAT.goldTrim);
                 core.position.copy(fl.position);
                 core.position.y += 0.03;
-                pG.add(core);
+                flowerG.add(core);
              }
 
              // Center flower
-             pG.add(cylM(0.01, 0.01, 0.4, MAT.leaf, 0, 0.35 + 0.2, 0));
-             const flC = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.1), 12, 12), bigFlowerMat);
+             flowerG.add(cylM(0.01, 0.01, 0.4, MAT.leaf, 0, 0.2, 0));
+             const flC = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.1), 12, 12), flowerMat);
              flC.scale.set(1, 0.6, 1);
-             flC.position.set(0, 0.35 + 0.4, 0);
-             pG.add(flC);
+             flC.position.set(0, 0.4, 0);
+             flowerG.add(flC);
              const coreC = new THREE.Mesh(new THREE.SphereGeometry(Math.max(EPS, 0.05), 8, 8), MAT.goldTrim);
-             coreC.position.set(0, 0.35 + 0.4 + 0.04, 0);
-             pG.add(coreC);
+             coreC.position.set(0, 0.44, 0);
+             flowerG.add(coreC);
+
+             flowerG.position.set(0, dirtY, 0);
+             pG.add(flowerG);
 
              pG.position.set(px, -0.1, 0); // On the floor
              g.add(pG);
@@ -1758,11 +1783,11 @@ export function IsometricRoom3D() {
           
           // Cursive text
           ctx.fillStyle = '#1A1410';
-          ctx.font = 'italic 400 240px "Brush Script MT", "Lucida Handwriting", cursive';
+          ctx.font = 'bold 160px "Jost", "Inter", "Helvetica Neue", sans-serif';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText('Vikore', c.width / 2, c.height / 2 - 120);
-          ctx.fillText('Vana', c.width / 2, c.height / 2 + 120);
+          ctx.fillText('VIKORE', c.width / 2, c.height / 2 - 120);
+          ctx.fillText('VANA', c.width / 2, c.height / 2 + 120);
 
           const tex = new THREE.CanvasTexture(c);
           tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
