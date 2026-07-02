@@ -17,10 +17,10 @@ export function QuizPopup({ allProducts }: { allProducts: Product[] }) {
     if (shown) return;
 
     let canTrigger = false;
-    // Require at least 15 seconds on the page before it can ever trigger
+    // Require at least 20 seconds on the page before it can ever trigger
     const timer = setTimeout(() => {
       canTrigger = true;
-    }, 15000);
+    }, 20000);
 
     const handleScroll = () => {
       if (!canTrigger) return;

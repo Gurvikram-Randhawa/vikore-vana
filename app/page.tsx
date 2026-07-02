@@ -7,6 +7,7 @@ import { FeaturedCategories } from "@/components/FeaturedCategories";
 import { ProductCard } from "@/components/ProductCard";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { ShopTheLook } from "@/components/ShopTheLook";
+import { BeforeAfterGallery } from "@/components/BeforeAfterGallery";
 import { ReviewsSection } from "@/components/ReviewsSection";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { getArticles, getProducts, getLooks } from "@/lib/content";
@@ -14,6 +15,12 @@ import { site } from "@/lib/site";
 
 
 export const dynamic = "force-dynamic";
+
+const SectionDivider = () => (
+  <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="h-px w-full bg-gradient-to-r from-transparent via-[#b89569]/20 dark:via-[#cba677]/20 to-transparent" />
+  </div>
+);
 
 export default function HomePage() {
   const articles = getArticles();
@@ -54,13 +61,14 @@ export default function HomePage() {
         {/* Product Grid */}
         <div className="w-full max-w-[1536px] mx-auto px-3 sm:px-4 lg:px-8 mt-6 sm:mt-8">
             <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-              {[...products].sort(() => 0.5 - Math.random()).slice(0, 10).map((product, index) => (
+              {[...products].sort(() => 0.5 - Math.random()).slice(0, 12).map((product, index) => (
                 <ScrollReveal 
                   key={product.slug} 
                   delay={index * 150} 
                   distance={100} 
                   duration={1000} 
                   direction="up"
+                  className={index >= 10 ? 'hidden xl:block' : ''}
                 >
                   <ProductCard product={product} />
                 </ScrollReveal>
@@ -87,9 +95,11 @@ export default function HomePage() {
       </section>
 
       {/* Featured Categories */}
+      <SectionDivider />
       <FeaturedCategories categories={site.categoryTiles} />
 
       {/* Featured Articles */}
+      <SectionDivider />
       <section className="container-premium py-10 sm:py-14 md:py-16">
         <ScrollReveal>
           <div className="mb-10 sm:mb-12 md:mb-14 text-center">
@@ -109,15 +119,23 @@ export default function HomePage() {
       </section>
 
       {/* Shop the Look */}
+      <SectionDivider />
       {randomLook && <ShopTheLook look={randomLook} />}
 
+      {/* Interactive Before & After */}
+      <SectionDivider />
+      <BeforeAfterGallery />
+
       {/* Core Values / Approach */}
+      <SectionDivider />
       <CoreValues />
 
       {/* Reviews */}
+      <SectionDivider />
       <ReviewsSection />
 
       {/* FAQ */}
+      <SectionDivider />
       <FaqSection />
 
       {/* Newsletter — Weekly Note */}

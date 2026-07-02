@@ -15,7 +15,7 @@ export function ShopTheLook({ look }: { look: Look }) {
   if (!look) return null;
 
   return (
-    <section className="py-20 md:py-32 bg-[#fffaf4] dark:bg-[#181614] relative">
+    <section className="py-10 sm:py-14 md:py-16 bg-[#fffaf4] dark:bg-[#181614] relative">
       
       {/* Subtle background glow */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#b89569]/5 dark:from-[#cba677]/5 to-transparent pointer-events-none" />
@@ -43,16 +43,18 @@ export function ShopTheLook({ look }: { look: Look }) {
 
         {/* Interactive Image Container */}
         <ScrollReveal delay={0.2}>
-          <div className="relative w-full max-w-6xl mx-auto aspect-[4/5] md:aspect-[16/9] lg:aspect-[21/9] rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] group border border-[#b89569]/10 z-10 hover:z-50">
+          <div className="relative w-full max-w-4xl mx-auto rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] group border border-[#b89569]/10 z-10 hover:z-50">
             
-            {/* Image Wrapper to contain image scale without clipping tooltips */}
-            <div className="absolute inset-0 rounded-[inherit] overflow-hidden pointer-events-none">
+            {/* Image Wrapper to perfectly shrink-wrap the intrinsic image ratio without clipping tooltips */}
+            <div className="relative w-full h-auto rounded-[inherit] overflow-hidden pointer-events-none">
               {/* Main Background Image */}
               <Image 
                 src={look.image}
                 alt={look.title || "Beautifully styled room"}
-                fill
-                className="object-cover transition-transform duration-[15000ms] ease-out group-hover:scale-105"
+                width={1200}
+                height={1200}
+                style={{ width: '100%', height: 'auto' }}
+                className="transition-transform duration-[15000ms] ease-out group-hover:scale-105"
               />
               
               {/* Dark overlay for contrast */}
@@ -60,32 +62,34 @@ export function ShopTheLook({ look }: { look: Look }) {
             </div>
 
             {/* Hotspots */}
-            {look.hotspots.map((spot) => (
+            {look.hotspots.map((spot, index) => (
               <div 
-                key={spot.id}
+                key={index}
                 className="absolute z-20 group/spot"
                 style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
-                onMouseEnter={() => setActiveSpot(spot.id)}
+                onMouseEnter={() => setActiveSpot(index.toString())}
                 onMouseLeave={() => setActiveSpot(null)}
+                onClick={() => setActiveSpot(activeSpot === index.toString() ? null : index.toString())}
               >
-                {/* The Pin */}
+                {/* The Pin - Premium Redesign */}
                 <div className="relative -ml-4 -mt-4 w-8 h-8 flex items-center justify-center cursor-pointer">
-                  {/* Pulsing ring */}
-                  <div className="absolute inset-0 rounded-full bg-white/60 dark:bg-white/30 animate-ping opacity-75 duration-[2000ms]" />
-                  {/* Solid center */}
-                  <div className="relative w-6 h-6 rounded-full bg-white/95 backdrop-blur-sm dark:bg-[#1a1a1a]/90 flex items-center justify-center shadow-lg border border-black/5 dark:border-white/10 transition-all duration-300 group-hover/spot:scale-110">
-                    <Plus className="w-4 h-4 text-ink dark:text-white transition-transform duration-500 group-hover/spot:rotate-90 group-hover/spot:text-[#b89569]" />
+                  {/* Subtle soft pulse shadow instead of cheap ping */}
+                  <div className="absolute inset-0 rounded-full bg-black/5 dark:bg-white/5 shadow-[0_0_15px_rgba(255,255,255,0.5)] dark:shadow-[0_0_15px_rgba(255,255,255,0.15)] animate-pulse" style={{ animationDuration: '3s' }} />
+                  
+                  {/* Solid glass center */}
+                  <div className="relative w-6 h-6 rounded-full bg-white/95 backdrop-blur-md dark:bg-[#1a1a1a]/95 flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-white/40 dark:border-white/10 transition-all duration-500 group-hover/spot:scale-110">
+                    <Plus className="w-3.5 h-3.5 text-ink/80 dark:text-white/80 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/spot:rotate-90 group-hover/spot:text-[#b89569]" />
                   </div>
                 </div>
 
-                {/* The Tooltip (Glassmorphism + Product Card) */}
+                {/* The Tooltip (Solid Product Card) */}
                 <div
                   className={`
                     absolute w-44 sm:w-56 md:w-64
                     transition-all duration-500 ease-out z-30
                     ${spot.x < 35 ? 'left-0' : spot.x > 65 ? 'right-0' : 'left-1/2 -translate-x-1/2'}
                     ${spot.y > 60 ? 'bottom-full mb-3 md:mb-4' : 'top-full mt-3 md:mt-4'}
-                    ${activeSpot === spot.id 
+                    ${activeSpot === index.toString() 
                       ? 'opacity-100 scale-100 pointer-events-auto' 
                       : `opacity-0 scale-95 pointer-events-none ${spot.y > 60 ? 'translate-y-4' : '-translate-y-4'}`}
                   `}

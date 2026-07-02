@@ -107,14 +107,14 @@ export function FurnishEasyHero() {
                     </span>
                   </button>
                 ) : !isMounting ? (
-                  <div className="flex flex-col items-center justify-center gap-4 w-[85%] h-[85%] rounded-[2.5rem] bg-gradient-to-br from-[#fdf6f0] to-[#f5ebd9] dark:from-[#25211e] dark:to-[#1a1715] animate-pulse">
+                  <div className="flex flex-col items-center justify-center gap-4 w-[85%] h-[85%] rounded-[2.5rem] bg-gradient-to-br from-[#fdf6f0] to-[#f5ebd9] dark:from-[#25211e] dark:to-[#1a1715] border border-[#b89569]/30 shadow-[0_8px_32px_rgba(184,149,105,0.15)] animate-pulse">
                     <Loader2 className="w-10 h-10 animate-spin text-[#b89569]" />
                     <span className="font-serif text-lg text-ink/70 dark:text-linen/70 font-medium">
                       Crafting your room...
                     </span>
                   </div>
                 ) : (
-                  <div className="w-full h-full animate-in fade-in zoom-in-95 duration-1000 ease-out fill-mode-both relative">
+                  <div className="w-[85%] h-[85%] rounded-[2.5rem] border border-[#b89569]/30 bg-gradient-to-br from-[#fdf6f0]/50 to-[#f5ebd9]/50 dark:from-[#25211e]/50 dark:to-[#1a1715]/50 shadow-[0_8px_32px_rgba(184,149,105,0.15)] animate-in fade-in zoom-in-95 duration-1000 ease-out fill-mode-both relative overflow-hidden">
                     <IsometricRoom3D />
                     <span className="absolute bottom-4 left-0 right-0 text-center text-[10px] text-[#b89569] dark:text-[#cba677] uppercase tracking-widest font-bold animate-pulse pointer-events-none">
                       Drag to interact with room
@@ -161,12 +161,15 @@ export function FurnishEasyHero() {
           </div>
 
           {/* ── Right — 3D Room (desktop only) ─────────────────── */}
-          <div className="order-2 hidden lg:flex relative hero-image-reveal w-full justify-center items-center">
+          <div className="order-2 hidden lg:flex relative hero-image-reveal w-full justify-center items-center px-8 xl:px-12">
             {/* Theme-responsive ambient glow behind the room */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] aspect-square rounded-full bg-[#b89569]/50 dark:bg-[#cba677]/40 blur-[100px] xl:blur-[140px] pointer-events-none" />
             
-            <div className="relative aspect-square w-[110%] lg:w-[130%] xl:w-[145%] 2xl:w-[160%] z-10">
+            <div className="relative aspect-square w-full max-w-[700px] z-10 rounded-[3rem] border border-[#b89569]/30 bg-gradient-to-br from-[#fdf6f0]/60 to-[#f5ebd9]/60 dark:from-[#25211e]/60 dark:to-[#1a1715]/60 shadow-[0_20px_60px_rgba(184,149,105,0.15)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.4)] overflow-hidden backdrop-blur-sm">
               <IsometricRoom3D />
+              <span className="absolute bottom-6 left-0 right-0 text-center text-[11px] text-[#b89569] dark:text-[#cba677] uppercase tracking-[0.25em] font-bold animate-pulse pointer-events-none drop-shadow-sm">
+                Drag to interact with room
+              </span>
             </div>
           </div>
 
