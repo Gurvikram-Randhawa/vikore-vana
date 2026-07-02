@@ -42,18 +42,21 @@ export function ShopTheLook({ look }: { look: Look }) {
 
         {/* Interactive Image Container */}
         <ScrollReveal delay={0.2}>
-          <div className="relative w-full max-w-6xl mx-auto aspect-[4/5] md:aspect-[16/9] lg:aspect-[21/9] rounded-2xl md:rounded-[2.5rem] overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] group border border-[#b89569]/10">
+          <div className="relative w-full max-w-6xl mx-auto aspect-[4/5] md:aspect-[16/9] lg:aspect-[21/9] rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] group border border-[#b89569]/10 z-10 hover:z-50">
             
-            {/* Main Background Image */}
-            <Image 
-              src={look.image}
-              alt={look.title || "Beautifully styled room"}
-              fill
-              className="object-cover transition-transform duration-[15000ms] ease-out group-hover:scale-105"
-            />
-            
-            {/* Dark overlay for contrast */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/30 transition-opacity duration-700 group-hover:opacity-70" />
+            {/* Image Wrapper to contain image scale without clipping tooltips */}
+            <div className="absolute inset-0 rounded-[inherit] overflow-hidden pointer-events-none">
+              {/* Main Background Image */}
+              <Image 
+                src={look.image}
+                alt={look.title || "Beautifully styled room"}
+                fill
+                className="object-cover transition-transform duration-[15000ms] ease-out group-hover:scale-105"
+              />
+              
+              {/* Dark overlay for contrast */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/30 transition-opacity duration-700 group-hover:opacity-70" />
+            </div>
 
             {/* Hotspots */}
             {look.hotspots.map((spot) => (
@@ -80,14 +83,15 @@ export function ShopTheLook({ look }: { look: Look }) {
                   target={spot.affiliate ? "_blank" : "_self"}
                   rel={spot.affiliate ? "noopener noreferrer" : ""}
                   className={`
-                    absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 md:w-56 p-3 
+                    absolute left-1/2 -translate-x-1/2 w-48 md:w-56 p-3 
                     bg-white/85 dark:bg-[#141210]/85 backdrop-blur-xl 
-                    border border-white/40 dark:border-white/5 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] 
+                    border border-white/40 dark:border-white/5 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.2)] 
                     transition-all duration-500 ease-out
-                    hover:border-[#b89569]/30 dark:hover:border-[#cba677]/30 hover:-translate-y-1 hover:scale-[1.02]
+                    hover:border-[#b89569]/30 dark:hover:border-[#cba677]/30 
+                    ${spot.y > 60 ? 'bottom-full mb-4 hover:-translate-y-1' : 'top-full mt-4 hover:translate-y-1'}
                     ${activeSpot === spot.id 
-                      ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' 
-                      : 'opacity-0 translate-y-4 scale-95 pointer-events-none'}
+                      ? 'opacity-100 scale-100 pointer-events-auto' 
+                      : `opacity-0 scale-95 pointer-events-none ${spot.y > 60 ? 'translate-y-4' : '-translate-y-4'}`}
                   `}
                 >
                   <div className="relative w-full aspect-square mb-4 rounded-xl overflow-hidden bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
