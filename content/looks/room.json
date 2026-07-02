@@ -1,0 +1,21 @@
+{
+  "hotspots": [
+    {
+      "id": "spot-1",
+      "x": 33.82,
+      "y": 71.41,
+      "productName": "chair",
+      "image": "/uploads/71zuqwtc7jl._ac_sl1500_.jpg"
+    },
+    {
+      "id": "spot-1",
+      "x": 55.21,
+      "y": 53.51,
+      "productName": "lamp",
+      "price": "500",
+      "image": "/uploads/51mhzp3fxkl._ac_sl1500_.jpg"
+    }
+  ],
+  "title": "room",
+  "image": "/uploads/3f2f.jpg"
+}
