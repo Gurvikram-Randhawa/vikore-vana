@@ -7,6 +7,7 @@ import { Plus } from "lucide-react";
 import { ScrollReveal } from "@/components/ScrollReveal";
 
 import { Look, Hotspot } from "@/lib/content";
+import { ProductCard } from "@/components/ProductCard";
 
 export function ShopTheLook({ look }: { look: Look }) {
   const [activeSpot, setActiveSpot] = useState<string | null>(null);
@@ -77,38 +78,28 @@ export function ShopTheLook({ look }: { look: Look }) {
                   </div>
                 </div>
 
-                {/* The Tooltip (Glassmorphism) */}
-                <Link
-                  href={spot.affiliate ? spot.affiliate : `/${spot.slug || ''}`}
-                  target={spot.affiliate ? "_blank" : "_self"}
-                  rel={spot.affiliate ? "noopener noreferrer" : ""}
+                {/* The Tooltip (Glassmorphism + Product Card) */}
+                <div
                   className={`
-                    absolute left-1/2 -translate-x-1/2 w-48 md:w-56 p-3 
-                    bg-white/85 dark:bg-[#141210]/85 backdrop-blur-xl 
-                    border border-white/40 dark:border-white/5 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.2)] 
-                    transition-all duration-500 ease-out
-                    hover:border-[#b89569]/30 dark:hover:border-[#cba677]/30 
-                    ${spot.y > 60 ? 'bottom-full mb-4 hover:-translate-y-1' : 'top-full mt-4 hover:translate-y-1'}
+                    absolute left-1/2 -translate-x-1/2 w-56 md:w-64
+                    transition-all duration-500 ease-out z-30
+                    ${spot.y > 60 ? 'bottom-full mb-4' : 'top-full mt-4'}
                     ${activeSpot === spot.id 
                       ? 'opacity-100 scale-100 pointer-events-auto' 
                       : `opacity-0 scale-95 pointer-events-none ${spot.y > 60 ? 'translate-y-4' : '-translate-y-4'}`}
                   `}
                 >
-                  <div className="relative w-full aspect-square mb-4 rounded-xl overflow-hidden bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
-                    <Image src={spot.image} alt={spot.productName} fill className="object-cover transition-transform duration-700 hover:scale-110" />
-                  </div>
-                  <div className="text-center pb-2">
-                    <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#b89569] dark:text-[#cba677] mb-1.5">
-                      {spot.category}
-                    </p>
-                    <h4 className="font-serif text-sm md:text-base text-ink dark:text-linen leading-tight mb-2">
-                      {spot.productName}
-                    </h4>
-                    <p className="text-sm font-medium text-smoke dark:text-bone/80">
-                      {spot.price}
-                    </p>
-                  </div>
-                </Link>
+                  <ProductCard product={{
+                    slug: spot.slug || '',
+                    name: spot.productName,
+                    description: '',
+                    image: spot.image,
+                    category: spot.category,
+                    affiliate: spot.affiliate,
+                    date: '',
+                    body: ''
+                  }} />
+                </div>
               </div>
             ))}
             

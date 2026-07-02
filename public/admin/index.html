@@ -67,6 +67,37 @@
                 { label: "Featured", name: "featured", widget: "boolean", required: false, default: false },
                 { label: "Notes", name: "body", widget: "markdown", required: false }
               ]
+            },
+            {
+              name: "looks",
+              label: "Shop the Look",
+              folder: "content/looks",
+              create: true,
+              extension: "json",
+              format: "json",
+              slug: "{{slug}}",
+              summary: "{{title}}",
+              fields: [
+                { label: "Title", name: "title", widget: "string" },
+                { label: "Main Image", name: "image", widget: "image" },
+                {
+                  label: "Hotspots",
+                  name: "hotspots",
+                  widget: "list",
+                  summary: "{{fields.productName}}",
+                  fields: [
+                    { label: "ID", name: "id", widget: "string", default: "spot-1" },
+                    { label: "X Coordinate (Percentage from left)", name: "x", widget: "number", value_type: "float", min: 0, max: 100 },
+                    { label: "Y Coordinate (Percentage from top)", name: "y", widget: "number", value_type: "float", min: 0, max: 100 },
+                    { label: "Product Name", name: "productName", widget: "string" },
+                    { label: "Price", name: "price", widget: "string" },
+                    { label: "Category", name: "category", widget: "string" },
+                    { label: "Product Slug (Internal link)", name: "slug", widget: "string", required: false },
+                    { label: "Affiliate Link (External URL)", name: "affiliate", widget: "string", required: false },
+                    { label: "Thumbnail Image", name: "image", widget: "image" }
+                  ]
+                }
+              ]
             }
           ]
         }
