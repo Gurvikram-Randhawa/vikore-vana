@@ -15,7 +15,7 @@ export function ShopTheLook({ look }: { look: Look }) {
   if (!look) return null;
 
   return (
-    <section className="py-10 sm:py-14 md:py-16 bg-[#fffaf4] dark:bg-[#181614] relative">
+    <section className="py-10 sm:py-14 md:py-16 bg-[#fffaf4] dark:bg-[#181614] relative z-20">
       
       {/* Subtle background glow */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#b89569]/5 dark:from-[#cba677]/5 to-transparent pointer-events-none" />
@@ -41,9 +41,9 @@ export function ShopTheLook({ look }: { look: Look }) {
           </ScrollReveal>
         </div>
 
-        {/* Interactive Image Container */}
+        {/* Interactive Image Container — constrained to match BeforeAfterGallery sizing */}
         <ScrollReveal delay={0.2}>
-          <div className="relative w-full max-w-4xl mx-auto rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] group border border-[#b89569]/10 z-10 hover:z-50">
+          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-xl mx-auto rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] group border border-[#b89569]/10 z-10 hover:z-50">
             
             {/* Image Wrapper to perfectly shrink-wrap the intrinsic image ratio without clipping tooltips */}
             <div className="relative w-full h-auto rounded-[inherit] overflow-hidden pointer-events-none">

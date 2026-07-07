@@ -2,16 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, Moon, Search, Sun, X } from "lucide-react";
+import { Menu, Search, Sun, Moon, X, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { site } from "@/lib/site";
 import { useTheme } from "./ThemeProvider";
+import { AnimatePresence, motion } from "framer-motion";
 
 export function Header() {
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const { dark, toggle } = useTheme();
   const pathname = usePathname();
 
@@ -25,7 +27,7 @@ export function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
@@ -37,105 +39,245 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
+  // Lock scroll when mobile menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  // Framer Motion Animation Variants
+  const sidebarVariants = {
+    closed: {
+      x: "100%",
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 40,
+        staggerChildren: 0.05,
+        staggerDirection: -1,
+      }
+    },
+    open: {
+      x: 0,
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 40,
+        staggerChildren: 0.08,
+        delayChildren: 0.15,
+      }
+    }
+  };
+
+  const itemVariants = {
+    closed: { y: 25, opacity: 0 },
+    open: { y: 0, opacity: 1, transition: { duration: 0.4, ease: "easeOut" } }
+  };
+
   return (
     <>
-      <header className={`sticky top-0 z-50 border-b border-[#b8935a]/15 bg-[#fffaf4]/85 backdrop-blur-md dark:border-white/5 dark:bg-[#181614]/85 transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
-        <div className="container-premium py-1 md:h-16 md:py-0 flex flex-col md:flex-row justify-center md:justify-between items-center gap-1.5 md:gap-4">
-          <div className="flex items-center justify-between w-full md:w-auto md:flex-1 md:justify-start">
-            <Link href="/" className="flex items-center gap-2 font-serif text-base md:text-lg tracking-[0.8px] font-semibold text-ink whitespace-nowrap dark:text-linen font-bold">
-              <span className="relative overflow-hidden w-8 h-8 md:w-9 md:h-9 rounded-full border border-[#b8935a]/30 dark:border-white/10 shadow-sm flex items-center justify-center shrink-0">
-                <Image src="/logo.jpg" alt="Vikore Vana Logo" fill className="object-cover" />
-              </span>
-              Vikore Vana
-            </Link>
+      {/* Sleek, Minimal Luxury Header Bar */}
+      <header 
+        className={`sticky top-0 z-50 w-full h-14 md:h-16 bg-[#fffaf4]/90 dark:bg-[#181614]/90 backdrop-blur-md border-b border-[#b89569]/5 dark:border-white/5 transition-transform duration-500 ease-in-out ${
+          isVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        <div className="max-w-[1400px] h-full mx-auto px-6 sm:px-10 flex items-center justify-between">
+          
+          {/* Left: Minimal Brand Logo */}
+          <Link 
+            href="/" 
+            className="flex items-center gap-3 font-serif tracking-[0.25em] uppercase text-xs sm:text-sm font-light text-ink dark:text-linen transition-opacity hover:opacity-85"
+          >
+            <span className="relative overflow-hidden w-8 h-8 rounded-full border border-[#b89569]/10 dark:border-white/5 flex items-center justify-center shrink-0">
+              <Image src="/logo.jpg" alt="Vikore Vana Logo" fill className="object-cover" />
+            </span>
+            <span>Vikore Vana</span>
+          </Link>
 
-            <div className="flex items-center gap-2 md:hidden">
-              <a 
-                aria-label="Pinterest" 
-                href="https://www.pinterest.com/vikore_vana/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="grid w-9 h-9 place-items-center rounded-full border border-[#b8935a]/15 dark:border-white/5 bg-[#b8935a]/5 dark:bg-white/5 text-[#b8935a] dark:text-[#cba677] transition hover:bg-[#b8935a]/10 dark:hover:bg-white/10"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                  <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.181 0 7.426 2.979 7.426 6.953 0 4.156-2.617 7.502-6.257 7.502-1.222 0-2.372-.635-2.766-1.385l-.754 2.873c-.272 1.042-1.01 2.343-1.505 3.139 1.161.359 2.392.552 3.666.552 6.621 0 11.988-5.367 11.988-11.988C24.017 5.367 18.638 0 12.017 0z" />
-                </svg>
-              </a>
-              <Link 
-                aria-label="Search" 
-                href="/search" 
-                className="grid w-9 h-9 place-items-center rounded-full border border-[#b8935a]/15 dark:border-white/5 bg-[#b8935a]/5 dark:bg-white/5 text-[#b8935a] dark:text-[#cba677] transition hover:bg-[#b8935a]/10 dark:hover:bg-white/10"
-              >
-                <Search size={16} />
-              </Link>
-            </div>
-          </div>
+          {/* Center: Delicate Text Navigation Links (Desktop) */}
+          <nav className="hidden lg:flex items-center gap-10">
+            {site.nav.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`relative py-1 text-[10px] font-medium uppercase tracking-[0.3em] transition-colors duration-300 ${
+                    active 
+                      ? "text-[#b89569] dark:text-[#cba677]" 
+                      : "text-neutral-500 dark:text-bone/45 hover:text-ink dark:hover:text-white"
+                  } after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#b89569] dark:after:bg-[#cba677] after:origin-right after:scale-x-0 after:transition-transform after:duration-300 hover:after:origin-left hover:after:scale-x-100`}
+                  style={{ fontFamily: "var(--font-jost), sans-serif" }}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
 
-          {/* Center: Nav */}
-          <div className="flex items-center justify-center">
-            <nav className="flex items-center gap-1 rounded-3xl px-3 py-2.5 bg-[#fdf6f0]/55 dark:bg-[#1e1a17]/60 backdrop-blur-xl border border-[#b8935a]/30 dark:border-[#b8935a]/15 shadow-[0_8px_28px_rgba(184,147,90,0.14),0_2px_6px_rgba(184,147,90,0.07)] dark:shadow-[0_8px_28px_rgba(0,0,0,0.4),0_2px_6px_rgba(0,0,0,0.25)]">
-              {site.nav.map((item) => {
-                const active = isActive(item.href);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center justify-center rounded-full px-5 py-1.5 text-[11px] font-semibold uppercase tracking-[1.5px] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${
-                      active
-                        ? "border border-[#b8935a] text-[#b8935a] dark:border-[#cba677] dark:text-[#cba677]"
-                        : "border border-transparent text-[#9c8b7a] hover:text-[#b8935a] hover:border-[#b8935a]/30 dark:text-bone/50 dark:hover:text-[#cba677] dark:hover:border-[#cba677]/30"
-                    }`}
-                    style={{ fontFamily: "var(--font-jost), sans-serif" }}
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-
-          <div className="hidden md:flex flex-1 items-center justify-end gap-3">
-            <a 
-              aria-label="Pinterest" 
-              href="https://www.pinterest.com/vikore_vana/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="grid w-10 h-10 place-items-center rounded-full border border-[#b8935a]/15 dark:border-white/5 bg-[#b8935a]/5 dark:bg-white/5 text-[#b8935a] dark:text-[#cba677] transition-all duration-300 hover:scale-105 active:scale-95 hover:bg-[#b8935a]/10 dark:hover:bg-white/10"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.181 0 7.426 2.979 7.426 6.953 0 4.156-2.617 7.502-6.257 7.502-1.222 0-2.372-.635-2.766-1.385l-.754 2.873c-.272 1.042-1.01 2.343-1.505 3.139 1.161.359 2.392.552 3.666.552 6.621 0 11.988-5.367 11.988-11.988C24.017 5.367 18.638 0 12.017 0z" />
-              </svg>
-            </a>
+          {/* Right: Essential Action Controls (Decluttered) */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            
+            {/* Search */}
             <Link 
               aria-label="Search" 
               href="/search" 
-              className="grid w-10 h-10 place-items-center rounded-full border border-[#b8935a]/15 dark:border-white/5 bg-[#b8935a]/5 dark:bg-white/5 text-[#b8935a] dark:text-[#cba677] transition-all duration-300 hover:scale-105 active:scale-95 hover:bg-[#b8935a]/10 dark:hover:bg-white/10"
+              className="grid w-10 h-10 place-items-center rounded-full text-neutral-500 dark:text-bone/45 hover:text-ink dark:hover:text-white hover:bg-neutral-100/50 dark:hover:bg-white/5 transition-all duration-300 active:scale-95"
             >
-              <Search size={17} />
+              <Search size={18} />
             </Link>
-            <button 
-              aria-label="Toggle dark mode" 
-              onClick={toggle} 
-              className="grid w-10 h-10 place-items-center rounded-full border border-[#b8935a]/25 dark:border-white/10 bg-[#b8935a]/10 dark:bg-white/10 text-[#b8935a] dark:text-[#cba677] transition-all duration-300 hover:scale-105 active:scale-95 hover:bg-[#b8935a]/15 dark:hover:bg-white/15"
+
+            {/* Mobile Hamburger menu */}
+            <button
+              aria-label="Toggle Menu"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="grid lg:hidden w-10 h-10 place-items-center rounded-full text-ink dark:text-linen hover:bg-neutral-100/50 dark:hover:bg-white/5 transition-all duration-300"
             >
-              {dark ? <Sun size={17} /> : <Moon size={17} />}
+              {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
+
           </div>
         </div>
       </header>
 
-      {/* Floating Mobile Dark Mode Button */}
+      {/* Floating Dark Mode Button (Fixed Bottom-Right as requested) */}
       <button
         aria-label="Toggle dark mode"
         onClick={toggle}
-        className="fixed bottom-12 right-6 z-[99] md:hidden flex items-center justify-center w-12 h-12 rounded-full
-          bg-white/40 dark:bg-[#151311]/45 backdrop-blur-xl
-          border border-[#b8935a]/35 dark:border-[#b8935a]/25
-          shadow-[0_8px_32px_rgba(31,38,135,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.37)]
+        className="fixed bottom-16 right-6 z-[99] flex items-center justify-center w-11 h-11 rounded-full
+          bg-[#fffaf4]/85 dark:bg-[#181614]/80 backdrop-blur-md
+          border border-[#b89569]/15 dark:border-white/10
+          shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)]
           text-ink dark:text-linen hover:scale-105 active:scale-95 transition-all duration-300"
       >
-        {dark ? <Sun size={20} /> : <Moon size={20} />}
+        {dark ? <Sun size={17} /> : <Moon size={17} />}
       </button>
+
+      {/* Premium Redesigned Slide-out Mobile Menu Drawer */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden flex justify-end"
+            onClick={() => setMenuOpen(false)}
+          >
+            {/* Drawer Container Panel */}
+            <motion.div
+              variants={sidebarVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              className="relative w-[85%] max-w-[380px] h-full bg-[#fffaf4]/95 dark:bg-[#181614]/95 backdrop-blur-xl border-l border-[#b89569]/10 dark:border-white/5 p-8 sm:p-10 flex flex-col justify-between shadow-3xl overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Top / Inner Section */}
+              <div className="flex flex-col gap-12 mt-12">
+                
+                {/* Minimal Brand Identity Block */}
+                <motion.div 
+                  variants={itemVariants} 
+                  className="border-b border-[#b89569]/10 pb-6"
+                >
+                  <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#b89569] dark:text-[#cba677]">Vikore Vana</span>
+                  <p className="text-[8px] text-neutral-500 dark:text-bone/45 uppercase tracking-[2px] mt-1">Curated Interior Architecture</p>
+                </motion.div>
+
+                {/* Staggered Vertical Menu Options with Large Editorial Typography */}
+                <nav className="flex flex-col gap-5">
+                  {site.nav.map((item) => {
+                    const active = isActive(item.href);
+                    const isHovered = hoveredLink === item.href;
+                    const isAnyHovered = hoveredLink !== null;
+
+                    return (
+                      <motion.div key={item.href} variants={itemVariants}>
+                        <Link
+                          href={item.href}
+                          onClick={() => setMenuOpen(false)}
+                          onMouseEnter={() => setHoveredLink(item.href)}
+                          onMouseLeave={() => setHoveredLink(null)}
+                          className={`group flex items-center justify-between py-2 text-lg sm:text-xl font-serif font-light tracking-[0.08em] uppercase transition-all duration-300 ${
+                            active 
+                              ? "text-[#b89569] dark:text-[#cba677]" 
+                              : "text-neutral-600 dark:text-bone/60"
+                          }`}
+                          style={{
+                            opacity: isAnyHovered && !isHovered ? 0.45 : 1,
+                            transform: isHovered ? "translateX(4px)" : "translateX(0px)",
+                          }}
+                        >
+                          <span className="relative">
+                            {item.label}
+                            {/* Thin subtle dot indicator next to active link */}
+                            {active && (
+                              <span className="absolute -left-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#b89569] dark:bg-[#cba677]" />
+                            )}
+                          </span>
+                          
+                          <ArrowRight 
+                            size={16} 
+                            className={`text-[#b89569] dark:text-[#cba677] opacity-0 -translate-x-2 transition-all duration-300 ${
+                              isHovered ? "opacity-100 translate-x-0" : ""
+                            }`} 
+                          />
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                </nav>
+              </div>
+
+              {/* Bottom / Socials & Info Section */}
+              <div className="flex flex-col gap-8 mt-12 border-t border-[#b89569]/10 pt-6">
+                
+                {/* Search Bar inside Drawer */}
+                <motion.div variants={itemVariants} className="w-full">
+                  <form action="/search" method="GET" onSubmit={() => setMenuOpen(false)} className="relative w-full">
+                    <input 
+                      type="text" 
+                      name="q" 
+                      placeholder="Search items & guides..." 
+                      className="w-full bg-transparent border-b border-[#b89569]/10 focus:border-[#b89569] outline-none py-2 pr-8 text-xs font-sans tracking-wider placeholder-[#8c8275]/40 text-ink dark:text-linen transition-colors duration-300"
+                    />
+                    <button type="submit" aria-label="Search" className="absolute right-0 top-2.5 text-[#b89569] dark:text-[#cba677] hover:scale-105 active:scale-95 transition-transform">
+                      <Search size={14} />
+                    </button>
+                  </form>
+                </motion.div>
+
+                {/* Social Pinterest Link */}
+                <motion.div variants={itemVariants} className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em]">
+                  <a 
+                    href="https://www.pinterest.com/vikore_vana/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="relative py-1 text-[#8c8275] hover:text-[#b89569] dark:text-bone/50 dark:hover:text-[#cba677] transition-colors after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#b89569] dark:after:bg-[#cba677] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300"
+                  >
+                    Pinterest ↗
+                  </a>
+                </motion.div>
+
+                {/* Footer copyright */}
+                <motion.p variants={itemVariants} className="text-[8px] text-neutral-500 dark:text-bone/35 uppercase tracking-[1.5px] leading-relaxed">
+                  © {new Date().getFullYear()} Vikore Vana. <br/>
+                  Curated Interior Architecture.
+                </motion.p>
+              </div>
+
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

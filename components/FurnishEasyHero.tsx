@@ -1,46 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowRight, Star, Sparkles, Loader2 } from "lucide-react";
-import { IsometricRoom3D } from "@/components/IsometricRoom3D";
+import { ArrowRight } from "lucide-react";
+import { AestheticCarousel } from "@/components/AestheticCarousel";
 
 export function FurnishEasyHero() {
-  const [showMagic, setShowMagic] = useState(false);
-  const [isMounting, setIsMounting] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (showMagic) {
-      // Defer the heavy WebGL mounting by 50ms to allow the browser to paint the loading UI first!
-      const timer = setTimeout(() => setIsMounting(true), 150);
-      return () => clearTimeout(timer);
-    } else {
-      setIsMounting(false);
-    }
-  }, [showMagic]);
-
-  useEffect(() => {
-    if (!showMagic) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries[0].isIntersecting) {
-          setShowMagic(false);
-        }
-      },
-      { threshold: 0 } // Unmount as soon as it leaves the viewport
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [showMagic]);
-
   return (
-    <section className="overflow-hidden pt-5 md:pt-6 pb-8 md:pb-12" ref={containerRef}>
+    <section className="overflow-hidden pt-5 md:pt-6 pb-8 md:pb-12">
       <div className="container-premium max-w-[1400px]">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-16 xl:gap-24 items-center">
 
@@ -87,40 +53,10 @@ export function FurnishEasyHero() {
               Curated pieces to help you build it.
             </p>
 
-            {/* 3D Room — mobile only, sits between headline and CTAs */}
-            <div className="mt-3 lg:hidden w-full flex justify-center overflow-visible">
-              <div className="w-[100vw] aspect-square relative -mx-4 flex items-center justify-center">
-                {!showMagic ? (
-                  <button 
-                    onClick={() => setShowMagic(true)}
-                    className="group relative flex flex-col items-center justify-center gap-3 w-[85%] h-[85%] rounded-[2.5rem] border border-[#b89569]/30 bg-gradient-to-br from-[#fdf6f0] to-[#f5ebd9] dark:from-[#25211e] dark:to-[#1a1715] shadow-[0_8px_32px_rgba(184,149,105,0.15)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden transition-all duration-500 active:scale-[0.98]"
-                  >
-                    <div className="absolute inset-0 bg-[#b89569]/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="w-16 h-16 rounded-full bg-[#b89569] flex items-center justify-center text-white shadow-[0_4px_16px_rgba(184,149,105,0.4)] group-hover:scale-110 transition-transform duration-500">
-                      <Sparkles className="w-7 h-7" />
-                    </div>
-                    <span className="font-serif text-2xl text-ink dark:text-linen font-medium tracking-wide mt-2">
-                      See the Magic
-                    </span>
-                    <span className="text-[10px] uppercase tracking-[2.5px] font-bold text-[#b89569] dark:text-[#cba677]">
-                      Interactive 3D Room
-                    </span>
-                  </button>
-                ) : !isMounting ? (
-                  <div className="flex flex-col items-center justify-center gap-4 w-[85%] h-[85%] rounded-[2.5rem] bg-gradient-to-br from-[#fdf6f0] to-[#f5ebd9] dark:from-[#25211e] dark:to-[#1a1715] border border-[#b89569]/30 shadow-[0_8px_32px_rgba(184,149,105,0.15)] animate-pulse">
-                    <Loader2 className="w-10 h-10 animate-spin text-[#b89569]" />
-                    <span className="font-serif text-lg text-ink/70 dark:text-linen/70 font-medium">
-                      Crafting your room...
-                    </span>
-                  </div>
-                ) : (
-                  <div className="w-[85%] h-[85%] rounded-[2.5rem] border border-[#b89569]/30 bg-gradient-to-br from-[#fdf6f0]/50 to-[#f5ebd9]/50 dark:from-[#25211e]/50 dark:to-[#1a1715]/50 shadow-[0_8px_32px_rgba(184,149,105,0.15)] animate-in fade-in zoom-in-95 duration-1000 ease-out fill-mode-both relative overflow-hidden">
-                    <IsometricRoom3D />
-                    <span className="absolute bottom-4 left-0 right-0 text-center text-[10px] text-[#b89569] dark:text-[#cba677] uppercase tracking-widest font-bold animate-pulse pointer-events-none">
-                      Drag to interact with room
-                    </span>
-                  </div>
-                )}
+            {/* Carousel — mobile only, sits between headline and CTAs */}
+            <div className="mt-2 sm:mt-3 lg:hidden w-full flex justify-center overflow-visible">
+              <div className="w-[100vw] h-auto min-h-[280px] sm:min-h-[330px] relative -mx-4 flex items-center justify-center overflow-visible">
+                <AestheticCarousel />
               </div>
             </div>
 
@@ -160,16 +96,13 @@ export function FurnishEasyHero() {
             </div>
           </div>
 
-          {/* ── Right — 3D Room (desktop only) ─────────────────── */}
-          <div className="order-2 hidden lg:flex relative hero-image-reveal w-full justify-center items-center px-8 xl:px-12">
-            {/* Theme-responsive ambient glow behind the room */}
+          {/* ── Right — Carousel (desktop only) ─────────────────── */}
+          <div className="order-2 hidden lg:flex relative hero-image-reveal w-full justify-center items-center px-8 xl:px-12 overflow-visible">
+            {/* Theme-responsive ambient glow behind the carousel */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] aspect-square rounded-full bg-[#b89569]/50 dark:bg-[#cba677]/40 blur-[100px] xl:blur-[140px] pointer-events-none" />
             
-            <div className="relative aspect-square w-full max-w-[700px] z-10 rounded-[3rem] border border-[#b89569]/30 bg-gradient-to-br from-[#fdf6f0]/60 to-[#f5ebd9]/60 dark:from-[#25211e]/60 dark:to-[#1a1715]/60 shadow-[0_20px_60px_rgba(184,149,105,0.15)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.4)] overflow-hidden backdrop-blur-sm">
-              <IsometricRoom3D />
-              <span className="absolute bottom-6 left-0 right-0 text-center text-[11px] text-[#b89569] dark:text-[#cba677] uppercase tracking-[0.25em] font-bold animate-pulse pointer-events-none drop-shadow-sm">
-                Drag to interact with room
-              </span>
+            <div className="relative w-full max-w-[700px] z-10 flex items-center justify-center overflow-visible">
+              <AestheticCarousel />
             </div>
           </div>
 

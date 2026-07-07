@@ -6,11 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { Play } from "lucide-react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
-import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass.js";
+import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 export function IsometricRoom3D() {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -79,51 +75,8 @@ export function IsometricRoom3D() {
     controls.update();
 
     // ============================================================
-    // POST-PROCESSING
-    // ============================================================
-    const renderTarget = new THREE.WebGLRenderTarget(width * pr, height * pr, {
-      samples: isMobile ? 2 : 4, // Hardware MSAA (reduced on mobile to prevent iOS memory crashes)
-      type: THREE.HalfFloatType // Preserves high dynamic range colors
-    });
-    const composer = new EffectComposer(renderer, renderTarget);
-    composer.setPixelRatio(pr);
-    composer.addPass(new RenderPass(scene, camera));
-
-    const bloomRes = isMobile ? new THREE.Vector2(width / 2, height / 2) : new THREE.Vector2(width, height);
-    const bloom = new UnrealBloomPass(
-      bloomRes,
-      0.18, 0.6, 0.85
-    );
-    composer.addPass(bloom);
-
-    // Vignette + color correction
-    const vignetteShader = {
-      uniforms: {
-        tDiffuse: { value: null },
-        darkness: { value: 0.35 },
-        offset: { value: 1.0 },
-        warmth: { value: 0.02 }
-      },
-      vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
-      fragmentShader: `
-    uniform sampler2D tDiffuse;
-    uniform float darkness;
-    uniform float offset;
-    uniform float warmth;
-    varying vec2 vUv;
-    void main(){
-      vec4 c=texture2D(tDiffuse,vUv);
-      vec2 uv=(vUv-vec2(0.5))*vec2(offset);
-      float v=1.0-dot(uv,uv);
-      c.rgb*=mix(1.0,smoothstep(0.0,1.0,v),darkness);
-      c.r+=warmth * c.a; c.b-=warmth*0.5 * c.a;
-      gl_FragColor=c;
-    }`
-    };
-    const vignettePass = new ShaderPass(vignetteShader);
-    composer.addPass(vignettePass);
-
-    // SMAAPass removed in favor of hardware MSAA for superior clarity
+    // Post-processing removed for performance — using direct renderer with
+    // built-in antialiasing + CSS vignette overlay for warmth
 
     // ============================================================
     // ENVIRONMENT (procedural HDRI)
@@ -1816,6 +1769,61 @@ export function IsometricRoom3D() {
         })();
 
         // ============================================================
+        // GEOMETRY MERGING — reduces draw calls from ~500 to ~20
+        // ============================================================
+        (function mergeStaticGeometry() {
+          // Collect all animated/dynamic meshes to exclude from merging
+          const animated = new Set();
+          [animData.flameMesh, animData.fireMesh].forEach(m => m && animated.add(m));
+          animData.curtainMeshes.forEach(m => animated.add(m));
+          animData.leaves.forEach(m => animated.add(m));
+          animData.wallFlameMeshes.forEach(m => animated.add(m));
+          const dogD = animData.dog;
+          if (dogD) dogD.group.traverse(c => { if (c.isMesh) animated.add(c); });
+
+          // Group static meshes by material
+          const buckets = new Map();
+          scene.traverse(obj => {
+            if (!obj.isMesh || animated.has(obj)) return;
+            // Skip multi-material meshes (e.g. room walls/floor with different faces)
+            if (Array.isArray(obj.material)) return;
+            const id = obj.material.uuid;
+            if (!buckets.has(id)) buckets.set(id, { material: obj.material, meshes: [] });
+            buckets.get(id).meshes.push(obj);
+          });
+
+          // Merge each material bucket into a single draw call
+          buckets.forEach(({ material, meshes }) => {
+            if (meshes.length < 3) return; // Not worth merging small groups
+            const geos = [];
+            let anyCast = false, anyReceive = false;
+            for (const mesh of meshes) {
+              mesh.updateWorldMatrix(true, false);
+              let g = mesh.geometry.clone();
+              g.applyMatrix4(mesh.matrixWorld); // Bake world transform into vertices
+              // Normalize to non-indexed so all geometries are compatible for merging
+              if (g.index) g = g.toNonIndexed();
+              geos.push(g);
+              if (mesh.castShadow) anyCast = true;
+              if (mesh.receiveShadow) anyReceive = true;
+            }
+            let merged;
+            try { merged = mergeGeometries(geos, false); } catch(e) { /* skip incompatible */ }
+            geos.forEach(g => g.dispose());
+            if (!merged) return;
+            const m = new THREE.Mesh(merged, material);
+            m.castShadow = anyCast;
+            m.receiveShadow = anyReceive;
+            scene.add(m);
+            // Remove original individual meshes (Groups stay for lights/animated children)
+            for (const mesh of meshes) {
+              if (mesh.parent) mesh.parent.remove(mesh);
+              mesh.geometry.dispose();
+            }
+          });
+        })();
+
+        // ============================================================
         // CINEMATIC INTRO
         // ============================================================
         const introDuration = 3.0;
@@ -2041,7 +2049,7 @@ export function IsometricRoom3D() {
           // (Dust particles removed)
 
           controls.update();
-          composer.render();
+          renderer.render(scene, camera);
         }
         
         startLoopRef.current = () => {
@@ -2060,7 +2068,6 @@ export function IsometricRoom3D() {
           camera.aspect = w / h;
           camera.updateProjectionMatrix();
           renderer.setSize(w, h);
-          composer.setSize(w, h);
         });
         ro.observe(container);
 
@@ -2071,7 +2078,6 @@ export function IsometricRoom3D() {
           ro.disconnect();
           controls.dispose();
           renderer.dispose();
-          composer.dispose();
           if (container && renderer.domElement && container.contains(renderer.domElement)) {
             container.removeChild(renderer.domElement);
           }
@@ -2079,6 +2085,10 @@ export function IsometricRoom3D() {
       }, []);
 
   return (
-    <div ref={mountRef} className="w-full h-full relative z-10 pointer-events-auto" />
+    <div className="w-full h-full relative z-10 pointer-events-auto">
+      <div ref={mountRef} className="w-full h-full" />
+      {/* CSS vignette — replaces GPU shader vignette for zero perf cost */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 55%, rgba(30,20,10,0.22) 100%)' }} />
+    </div>
   );
 }
