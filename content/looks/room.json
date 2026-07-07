@@ -2,20 +2,21 @@
   "hotspots": [
     {
       "id": "spot-1",
-      "x": 33.82,
-      "y": 71.41,
-      "productName": "chair",
-      "image": "/uploads/71zuqwtc7jl._ac_sl1500_.jpg"
+      "x": 27.38,
+      "y": 71.54,
+      "productName": "Office Chair",
+      "affiliate": "https://amzn.to/4p5nLXy",
+      "image": "/uploads/91puxxl0oul._ac_sl1500_.jpg"
     },
     {
-      "id": "spot-1",
-      "x": 55.21,
-      "y": 53.51,
-      "productName": "lamp",
-      "price": "500",
-      "image": "/uploads/51mhzp3fxkl._ac_sl1500_.jpg"
+      "id": "spot-2",
+      "x": 7.9,
+      "y": 66.84,
+      "productName": "Wooden Study Desk",
+      "affiliate": "https://amzn.to/4vicXqC",
+      "image": "/uploads/61dzws9ycll._ac_sl1500_.jpg"
     }
   ],
-  "title": "room",
+  "title": "Modern Bedroom",
   "image": "/uploads/3f2f.jpg"
 }
