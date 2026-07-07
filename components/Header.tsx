@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { site } from "@/lib/site";
 import { useTheme } from "./ThemeProvider";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, Variants } from "framer-motion";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -52,7 +52,7 @@ export function Header() {
   }, [menuOpen]);
 
   // Framer Motion Animation Variants
-  const sidebarVariants = {
+  const sidebarVariants: Variants = {
     closed: {
       x: "100%",
       transition: {
@@ -75,7 +75,7 @@ export function Header() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     closed: { y: 25, opacity: 0 },
     open: { y: 0, opacity: 1, transition: { duration: 0.4, ease: "easeOut" } }
   };
