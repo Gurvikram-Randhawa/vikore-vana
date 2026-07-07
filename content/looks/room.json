@@ -2,20 +2,45 @@
   "hotspots": [
     {
       "id": "spot-1",
-      "x": 33.82,
-      "y": 71.41,
-      "productName": "chair",
-      "image": "/uploads/71zuqwtc7jl._ac_sl1500_.jpg"
+      "x": 27.38,
+      "y": 71.54,
+      "productName": "Office Chair",
+      "affiliate": "https://amzn.to/4p5nLXy",
+      "image": "/uploads/91puxxl0oul._ac_sl1500_.jpg"
     },
     {
-      "id": "spot-1",
-      "x": 55.21,
-      "y": 53.51,
-      "productName": "lamp",
-      "price": "500",
-      "image": "/uploads/51mhzp3fxkl._ac_sl1500_.jpg"
+      "id": "spot-2",
+      "x": 7.9,
+      "y": 66.84,
+      "productName": "Wooden Study Desk",
+      "affiliate": "https://amzn.to/4vicXqC",
+      "image": "/uploads/61dzws9ycll._ac_sl1500_.jpg"
+    },
+    {
+      "id": "spot-3",
+      "x": 55.9,
+      "y": 54.42,
+      "productName": "Floor Lamp",
+      "affiliate": "https://amzn.to/4vQBqnU",
+      "image": "/uploads/51crfe7xhql._ac_sl1402_.jpg"
+    },
+    {
+      "id": "spot-4",
+      "productName": "Throw Pillow",
+      "x": 86.51,
+      "y": 65.14,
+      "affiliate": "https://amzn.to/4f2J9It",
+      "image": "/uploads/81ooq82wx7l._ac_sl1500_.jpg"
+    },
+    {
+      "id": "spot-5",
+      "x": 43.9,
+      "y": 95.07,
+      "productName": "Jute Area Rug",
+      "affiliate": "https://amzn.to/4wA8NLY",
+      "image": "/uploads/91pgl07pdfl._ac_sl1500_.jpg"
     }
   ],
-  "title": "room",
+  "title": "Modern Bedroom",
   "image": "/uploads/3f2f.jpg"
 }
