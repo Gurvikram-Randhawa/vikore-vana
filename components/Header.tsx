@@ -151,13 +151,13 @@ export function Header() {
       <button
         aria-label="Toggle dark mode"
         onClick={toggle}
-        className="fixed bottom-16 right-6 z-[99] flex items-center justify-center w-11 h-11 rounded-full
-          bg-[#fffaf4]/85 dark:bg-[#181614]/80 backdrop-blur-md
-          border border-[#b89569]/15 dark:border-white/10
-          shadow-[0_4px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)]
-          text-ink dark:text-linen hover:scale-105 active:scale-95 transition-all duration-300"
+        className="fixed bottom-16 right-6 z-[99] flex items-center justify-center w-14 h-14 rounded-full
+          bg-[#fffaf4]/90 dark:bg-[#181614]/90 backdrop-blur-md
+          border border-[#b89569]/20 dark:border-white/15
+          shadow-[0_10px_30px_rgba(184,149,105,0.18),0_4px_12px_rgba(184,149,105,0.08)] dark:shadow-[0_12px_36px_rgba(0,0,0,0.6)]
+          text-ink dark:text-linen hover:scale-110 active:scale-95 transition-all duration-300"
       >
-        {dark ? <Sun size={17} /> : <Moon size={17} />}
+        {dark ? <Sun size={20} /> : <Moon size={20} />}
       </button>
 
       {/* Premium Redesigned Slide-out Mobile Menu Drawer */}
