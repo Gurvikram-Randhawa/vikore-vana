@@ -52,7 +52,7 @@ export function BeforeAfterGallery() {
         </ScrollReveal>
 
         {/* Category Navigation with Arrows */}
-        <ScrollReveal delay={150}>
+        <ScrollReveal delay={100} duration={1000} scale={0.95}>
           <div className="relative flex items-center justify-center max-w-4xl mx-auto mb-10 group/nav">
             
             {/* Left Arrow */}

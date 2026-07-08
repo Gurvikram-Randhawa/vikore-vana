@@ -64,9 +64,11 @@ export default function HomePage() {
               {[...products].sort(() => 0.5 - Math.random()).slice(0, 12).map((product, index) => (
                 <ScrollReveal 
                   key={product.slug} 
-                  delay={index * 150} 
-                  distance={100} 
+                  delay={index * 80} 
+                  distance={30} 
                   duration={1000} 
+                  scale={0.95}
+                  rotate={15}
                   direction="up"
                   className={index >= 10 ? 'hidden xl:block' : ''}
                 >

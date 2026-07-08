@@ -117,12 +117,31 @@ export function getRelatedArticles(article: Article, limit = 3) {
     .slice(0, limit);
 }
 
-export function getArticleProducts(article: Article) {
+export function getArticleProducts(article: Article, limit = 6) {
   const products = getProducts();
-  if (!article.products?.length) return products.filter((product) => product.category === article.category).slice(0, 6);
-  return article.products
-    .map((slug) => products.find((product) => product.slug === slug))
-    .filter((product): product is Product => Boolean(product));
+
+  // 1. Try explicitly referenced product slugs
+  if (article.products?.length) {
+    const explicit = article.products
+      .map((slug) => products.find((product) => product.slug === slug))
+      .filter((product): product is Product => Boolean(product));
+    if (explicit.length) return explicit.slice(0, limit);
+    // If none resolved, fall through to category matching
+  }
+
+  // 2. Exact category match
+  const byCategory = products.filter((product) => product.category === article.category);
+  if (byCategory.length) return byCategory.slice(0, limit);
+
+  // 3. Slug-normalized category match (handles casing/spacing differences)
+  const articleCatSlug = categorySlug(article.category);
+  const byCategorySlug = products.filter((product) => categorySlug(product.category) === articleCatSlug);
+  if (byCategorySlug.length) return byCategorySlug.slice(0, limit);
+
+  // 4. Fallback: featured products, then any products
+  const featured = products.filter((product) => product.featured);
+  if (featured.length) return featured.slice(0, limit);
+  return products.slice(0, limit);
 }
 
 export function getLooks(): Look[] {

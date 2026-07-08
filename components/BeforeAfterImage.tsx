@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { animate } from 'framer-motion';
 
 interface BeforeAfterImageProps {
   beforeImage: string;
@@ -11,10 +12,42 @@ interface BeforeAfterImageProps {
 
 export function BeforeAfterImage({ beforeImage, afterImage, alt }: BeforeAfterImageProps) {
   const [isDragging, setIsDragging] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const foregroundRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<any>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);
+
+  // Auto-slide animation when scrolled into view
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !hasInteracted) {
+        setHasInteracted(true);
+        animationRef.current = animate(50, [50, 40, 60, 50], {
+          duration: 1.8,
+          ease: "easeInOut",
+          onUpdate: (latest) => {
+            if (foregroundRef.current && sliderRef.current) {
+              foregroundRef.current.style.width = `${latest}%`;
+              sliderRef.current.style.left = `${latest}%`;
+            }
+          }
+        });
+        observer.disconnect();
+      }
+    }, { threshold: 0.5 });
+    
+    observer.observe(el);
+    
+    return () => {
+      observer.disconnect();
+      if (animationRef.current) animationRef.current.stop();
+    };
+  }, []);
 
   // Update container width for the before image to maintain aspect ratio
   useEffect(() => {
@@ -55,6 +88,10 @@ export function BeforeAfterImage({ beforeImage, afterImage, alt }: BeforeAfterIm
 
   const handleInteractionStart = (clientX: number) => {
     setIsDragging(true);
+    setHasInteracted(true);
+    if (animationRef.current) {
+      animationRef.current.stop();
+    }
     handleMove(clientX);
   };
 
@@ -137,9 +174,9 @@ export function BeforeAfterImage({ beforeImage, afterImage, alt }: BeforeAfterIm
         style={{ left: `50%`, transform: 'translateX(-50%)' }}
       >
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40 shadow-xl group-hover:scale-110 group-hover:bg-white/20 transition-all duration-300">
-          <div className="flex gap-[3px]">
-            <div className="w-[1.5px] h-3.5 bg-white rounded-full" />
-            <div className="w-[1.5px] h-3.5 bg-white rounded-full" />
+          <div className="flex gap-[3px] relative z-10">
+            <div className="w-[1px] h-3 md:h-4 bg-white/80" />
+            <div className="w-[1px] h-3 md:h-4 bg-white/80" />
           </div>
         </div>
       </div>

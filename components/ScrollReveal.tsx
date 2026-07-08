@@ -10,6 +10,9 @@ interface ScrollRevealProps {
   delay?: number;
   duration?: number;
   distance?: number;
+  scale?: number;
+  blur?: number;
+  rotate?: number;
   className?: string;
   once?: boolean;
 }
@@ -20,6 +23,9 @@ export function ScrollReveal({
   delay = 0,
   duration = 700,
   distance = 40,
+  scale = 1,
+  blur = 0,
+  rotate = 0,
   className = "",
   once = true,
 }: ScrollRevealProps) {
@@ -47,14 +53,17 @@ export function ScrollReveal({
   }, [once]);
 
   const getTransform = () => {
-    if (isVisible) return "translate3d(0, 0, 0)";
+    const basePerspective = rotate !== 0 ? "perspective(1000px) " : "";
+    if (isVisible) return `${basePerspective}translate3d(0, 0, 0) scale(1) rotateX(0deg)`;
+    const scaleStr = scale !== 1 ? ` scale(${scale})` : "";
+    const rotateStr = rotate !== 0 ? ` rotateX(${rotate}deg)` : "";
     switch (direction) {
       case "up":
-        return `translate3d(0, ${distance}px, 0)`;
+        return `${basePerspective}translate3d(0, ${distance}px, 0)${scaleStr}${rotateStr}`;
       case "left":
-        return `translate3d(${distance}px, 0, 0)`;
+        return `${basePerspective}translate3d(${distance}px, 0, 0)${scaleStr}${rotateStr}`;
       case "right":
-        return `translate3d(-${distance}px, 0, 0)`;
+        return `${basePerspective}translate3d(-${distance}px, 0, 0)${scaleStr}${rotateStr}`;
     }
   };
 
@@ -65,11 +74,13 @@ export function ScrollReveal({
       style={{
         opacity: isVisible ? 1 : 0,
         transform: getTransform(),
+        filter: isVisible ? "blur(0px)" : `blur(${blur}px)`,
         transition: [
           `opacity ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
           `transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+          `filter ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
         ].join(", "),
-        willChange: "opacity, transform",
+        willChange: "opacity, transform, filter",
       }}
     >
       {children}
