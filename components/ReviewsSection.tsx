@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Star } from "lucide-react";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { AnimatedHeading } from "@/components/AnimatedHeading";
 
 const reviews = [
   {
@@ -128,18 +129,21 @@ export function ReviewsSection() {
   return (
     <section className="py-10 sm:py-14 md:py-16">
       <div className="container-premium overflow-hidden">
-        <ScrollReveal>
-          <div className="mb-4 sm:mb-5 md:mb-6 flex flex-col items-center justify-center text-center">
-            <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
-              <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
-              <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-[#b89569] dark:text-[#cba677]">
-                Community Reviews
-              </p>
-              <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
-            </div>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-ink dark:text-linen leading-[1.1] mb-6">
-              Inspiring 2M+ <span className="text-[#b89569] italic dark:text-[#cba677]">Homes</span>
-            </h2>
+        <div className="mb-4 sm:mb-5 md:mb-6 flex flex-col items-center justify-center text-center">
+          <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
+            <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
+            <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-[#b89569] dark:text-[#cba677]">
+              Community Reviews
+            </p>
+            <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
+          </div>
+          <AnimatedHeading 
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-ink dark:text-linen leading-[1.1] mb-6 justify-center"
+            tokens={[
+              { text: "Inspiring 2M+" },
+              { text: "Homes", className: "text-[#b89569] italic dark:text-[#cba677]" }
+            ]}
+          />
             
             {/* Desktop Navigation Dots */}
             <div className="hidden sm:flex items-center gap-2">
@@ -157,7 +161,6 @@ export function ReviewsSection() {
               ))}
             </div>
           </div>
-        </ScrollReveal>
  
         <ScrollReveal delay={150} distance={40}>
           <div className="relative -mx-4 px-4 sm:mx-0 sm:px-0">

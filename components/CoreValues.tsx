@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { Sparkles, Leaf, Hourglass } from "lucide-react";
 
 const values = [
@@ -22,19 +22,6 @@ const values = [
 ];
 
 export function CoreValues() {
-  const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.2 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <section className="relative overflow-hidden py-10 sm:py-14 md:py-16">
@@ -53,10 +40,7 @@ export function CoreValues() {
 
       <div className="container-premium relative z-10">
         {/* Header */}
-        <div
-          ref={ref}
-          className={`mx-auto max-w-3xl text-center mb-10 sm:mb-12 md:mb-14 transition-all duration-1000 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-        >
+        <div className="mx-auto max-w-3xl text-center mb-10 sm:mb-12 md:mb-14">
           <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
             <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-cedar/50" />
             <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-cedar dark:text-[#cba677]">
@@ -65,10 +49,8 @@ export function CoreValues() {
             <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-cedar/50" />
           </div>
 
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-ink dark:text-linen leading-[1.1] mb-4 sm:mb-6">
-            Designed for the{" "}
-            <span className="italic text-[#b89569] dark:text-[#cba677]">thoughtful</span>{" "}
-            home.
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-ink dark:text-linen leading-[1.1] mb-4 sm:mb-6 flex flex-wrap justify-center">
+            Designed for the <span className="italic text-[#b89569] dark:text-[#cba677] ml-2 mr-2">thoughtful</span> home.
           </h2>
 
           <p className="text-smoke dark:text-bone/80 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl mx-auto font-light">
@@ -77,19 +59,14 @@ export function CoreValues() {
         </div>
 
         {/* 3-Column Minimal Row */}
-        <div
-          className={`
-            border-y border-[#b8935a]/40 py-[40px]
-            grid grid-cols-3 divide-x divide-[#b8935a]/40
-            transition-all duration-1000 delay-300 max-w-4xl mx-auto
-            ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
-          `}
-        >
+        <div className="border-y border-[#b8935a]/40 py-[40px] grid grid-cols-3 divide-x divide-[#b8935a]/40 max-w-4xl mx-auto">
           {values.map((value, index) => {
             const Icon = value.icon;
             return (
               <div key={index} className="flex flex-col items-center justify-center text-center px-1 sm:px-4">
-                <Icon size={28} color="#b8935a" strokeWidth={1.25} className="mb-4" />
+                <div className="mb-4 transform transition-transform duration-[2000ms] hover:scale-110 hover:rotate-3">
+                  <Icon size={28} color="#b8935a" strokeWidth={1.25} />
+                </div>
                 <h3
                   className="text-[12px] sm:text-[13px] text-[#1c1c1c] dark:text-linen uppercase tracking-[2.5px] mb-2 font-semibold"
                   style={{ fontFamily: "var(--font-jost)" }}

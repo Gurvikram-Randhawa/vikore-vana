@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ScrollReveal } from "./ScrollReveal";
+import { AnimatedHeading } from "./AnimatedHeading";
 import { Plus, Minus } from "lucide-react";
 
 const faqs = [
@@ -33,20 +34,22 @@ export function FaqSection() {
   return (
     <section className="py-10 sm:py-14 md:py-16">
       <div className="container-premium max-w-4xl">
-        <ScrollReveal>
-          <div className="mb-10 sm:mb-12 md:mb-14 text-center">
-            <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
-              <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-cedar/50" />
-              <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-cedar dark:text-[#cba677]">
-                Support & Information
-              </p>
-              <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-cedar/50" />
-            </div>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1]">
-              Frequently Asked <span className="italic text-[#b89569] dark:text-[#cba677]">Questions</span>
-            </h2>
+        <div className="mb-10 sm:mb-12 md:mb-14 text-center">
+          <div className="inline-flex items-center gap-3 mb-4 sm:mb-6">
+            <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-cedar/50" />
+            <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-cedar dark:text-[#cba677]">
+              Support & Information
+            </p>
+            <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-cedar/50" />
           </div>
-        </ScrollReveal>
+          <AnimatedHeading 
+            className="text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1] justify-center"
+            tokens={[
+              { text: "Frequently Asked" },
+              { text: "Questions", className: "italic text-[#b89569] dark:text-[#cba677]" }
+            ]}
+          />
+        </div>
 
         <div className="flex flex-col gap-4">
           {faqs.map((faq, index) => {

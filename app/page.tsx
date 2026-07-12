@@ -10,6 +10,7 @@ import { ShopTheLook } from "@/components/ShopTheLook";
 import { BeforeAfterGallery } from "@/components/BeforeAfterGallery";
 import { ReviewsSection } from "@/components/ReviewsSection";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { SplashScreen } from "@/components/SplashScreen";
 import { getArticles, getProducts, getLooks } from "@/lib/content";
 import { site } from "@/lib/site";
 
@@ -33,6 +34,7 @@ export default function HomePage() {
 
   return (
     <>
+      <SplashScreen />
       {/* Hero — Furnish-Easy Style */}
       <FurnishEasyHero />
 
@@ -120,13 +122,21 @@ export default function HomePage() {
         <FeaturedArticlesList articles={sortedArticles} />
       </section>
 
-      {/* Shop the Look */}
+      {/* Shop the Look & Before/After (Side by side on desktop) */}
       <SectionDivider />
-      {randomLook && <ShopTheLook look={randomLook} />}
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:divide-x divide-black/10 dark:divide-white/10">
+        <div className="w-full">
+          {randomLook && <ShopTheLook look={randomLook} />}
+        </div>
+        
+        <div className="w-full lg:hidden">
+          <SectionDivider />
+        </div>
 
-      {/* Interactive Before & After */}
-      <SectionDivider />
-      <BeforeAfterGallery />
+        <div className="w-full">
+          <BeforeAfterGallery />
+        </div>
+      </div>
 
       {/* Core Values / Approach */}
       <SectionDivider />

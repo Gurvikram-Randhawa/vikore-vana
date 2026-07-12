@@ -25,7 +25,7 @@ export function ProductCard({ product, solidBackground }: { product: Product, so
         </div>
         <h3 className="font-serif text-[13px] sm:text-[15px] md:text-lg font-medium leading-snug text-[#1c1c1c] dark:text-[#fdf6f0] line-clamp-2">{product.name}</h3>
         <div className="mt-auto pt-3 md:pt-4">
-          <a href={product.affiliate} target="_blank" rel="nofollow sponsored noopener noreferrer" className="inline-flex min-h-8 sm:min-h-9 md:min-h-10 items-center justify-center gap-1.5 sm:gap-2 rounded-full bg-[#b85c37] text-white dark:bg-[#c8653b] font-sans text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[1.5px] transition-all duration-300 hover:bg-[#9a4d2c] dark:hover:bg-[#b0532b] hover:shadow-[0_4px_12px_rgba(184,92,55,0.25)] w-full px-2">
+          <a href={product.affiliate} target="_blank" rel="nofollow sponsored noopener noreferrer" className="inline-flex min-h-8 sm:min-h-9 md:min-h-10 items-center justify-center gap-1.5 sm:gap-2 rounded-full bg-[#b89569] text-white font-sans text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[1.5px] transition-all duration-300 hover:bg-[#a38259] hover:shadow-[0_4px_14px_rgba(184,149,105,0.35)] w-full px-2">
             <ShoppingBag className="w-3 h-3 sm:w-[15px] sm:h-[15px]" />
             <span>Shop Now</span>
           </a>

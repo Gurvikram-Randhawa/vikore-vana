@@ -26,7 +26,7 @@ export function Header() {
       if (!isMobile()) return;
       setDarkBtnVisible(true);
       if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
-      scrollTimerRef.current = setTimeout(() => setDarkBtnVisible(false), 1500);
+      scrollTimerRef.current = setTimeout(() => setDarkBtnVisible(false), 4000);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {

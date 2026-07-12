@@ -23,7 +23,7 @@ export function ShopTheLook({ look }: { look: Look }) {
       <div className="container-premium relative z-10">
         
         {/* Header */}
-        <div className="text-center mb-12 md:mb-16">
+        <div className="text-center mb-12 md:mb-16 lg:h-[180px] flex flex-col justify-end">
           <ScrollReveal>
             <div className="inline-flex items-center gap-3 mb-4">
               <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
@@ -41,20 +41,22 @@ export function ShopTheLook({ look }: { look: Look }) {
           </ScrollReveal>
         </div>
 
+        {/* Invisible spacer to match the exact size of the Category Tabs in Before & After on desktop */}
+        <div className="hidden lg:block h-[54px] mb-10" />
+
         {/* Interactive Image Container — constrained to match BeforeAfterGallery sizing */}
         <ScrollReveal delay={200} duration={1200} scale={0.95} rotate={15}>
-          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-xl mx-auto rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] group border border-[#b89569]/10 z-10 hover:z-50">
+          <div className="relative w-full max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-md mx-auto rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] group border border-[#b89569]/10 z-10 hover:z-50">
             
-            {/* Image Wrapper to perfectly shrink-wrap the intrinsic image ratio without clipping tooltips */}
-            <div className="relative w-full h-auto rounded-[inherit] overflow-hidden pointer-events-none">
+            {/* Image Wrapper locked to an elegant tall ratio */}
+            <div className="relative w-full aspect-[4/5] rounded-[inherit] overflow-hidden pointer-events-none">
               {/* Main Background Image */}
               <Image 
                 src={look.image}
                 alt={look.title || "Beautifully styled room"}
-                width={1200}
-                height={1200}
-                style={{ width: '100%', height: 'auto' }}
-                className="transition-transform duration-[15000ms] ease-out group-hover:scale-105"
+                fill
+                className="object-cover transition-transform duration-[15000ms] ease-out group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 1200px"
               />
               
               {/* Dark overlay for contrast */}

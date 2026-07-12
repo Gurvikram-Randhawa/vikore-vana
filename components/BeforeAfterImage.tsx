@@ -27,9 +27,9 @@ export function BeforeAfterImage({ beforeImage, afterImage, alt }: BeforeAfterIm
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && !hasInteracted) {
         setHasInteracted(true);
-        animationRef.current = animate(50, [50, 40, 60, 50], {
-          duration: 1.8,
-          ease: "easeInOut",
+        animationRef.current = animate(0, 50, {
+          duration: 2.2,
+          ease: [0.16, 1, 0.3, 1],
           onUpdate: (latest) => {
             if (foregroundRef.current && sliderRef.current) {
               foregroundRef.current.style.width = `${latest}%`;
@@ -122,7 +122,7 @@ export function BeforeAfterImage({ beforeImage, afterImage, alt }: BeforeAfterIm
   return (
     <div 
       ref={containerRef}
-      className="relative w-full aspect-[3/4] rounded-2xl md:rounded-[2.5rem] overflow-hidden select-none touch-none group shadow-2xl border border-black/5 dark:border-white/5"
+      className="relative w-full aspect-[4/5] rounded-2xl md:rounded-[2.5rem] overflow-hidden select-none touch-none group shadow-2xl border border-black/5 dark:border-white/5"
       onMouseDown={(e) => handleInteractionStart(e.clientX)}
       onTouchStart={(e) => handleInteractionStart(e.touches[0].clientX)}
     >
@@ -146,7 +146,7 @@ export function BeforeAfterImage({ beforeImage, afterImage, alt }: BeforeAfterIm
       <div 
         ref={foregroundRef}
         className="absolute inset-0 h-full overflow-hidden"
-        style={{ width: `50%` }}
+        style={{ width: `0%` }}
       >
         <div 
           className="absolute inset-0 h-full" 
@@ -171,9 +171,22 @@ export function BeforeAfterImage({ beforeImage, afterImage, alt }: BeforeAfterIm
       <div 
         ref={sliderRef}
         className={`absolute top-0 bottom-0 w-[1.5px] bg-white/80 cursor-col-resize shadow-[0_0_15px_rgba(0,0,0,0.5)] z-20 transition-opacity duration-300 ${isDragging ? 'opacity-0' : 'opacity-100 group-hover:w-[2px]'}`}
-        style={{ left: `50%`, transform: 'translateX(-50%)' }}
+        style={{ left: `0%`, transform: 'translateX(-50%)' }}
       >
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40 shadow-xl group-hover:scale-110 group-hover:bg-white/20 transition-all duration-300">
+          
+          {/* Subtle pulse animation behind the handle */}
+          {!hasInteracted && (
+            <div className="absolute inset-0 rounded-full border border-white/60 animate-ping opacity-50" style={{ animationDuration: '2.5s' }} />
+          )}
+
+          {/* Hint text */}
+          {!hasInteracted && (
+            <div className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/60 backdrop-blur-md text-white text-[9px] md:text-[10px] px-3 py-1.5 rounded-full font-medium tracking-widest uppercase animate-bounce shadow-lg pointer-events-none">
+              Drag to compare
+            </div>
+          )}
+
           <div className="flex gap-[3px] relative z-10">
             <div className="w-[1px] h-3 md:h-4 bg-white/80" />
             <div className="w-[1px] h-3 md:h-4 bg-white/80" />

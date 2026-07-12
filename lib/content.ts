@@ -112,15 +112,30 @@ export function getProducts() {
 }
 
 export function getRelatedArticles(article: Article, limit = 3) {
-  return getArticles()
-    .filter((item) => item.slug !== article.slug && categorySlug(item.category) === categorySlug(article.category))
-    .slice(0, limit);
+  const candidates = getArticles()
+    .filter((item) => item.slug !== article.slug && categorySlug(item.category) === categorySlug(article.category));
+  return shuffle(candidates).slice(0, limit);
 }
+
+/** Fisher-Yates shuffle – returns a new shuffled copy of the array */
+function shuffle<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+/** Categories that should also show cross-category recommendations */
+const CROSS_RECOMMEND_CATEGORIES = ["bedroom", "living-room", "small-spaces"];
+/** The extra categories to pull bonus products from */
+const BONUS_CATEGORIES = ["luxury-decor", "home-decor", "lighting"];
 
 export function getArticleProducts(article: Article, limit = 6) {
   const products = getProducts();
 
-  // 1. Try explicitly referenced product slugs
+  // 1. Try explicitly referenced product slugs (keep author-curated order)
   if (article.products?.length) {
     const explicit = article.products
       .map((slug) => products.find((product) => product.slug === slug))
@@ -129,19 +144,38 @@ export function getArticleProducts(article: Article, limit = 6) {
     // If none resolved, fall through to category matching
   }
 
-  // 2. Exact category match
-  const byCategory = products.filter((product) => product.category === article.category);
-  if (byCategory.length) return byCategory.slice(0, limit);
-
-  // 3. Slug-normalized category match (handles casing/spacing differences)
   const articleCatSlug = categorySlug(article.category);
-  const byCategorySlug = products.filter((product) => categorySlug(product.category) === articleCatSlug);
-  if (byCategorySlug.length) return byCategorySlug.slice(0, limit);
 
-  // 4. Fallback: featured products, then any products
+  // 2. Get main-category products
+  const byCategory = products.filter(
+    (product) => categorySlug(product.category) === articleCatSlug
+  );
+
+  // 3. For Bedroom / Living Room / Small Spaces, mix in bonus products
+  if (CROSS_RECOMMEND_CATEGORIES.includes(articleCatSlug) && byCategory.length) {
+    const mainLimit = Math.min(4, byCategory.length);        // majority from main category
+    const bonusLimit = limit - mainLimit;                     // rest from bonus categories
+
+    const main = shuffle(byCategory).slice(0, mainLimit);
+    const usedSlugs = new Set(main.map((p) => p.slug));
+
+    const bonusPool = products.filter(
+      (product) =>
+        BONUS_CATEGORIES.includes(categorySlug(product.category)) &&
+        !usedSlugs.has(product.slug)
+    );
+    const bonus = shuffle(bonusPool).slice(0, bonusLimit);
+
+    return [...main, ...bonus];
+  }
+
+  // 4. Regular category match – shuffled so each reload shows different products
+  if (byCategory.length) return shuffle(byCategory).slice(0, limit);
+
+  // 5. Fallback: featured products, then any products – also shuffled
   const featured = products.filter((product) => product.featured);
-  if (featured.length) return featured.slice(0, limit);
-  return products.slice(0, limit);
+  if (featured.length) return shuffle(featured).slice(0, limit);
+  return shuffle(products).slice(0, limit);
 }
 
 export function getLooks(): Look[] {

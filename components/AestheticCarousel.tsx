@@ -100,7 +100,7 @@ const ITEMS: CarouselItem[] = [
 ];
 
 export function AestheticCarousel() {
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(12);
   const [dragStart, setDragStart] = useState<number | null>(null);
   const [dragOffset, setDragOffset] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -151,11 +151,11 @@ export function AestheticCarousel() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center select-none relative pt-0 pb-3 overflow-visible">
+    <div className="w-full h-full flex flex-col justify-center items-center select-none relative pt-0 pb-0 overflow-visible">
       
       {/* Coverflow Viewport Container */}
       <div 
-        className="relative w-full max-w-[650px] h-[220px] sm:h-[260px] md:h-[370px] flex items-center justify-center overflow-visible cursor-grab active:cursor-grabbing"
+        className="relative w-full h-[220px] sm:h-[260px] md:h-[340px] lg:h-[360px] flex items-center justify-center overflow-visible cursor-grab active:cursor-grabbing"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -227,7 +227,7 @@ export function AestheticCarousel() {
                 if (isPrev || isPrevPrev) handlePrev();
               }}
               className={`absolute rounded-[2.5rem] bg-white dark:bg-[#1a1715] overflow-hidden shadow-2xl aspect-square ${
-                isMobile ? "w-[210px] h-[210px]" : isTablet ? "w-[250px] h-[250px]" : "w-[360px] h-[360px]"
+                isMobile ? "w-[210px] h-[210px]" : isTablet ? "w-[250px] h-[250px]" : "w-[280px] h-[280px]"
               }`}
               style={{
                 cursor: isActive ? "grab" : "pointer",
@@ -263,7 +263,7 @@ export function AestheticCarousel() {
                     src={item.src}
                     alt={item.title}
                     fill
-                    sizes="(max-width: 640px) 220px, (max-width: 1024px) 300px, 360px"
+                    sizes="(max-width: 640px) 210px, (max-width: 1024px) 250px, 280px"
                     priority={isActive}
                     className="object-cover"
                   />
@@ -275,36 +275,34 @@ export function AestheticCarousel() {
       </div>
 
       {/* Navigation Controls */}
-      <div className="flex flex-col items-center justify-center gap-3 mt-3 sm:mt-4 relative z-30">
+      <div className="flex items-center justify-center gap-4 sm:gap-6 mt-12 md:mt-10 lg:mt-12 relative z-30">
+        {/* Previous Arrow */}
+        <button
+          onClick={handlePrev}
+          className="group flex items-center justify-center w-9 h-9 rounded-full bg-white/40 dark:bg-white/5 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.12)] md:hover:bg-white/80 active:bg-white/80 dark:md:hover:bg-white/10 dark:active:bg-white/10 md:hover:border-[#b89569]/40 active:border-[#b89569]/40 md:hover:shadow-[0_12px_32px_rgba(184,149,105,0.25)] active:shadow-[0_12px_32px_rgba(184,149,105,0.25)] text-ink/70 dark:text-white/70 md:hover:text-[#b89569] active:text-[#b89569] transition-all duration-300 ease-out md:hover:scale-105 active:scale-95 shrink-0"
+          aria-label="Previous image"
+        >
+          <ArrowLeft className="w-4 h-4 transition-transform duration-300 md:group-hover:-translate-x-0.5 group-active:-translate-x-1" strokeWidth={1.5} />
+        </button>
+
         {/* Caption Text (Shows Active Title) */}
-        <div className="text-center mt-2 sm:mt-0">
-          <span className="text-[10px] font-bold uppercase tracking-[2px] text-[#b89569] dark:text-[#cba677]">
+        <div className="text-center min-w-[130px] max-w-[180px]">
+          <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[2px] text-[#b89569] dark:text-[#cba677] block truncate">
             {ITEMS[activeIndex].category}
           </span>
-          <h3 className="text-sm sm:text-base font-serif font-semibold text-ink dark:text-linen mt-0.5">
+          <h3 className="text-xs sm:text-sm font-serif font-semibold text-ink dark:text-linen mt-0.5 truncate">
             {ITEMS[activeIndex].title}
           </h3>
         </div>
 
-        <div className="flex items-center justify-center gap-6">
-          <button
-            onClick={handlePrev}
-            className="flex items-center justify-center w-10 h-10 rounded-full border border-[#b89569]/30 bg-white/70 dark:bg-black/30 hover:bg-[#b89569]/10 text-[#b89569] transition-all hover:scale-105 active:scale-95 backdrop-blur-sm shadow-sm"
-            aria-label="Previous image"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <span className="text-xs font-semibold tracking-widest text-[#b89569]">
-            {activeIndex + 1} / {numItems}
-          </span>
-          <button
-            onClick={handleNext}
-            className="flex items-center justify-center w-10 h-10 rounded-full border border-[#b89569]/30 bg-white/70 dark:bg-black/30 hover:bg-[#b89569]/10 text-[#b89569] transition-all hover:scale-105 active:scale-95 backdrop-blur-sm shadow-sm"
-            aria-label="Next image"
-          >
-            <ArrowRight className="w-5 h-5" />
-          </button>
-        </div>
+        {/* Next Arrow */}
+        <button
+          onClick={handleNext}
+          className="group flex items-center justify-center w-9 h-9 rounded-full bg-white/40 dark:bg-white/5 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-[0_8px_24px_rgba(0,0,0,0.12)] md:hover:bg-white/80 active:bg-white/80 dark:md:hover:bg-white/10 dark:active:bg-white/10 md:hover:border-[#b89569]/40 active:border-[#b89569]/40 md:hover:shadow-[0_12px_32px_rgba(184,149,105,0.25)] active:shadow-[0_12px_32px_rgba(184,149,105,0.25)] text-ink/70 dark:text-white/70 md:hover:text-[#b89569] active:text-[#b89569] transition-all duration-300 ease-out md:hover:scale-105 active:scale-95 shrink-0"
+          aria-label="Next image"
+        >
+          <ArrowRight className="w-4 h-4 transition-transform duration-300 md:group-hover:translate-x-0.5 group-active:translate-x-1" strokeWidth={1.5} />
+        </button>
       </div>
 
     </div>
