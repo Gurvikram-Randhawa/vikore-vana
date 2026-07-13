@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { Instagram, Mail, Pin } from "lucide-react";
-import { Great_Vibes } from "next/font/google";
 import { site } from "@/lib/site";
-
-const signatureFont = Great_Vibes({ weight: "400", subsets: ["latin"], display: "swap" });
 
 export function Footer() {
   return (
@@ -13,9 +10,6 @@ export function Footer() {
           <Link href="/" className="font-serif text-2xl md:text-3xl text-ink dark:text-linen transition-colors duration-300 hover:text-cedar">
             Vikore Vana
           </Link>
-          <div className={`mt-1 text-xl md:text-2xl text-cedar ${signatureFont.className}`}>
-            G Randhawa
-          </div>
           <p className="mt-3 md:mt-4 max-w-sm text-xs md:text-sm leading-relaxed md:leading-7 text-smoke dark:text-bone">
             Curated interiors, small-space ideas, and affiliate furniture edits for a calmer, more beautiful home.
           </p>
@@ -33,10 +27,21 @@ export function Footer() {
         <div>
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-cedar">Social</p>
           <div className="flex gap-3">
-            {[Instagram, Pin, Mail].map((Icon, index) => (
-              <span key={index} className="grid size-11 place-items-center rounded-full bg-white text-ink shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-md hover:bg-cedar hover:text-white dark:bg-white/10 dark:text-linen dark:hover:bg-cedar cursor-pointer">
+            {[
+              { Icon: Instagram, href: "https://www.instagram.com/vikore_vana", label: "Instagram" },
+              { Icon: Pin, href: "https://www.pinterest.com/vikore_vana/", label: "Pinterest" },
+              { Icon: Mail, href: "mailto:vikorevana@gmail.com", label: "Email" },
+            ].map(({ Icon, href, label }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="grid size-11 place-items-center rounded-full bg-white text-ink shadow-sm transition-all duration-300 hover:scale-110 hover:shadow-md hover:bg-cedar hover:text-white dark:bg-white/10 dark:text-linen dark:hover:bg-cedar"
+              >
                 <Icon size={18} />
-              </span>
+              </a>
             ))}
           </div>
         </div>

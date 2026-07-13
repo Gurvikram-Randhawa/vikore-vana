@@ -17,7 +17,7 @@ export async function GET() {
     );
   }
 
-  const redirectUri = `${process.env.NEXT_PUBLIC_SITE_URL || "https://vikore-vana.vercel.app"}/api/auth/callback`;
+  const redirectUri = `${process.env.NEXT_PUBLIC_SITE_URL || "https://vikorevana.store"}/api/auth/callback`;
 
   const params = new URLSearchParams({
     client_id: clientId,

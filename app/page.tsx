@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { FurnishEasyHero } from "@/components/FurnishEasyHero";
-import { CoreValues } from "@/components/CoreValues";
 import { FaqSection } from "@/components/FaqSection";
+import { EditorsNote } from "@/components/EditorsNote";
 import { FeaturedArticlesList } from "@/components/FeaturedArticlesList";
 import { FeaturedCategories } from "@/components/FeaturedCategories";
 import { ProductCard } from "@/components/ProductCard";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { ShopTheLook } from "@/components/ShopTheLook";
 import { BeforeAfterGallery } from "@/components/BeforeAfterGallery";
-import { ReviewsSection } from "@/components/ReviewsSection";
+import { ReaderFavorites } from "@/components/ReaderFavorites";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { SplashScreen } from "@/components/SplashScreen";
 import { getArticles, getProducts, getLooks } from "@/lib/content";
@@ -30,6 +30,33 @@ export default function HomePage() {
   
   const looks = getLooks();
   const randomLook = looks.length > 0 ? looks[Math.floor(Math.random() * looks.length)] : null;
+
+  // Reader Favorites: featured articles first, then most recent
+  const featuredArticles = articles.filter((a) => a.featured);
+  const readerFavorites = (featuredArticles.length >= 3 ? featuredArticles : articles)
+    .slice(0, 3)
+    .map((a) => ({
+      slug: a.slug,
+      title: a.title,
+      description: a.description,
+      category: a.category,
+      cover: a.cover,
+      readingTime: Math.max(1, Math.ceil((a.body?.split(/\s+/).length || 0) / 200)),
+    }));
+
+  // Most Pinned: a different shuffled set of articles for the Pinterest grid
+  const mostPinned = [...articles]
+    .filter((a) => !readerFavorites.some((f) => f.slug === a.slug))
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 6)
+    .map((a) => ({
+      slug: a.slug,
+      title: a.title,
+      description: a.description,
+      category: a.category,
+      cover: a.cover,
+      readingTime: Math.max(1, Math.ceil((a.body?.split(/\s+/).length || 0) / 200)),
+    }));
 
 
   return (
@@ -138,13 +165,12 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Core Values / Approach */}
-      <SectionDivider />
-      <CoreValues />
 
-      {/* Reviews */}
+
+      {/* Reader Favorites & Most Pinned */}
       <SectionDivider />
-      <ReviewsSection />
+      <ReaderFavorites articles={readerFavorites} pins={mostPinned} />
+
 
       {/* FAQ */}
       <SectionDivider />
@@ -211,6 +237,9 @@ export default function HomePage() {
           </ScrollReveal>
         </div>
       </section>
+
+      {/* Editor's Note — Founder Letter */}
+      <EditorsNote />
     </>
   );
 }

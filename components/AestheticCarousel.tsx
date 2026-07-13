@@ -153,9 +153,8 @@ export function AestheticCarousel() {
   return (
     <div className="w-full h-full flex flex-col justify-center items-center select-none relative pt-0 pb-0 overflow-visible">
       
-      {/* Coverflow Viewport Container */}
       <div 
-        className="relative w-full h-[220px] sm:h-[260px] md:h-[340px] lg:h-[360px] flex items-center justify-center overflow-visible cursor-grab active:cursor-grabbing"
+        className="relative w-full h-[220px] sm:h-[260px] md:h-[340px] lg:h-[480px] flex items-center justify-center overflow-visible cursor-grab active:cursor-grabbing"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -227,7 +226,7 @@ export function AestheticCarousel() {
                 if (isPrev || isPrevPrev) handlePrev();
               }}
               className={`absolute rounded-[2.5rem] bg-white dark:bg-[#1a1715] overflow-hidden shadow-2xl aspect-square ${
-                isMobile ? "w-[210px] h-[210px]" : isTablet ? "w-[250px] h-[250px]" : "w-[280px] h-[280px]"
+                isMobile ? "w-[210px] h-[210px]" : isTablet ? "w-[250px] h-[250px]" : "w-[400px] h-[400px]"
               }`}
               style={{
                 cursor: isActive ? "grab" : "pointer",
@@ -263,7 +262,7 @@ export function AestheticCarousel() {
                     src={item.src}
                     alt={item.title}
                     fill
-                    sizes="(max-width: 640px) 210px, (max-width: 1024px) 250px, 280px"
+                    sizes="(max-width: 640px) 210px, (max-width: 1024px) 250px, 400px"
                     priority={isActive}
                     className="object-cover"
                   />

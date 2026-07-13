@@ -329,20 +329,45 @@ main {
   }
 }
 
+@media (min-width: 1024px) {
+  .prose-vana h1 {
+    font-size: 2.25rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+  .prose-vana h2 {
+    font-size: 2.25rem;
+  }
+}
+
 .prose-vana p {
   margin-block: 1.15rem;
+}
+
+.prose-vana p,
+.prose-vana li {
   color: #504b45;
   font-size: clamp(0.95rem, 2vw, 1.075rem);
   line-height: 1.8;
 }
 
 @media (min-width: 768px) {
-  .prose-vana p {
+  .prose-vana p,
+  .prose-vana li {
     line-height: 1.9;
   }
 }
 
-.dark .prose-vana p {
+@media (min-width: 1024px) {
+  .prose-vana p,
+  .prose-vana li {
+    font-size: 1.2rem;
+    line-height: 1.95;
+  }
+}
+
+.dark .prose-vana p,
+.dark .prose-vana li {
   color: #dfd3c5;
 }
 

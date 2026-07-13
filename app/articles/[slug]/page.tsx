@@ -7,6 +7,7 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { ProductCard } from "@/components/ProductCard";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { ShareButtons } from "@/components/ShareButtons";
+import { ArticleLikeButton } from "@/components/ArticleLikeButton";
 import { getArticle, getArticleProducts, getArticles, getRelatedArticles } from "@/lib/content";
 import { site } from "@/lib/site";
 
@@ -50,7 +51,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
   const article = getArticle(slug);
   if (!article) notFound();
-  const products = getArticleProducts(article);
+  const products = getArticleProducts(article, 10);
   const related = getRelatedArticles(article);
   const url = `${site.url}/articles/${article.slug}`;
   const schema = {
@@ -78,23 +79,25 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <span className="mx-2">/</span>
             <span>{article.category}</span>
           </nav>
-          <div className="mx-auto flex justify-center overflow-hidden rounded-lg bg-bone md:max-w-4xl">
-            <Image
-              src={article.cover}
-              alt=""
-              width={0}
-              height={0}
-              sizes="100vw"
-              style={{ width: '100%', height: 'auto', maxHeight: '75vh', objectFit: 'contain' }}
-              priority
-            />
-          </div>
-          <div className="mx-auto mt-6 md:mt-10 max-w-3xl">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-cedar">{article.category}</p>
-            <h1 className="font-serif text-4xl leading-[1.02] text-ink md:text-5xl lg:text-7xl dark:text-linen">{article.title}</h1>
-            <p className="mt-4 md:mt-6 text-base md:text-lg leading-relaxed md:leading-9 text-smoke dark:text-bone">{article.description}</p>
-            <div className="mt-7">
-              <ShareButtons title={article.title} url={url} image={article.cover} />
+          <div className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
+            <div className="flex justify-center overflow-hidden rounded-lg bg-bone">
+              <Image
+                src={article.cover}
+                alt=""
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: '100%', height: 'auto', maxHeight: '75vh', objectFit: 'contain' }}
+                priority
+              />
+            </div>
+            <div className="mt-2 md:mt-4 lg:mt-0 lg:pl-4">
+              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-cedar">{article.category}</p>
+              <h1 className="font-serif text-3xl leading-[1.02] text-ink md:text-4xl lg:text-6xl xl:text-7xl dark:text-linen">{article.title}</h1>
+              <p className="mt-4 md:mt-6 text-base md:text-lg leading-relaxed md:leading-9 text-smoke dark:text-bone">{article.description}</p>
+              <div className="mt-7">
+                <ShareButtons title={article.title} url={url} image={article.cover} />
+              </div>
             </div>
           </div>
         </section>
@@ -104,11 +107,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <div className="prose-vana prose-lg xl:prose-xl">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.body}</ReactMarkdown>
             </div>
+            <ArticleLikeButton slug={article.slug} />
           </div>
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <h2 className="mb-4 md:mb-5 font-serif text-2xl md:text-3xl text-ink dark:text-linen">Recommended Products</h2>
             <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 lg:gap-5">
-              {products.map((product) => <ProductCard key={product.slug} product={product} />)}
+              {products.slice(0, 10).map((product, index) => (
+                <div key={product.slug} className={index >= 4 ? "hidden lg:block" : ""}>
+                  <ProductCard product={product} />
+                </div>
+              ))}
             </div>
           </aside>
         </section>

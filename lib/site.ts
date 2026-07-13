@@ -14,7 +14,7 @@ export const categoryTiles = [...contentCategories];
 
 export const site = {
   name: "Vikore Vana",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://vikorevana.store",
+  url: "https://vikorevana.store",
   description:
     "Premium home decor, interior design inspiration, furniture finds, small-space ideas, and aesthetic living guides.",
   nav: [

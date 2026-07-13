@@ -56,7 +56,7 @@ export function FurnishEasyHero() {
 
       {/* ── Full Width Carousel (Outside Container) ── */}
       <div className="mt-4 sm:mt-6 lg:mt-2 w-full flex justify-center overflow-visible">
-        <div className="w-[100vw] h-auto min-h-[280px] sm:min-h-[330px] lg:min-h-[440px] relative flex items-center justify-center overflow-visible">
+        <div className="w-[100vw] h-auto min-h-[280px] sm:min-h-[330px] lg:min-h-[520px] relative flex items-center justify-center overflow-visible">
           <AestheticCarousel />
         </div>
       </div>
