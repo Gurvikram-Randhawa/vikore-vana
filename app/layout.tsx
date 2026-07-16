@@ -45,6 +45,16 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image"
   },
+  icons: {
+    icon: [
+      { url: '/icon.png', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png', sizes: '192x192' },
+      { url: '/icon.png', type: 'image/png', sizes: '512x512' }
+    ],
+    apple: [
+      { url: '/icon.png' }
+    ]
+  },
   other: {
     "pinterest-rich-pin": "true",
     "google-site-verification": "KRtxf-ldKOW9N6uHexTvZwzj1H4kQ6z4w6I12UMapxE",
@@ -65,7 +75,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <EntranceReveal />
         <SmoothScroll>
           <ThemeProvider>
-            <SwarmBackground />
             <Header />
             <main>{children}</main>
             <Footer />

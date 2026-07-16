@@ -55,7 +55,7 @@ export function QuizPopup({ allProducts }: { allProducts: Product[] }) {
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12 animate-in fade-in duration-500">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity" 
+        className="absolute inset-0 bg-black/50 transition-opacity" 
         onClick={closePopup}
       />
       
@@ -72,7 +72,7 @@ export function QuizPopup({ allProducts }: { allProducts: Product[] }) {
         </button>
 
         {/* Decorative background within modal */}
-        <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] bg-[#b89569]/10 rounded-full blur-[80px] pointer-events-none" />
+        <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] bg-[#b89569]/10 rounded-full blur-[40px] pointer-events-none" />
         
         {/* Quiz Component embedded */}
         <div className="relative z-10 pt-8 pb-12 sm:pt-12 sm:pb-16 px-4">

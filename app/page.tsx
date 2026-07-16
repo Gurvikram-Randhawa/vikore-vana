@@ -1,16 +1,19 @@
 import Link from "next/link";
+import nextDynamic from "next/dynamic";
 import { FurnishEasyHero } from "@/components/FurnishEasyHero";
-import { FaqSection } from "@/components/FaqSection";
-import { EditorsNote } from "@/components/EditorsNote";
-import { FeaturedArticlesList } from "@/components/FeaturedArticlesList";
-import { FeaturedCategories } from "@/components/FeaturedCategories";
-import { ProductCard } from "@/components/ProductCard";
-import { NewsletterForm } from "@/components/NewsletterForm";
-import { ShopTheLook } from "@/components/ShopTheLook";
-import { BeforeAfterGallery } from "@/components/BeforeAfterGallery";
-import { ReaderFavorites } from "@/components/ReaderFavorites";
-import { ScrollReveal } from "@/components/ScrollReveal";
 import { SplashScreen } from "@/components/SplashScreen";
+
+// Lazy-loaded heavy components (loaded only when scrolled into view)
+const FaqSection = nextDynamic(() => import("@/components/FaqSection").then(mod => mod.FaqSection));
+const EditorsNote = nextDynamic(() => import("@/components/EditorsNote").then(mod => mod.EditorsNote));
+const FeaturedArticlesList = nextDynamic(() => import("@/components/FeaturedArticlesList").then(mod => mod.FeaturedArticlesList));
+const FeaturedCategories = nextDynamic(() => import("@/components/FeaturedCategories").then(mod => mod.FeaturedCategories));
+const ProductCard = nextDynamic(() => import("@/components/ProductCard").then(mod => mod.ProductCard));
+const NewsletterForm = nextDynamic(() => import("@/components/NewsletterForm").then(mod => mod.NewsletterForm));
+const ShopTheLook = nextDynamic(() => import("@/components/ShopTheLook").then(mod => mod.ShopTheLook));
+const BeforeAfterGallery = nextDynamic(() => import("@/components/BeforeAfterGallery").then(mod => mod.BeforeAfterGallery));
+const ReaderFavorites = nextDynamic(() => import("@/components/ReaderFavorites").then(mod => mod.ReaderFavorites));
+const ScrollReveal = nextDynamic(() => import("@/components/ScrollReveal").then(mod => mod.ScrollReveal));
 import { getArticles, getProducts, getLooks } from "@/lib/content";
 import { site } from "@/lib/site";
 

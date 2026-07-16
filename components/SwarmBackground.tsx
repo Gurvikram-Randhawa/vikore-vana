@@ -14,7 +14,7 @@ export function SwarmBackground() {
   }, []);
 
   useEffect(() => {
-    if (isMobile) return;
+    // We no longer exit on mobile. Instead, we optimize the render.
     
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -24,14 +24,8 @@ export function SwarmBackground() {
     let animId: number;
     let isDark = document.documentElement.classList.contains("dark");
 
-    // ── Scroll tracking with smooth lerp ──────────────────────────
-    // time is ONLY driven by scroll — static when page is still
-    let rawScroll   = window.scrollY;   // actual scroll position
-    let smoothScroll = rawScroll;        // lerped value for buttery motion
-    let prevSmooth  = rawScroll;         // detect if still moving
-
-    const onScroll = () => { rawScroll = window.scrollY; };
-    window.addEventListener("scroll", onScroll, { passive: true });
+    // ── Autonomous Clock ──────────────────────────
+    // The background animates completely independently of scroll or touch
 
     const themeObserver = new MutationObserver(() => {
       isDark = document.documentElement.classList.contains("dark");
@@ -42,8 +36,13 @@ export function SwarmBackground() {
     });
 
     const resize = () => {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
+      // On mobile, render at half resolution for massive performance boost
+      const scale = isMobile ? 0.5 : 1;
+      canvas.width  = window.innerWidth * scale;
+      canvas.height = window.innerHeight * scale;
+      // Keep visual size full screen
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
     };
     resize();
     window.addEventListener("resize", resize);
@@ -86,27 +85,20 @@ export function SwarmBackground() {
     const render = (now: number) => {
       animId = requestAnimationFrame(render);
 
-      // Lerp smoothScroll toward rawScroll — smooth deceleration
-      smoothScroll += (rawScroll - smoothScroll) * 0.02;
-      prevSmooth = smoothScroll;
-
       const w = canvas.width;
       const h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
+      // Use alpha clear for a natural motion blur trail
+      ctx.fillStyle = isDark ? "rgba(24, 22, 20, 0.2)" : "rgba(255, 250, 244, 0.2)";
+      ctx.fillRect(0, 0, w, h);
 
-      // Autonomous slow clock — particles drift at all times
-      const clock = now * 0.000095; // slightly faster drift when stationary
+      // Autonomous slow clock — particles drift independently
+      const clock = now * 0.00015; // Increased slightly since it's the only driver now
 
-      // Scroll adds an extra offset on top of the autonomous drift
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollFraction = maxScroll > 0 ? smoothScroll / maxScroll : 0;
-      const scrollOffset = scrollFraction * Math.PI * 2 * P * 0.15;
+      const time = clock;
 
-      const time = clock + scrollOffset;
-
-      // Global rotation driven by clock + scroll — very slow
-      const gRx = clock * 0.4 + scrollFraction * Math.PI * 0.08;
-      const gRy = clock * 0.6 + scrollFraction * Math.PI * 0.12;
+      // Global rotation driven strictly by clock
+      const gRx = clock * 0.4;
+      const gRy = clock * 0.6;
 
       // ── Ambient glow blobs flowing along the path ───────────────
       for (let i = 0; i < NUM_GLOWS; i++) {
@@ -149,13 +141,14 @@ export function SwarmBackground() {
 
     return () => {
       cancelAnimationFrame(animId);
-      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", resize);
       themeObserver.disconnect();
     };
   }, [isMobile]);
 
-  if (isMobile) return null;
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <canvas
@@ -166,8 +159,8 @@ export function SwarmBackground() {
         width: "100vw",
         height: "100vh",
         zIndex: -1,
-        filter: "blur(30px)",
-        opacity: 1,
+        filter: isMobile ? "none" : "blur(30px)",
+        opacity: isMobile ? 0.8 : 1,
       }}
     />
   );

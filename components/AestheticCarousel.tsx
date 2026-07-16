@@ -263,7 +263,7 @@ export function AestheticCarousel() {
                     alt={item.title}
                     fill
                     sizes="(max-width: 640px) 210px, (max-width: 1024px) 250px, 400px"
-                    priority={isActive}
+                    priority={index <= 2}
                     className="object-cover"
                   />
                 </motion.div>

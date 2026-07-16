@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image, { ImageProps } from "next/image";
 
 interface ParallaxImageProps extends ImageProps {
@@ -10,8 +10,18 @@ interface ParallaxImageProps extends ImageProps {
 export function ParallaxImage({ speed = 0.15, className, ...props }: ParallaxImageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageWrapperRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return; // Skip parallax entirely on mobile
+
     const el = containerRef.current;
     const imgWrap = imageWrapperRef.current;
     if (!el || !imgWrap) return;
@@ -70,7 +80,16 @@ export function ParallaxImage({ speed = 0.15, className, ...props }: ParallaxIma
       window.removeEventListener("scroll", handleScroll);
       cancelAnimationFrame(rafId);
     };
-  }, [speed]);
+  }, [speed, isMobile]);
+
+  // On mobile, render a simple static image (no parallax wrapper overhead)
+  if (isMobile) {
+    return (
+      <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+        <Image {...props} className={`${className || ''} object-cover`} fill />
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">

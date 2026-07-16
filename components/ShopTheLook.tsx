@@ -46,7 +46,7 @@ export function ShopTheLook({ look }: { look: Look }) {
 
         {/* Interactive Image Container — constrained to match BeforeAfterGallery sizing */}
         <ScrollReveal delay={200} duration={1200} scale={0.95} rotate={15}>
-          <div className="relative w-full max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-md mx-auto rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] group border border-[#b89569]/10 z-10 hover:z-50">
+          <div className="relative w-full max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-md mx-auto rounded-2xl md:rounded-[2.5rem] shadow-[0_8px_30px_rgba(184,149,105,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_16px_40px_rgba(184,149,105,0.25)] dark:hover:shadow-[0_16px_40px_rgba(203,166,119,0.25)] hover:-translate-y-2 transition-all duration-500 group border border-[#b89569]/15 z-10 hover:z-50">
             
             {/* Image Wrapper locked to an elegant tall ratio */}
             <div className="relative w-full aspect-[4/5] rounded-[inherit] overflow-hidden pointer-events-none">

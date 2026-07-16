@@ -31,13 +31,31 @@ html {
 body {
   margin: 0;
   overflow-x: hidden;
-  background: #fffaf4;
+  background-color: #fffaf4;
   color: #282522;
+  transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: -100px; 
+  bottom: -100px; 
+  left: 0; 
+  right: 0;
+  z-index: -100;
+  pointer-events: none;
+  background-color: #fffaf4;
+  transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark body {
-  background: #181614;
+  background-color: #12100e;
   color: #f8efe4;
+}
+
+.dark body::before {
+  background-color: #12100e;
 }
 
 ::selection {
@@ -387,35 +405,43 @@ main {
 /* ── Theme Switch Sweep Animations ──────────────────────── */
 @keyframes sweep-ltr-enter {
   0% {
-    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    transform-origin: left;
+    transform: scaleX(0);
   }
   100% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform-origin: left;
+    transform: scaleX(1);
   }
 }
 @keyframes sweep-ltr-exit {
   0% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform-origin: right;
+    transform: scaleX(1);
   }
   100% {
-    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+    transform-origin: right;
+    transform: scaleX(0);
   }
 }
 
 @keyframes sweep-rtl-enter {
   0% {
-    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+    transform-origin: right;
+    transform: scaleX(0);
   }
   100% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform-origin: right;
+    transform: scaleX(1);
   }
 }
 @keyframes sweep-rtl-exit {
   0% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform-origin: left;
+    transform: scaleX(1);
   }
   100% {
-    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    transform-origin: left;
+    transform: scaleX(0);
   }
 }
 
@@ -425,3 +451,22 @@ main {
   0% { opacity: 0; }
   100% { opacity: 1; }
 }
+
+/* ── Mobile Pure CSS Background ──────────────────────── */
+.mobile-blob {
+  position: absolute;
+  border-radius: 50%;
+  animation: blob-float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+@keyframes blob-float {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(8vw, -12vh, 0) scale(1.1); }
+  66% { transform: translate3d(-12vw, 8vh, 0) scale(0.9); }
+  100% { transform: translate3d(5vw, 12vh, 0) scale(1.05); }
+}
+
+.blob-1 { animation-delay: 0s; }
+.blob-2 { animation-delay: -7s; }
+.blob-3 { animation-delay: -14s; }

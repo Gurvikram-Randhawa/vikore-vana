@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from 'react';
-import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { BeforeAfterImage } from './BeforeAfterImage';
 import { ScrollReveal } from './ScrollReveal';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -23,39 +22,8 @@ function getDirection(prevId: string, nextId: string) {
   return nextIdx >= prevIdx ? 1 : -1;
 }
 
-const imageVariants: Variants = {
-  enter: () => ({
-    opacity: 0,
-    scale: 0.85,
-    filter: 'blur(6px)',
-  }),
-  center: {
-    opacity: 1,
-    scale: 1,
-    filter: 'blur(0px)',
-    transition: {
-      type: 'spring',
-      stiffness: 300,
-      damping: 22,
-      mass: 0.8,
-      opacity: { duration: 0.3, ease: 'easeOut' },
-      filter: { duration: 0.35, ease: 'easeOut' },
-    },
-  },
-  exit: () => ({
-    opacity: 0,
-    scale: 0.9,
-    filter: 'blur(4px)',
-    transition: {
-      duration: 0.2,
-      ease: [0.4, 0, 1, 1],
-    },
-  }),
-};
-
 export function BeforeAfterGallery() {
   const [activeCategory, setActiveCategory] = useState(categories[0].id);
-  const [direction, setDirection] = useState(1);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scroll = (dir: 'left' | 'right') => {
@@ -70,7 +38,6 @@ export function BeforeAfterGallery() {
 
   const handleCategoryChange = (newId: string) => {
     if (newId === activeCategory) return;
-    setDirection(getDirection(activeCategory, newId));
     setActiveCategory(newId);
   };
 
@@ -145,26 +112,16 @@ export function BeforeAfterGallery() {
           </div>
         </ScrollReveal>
 
-        {/* The Slider Images – AnimatePresence for premium transitions */}
+        {/* The Slider Images */}
         <ScrollReveal delay={300}>
           <div className="relative w-full max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-md mx-auto">
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
-                key={activeCat.id}
-                custom={direction}
-                variants={imageVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                className="w-full"
-              >
-                <BeforeAfterImage 
-                  beforeImage={activeCat.before} 
-                  afterImage={activeCat.after} 
-                  alt={activeCat.name} 
-                />
-              </motion.div>
-            </AnimatePresence>
+            <div className="w-full">
+              <BeforeAfterImage 
+                beforeImage={activeCat.before} 
+                afterImage={activeCat.after} 
+                alt={activeCat.name} 
+              />
+            </div>
           </div>
         </ScrollReveal>
 

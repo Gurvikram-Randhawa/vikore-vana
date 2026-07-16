@@ -6,9 +6,12 @@ import { motion, AnimatePresence } from "framer-motion";
 export function SplashScreen() {
   const [show, setShow] = useState(true);
   const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
+    setIsMobile(window.innerWidth < 768);
+
     // Use sessionStorage so it only shows once per browser tab session
     const visited = sessionStorage.getItem("vikore_splash_seen");
     
@@ -46,12 +49,18 @@ export function SplashScreen() {
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black"
         >
           <motion.div
-            initial={{ opacity: 0, filter: "blur(12px)" }}
-            animate={{ 
-              opacity: [0, 1, 1, 0], 
-              filter: ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"],
-              scale: [0.95, 1, 1, 1.05]
-            }}
+            initial={{ opacity: 0, ...(isMobile ? {} : { filter: "blur(12px)" }) }}
+            animate={isMobile
+              ? { 
+                  opacity: [0, 1, 1, 0], 
+                  scale: [0.95, 1, 1, 1.05] 
+                }
+              : { 
+                  opacity: [0, 1, 1, 0], 
+                  filter: ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"],
+                  scale: [0.95, 1, 1, 1.05]
+                }
+            }
             transition={{ 
               duration: 3.5, 
               times: [0, 0.3, 0.7, 1], // Fade in by 30%, hold until 70%, fade out to 100%

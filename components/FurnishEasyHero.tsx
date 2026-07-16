@@ -6,7 +6,7 @@ import { AestheticCarousel } from "@/components/AestheticCarousel";
 
 export function FurnishEasyHero() {
   return (
-    <section className="overflow-x-clip pt-5 md:pt-6 pb-4 md:pb-8">
+    <section className="overflow-x-clip pt-3 md:pt-4 pb-4 md:pb-8">
       {/* ── Top Content (Text) ── */}
       <div className="container-premium max-w-[1400px]">
         <div className="flex flex-col items-center justify-center">
@@ -69,14 +69,14 @@ export function FurnishEasyHero() {
             <div className="mt-12 sm:mt-16 lg:mt-20 flex items-center justify-center gap-3">
               <Link
                 href="/products"
-                className="group flex h-12 flex-1 sm:flex-none items-center justify-center gap-2 rounded-full bg-ink px-5 text-[13px] font-medium text-white transition-all hover:bg-ink/90 hover:shadow-lg dark:bg-white dark:text-ink dark:hover:bg-white/90"
+                className="group flex h-12 flex-1 sm:flex-none items-center justify-center gap-2 rounded-full bg-ink px-5 text-[13px] font-medium text-white transition-all shadow-[0_8px_20px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.18)] hover:-translate-y-0.5 hover:bg-ink/90 dark:bg-white dark:text-ink dark:shadow-[0_8px_20px_rgba(255,255,255,0.1)] dark:hover:shadow-[0_12px_28px_rgba(255,255,255,0.15)] dark:hover:bg-white/90"
               >
                 Explore Collection
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 href="/categories"
-                className="flex h-12 flex-1 sm:flex-none items-center justify-center gap-2 rounded-full border border-black/10 px-5 text-[13px] font-medium text-ink transition-all hover:bg-black/5 dark:border-white/20 dark:text-white dark:hover:bg-white/10"
+                className="flex h-12 flex-1 sm:flex-none items-center justify-center gap-2 rounded-full border border-black/10 px-5 text-[13px] font-medium text-ink transition-all shadow-[0_4px_14px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:bg-black/5 dark:border-white/20 dark:text-white dark:shadow-[0_4px_14px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)] dark:hover:bg-white/10"
               >
                 View Room Edits
               </Link>

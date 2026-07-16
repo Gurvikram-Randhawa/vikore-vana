@@ -102,7 +102,7 @@ export function Header() {
     <>
       {/* Sleek, Minimal Luxury Header Bar */}
       <header
-        className={`sticky top-0 z-50 w-full h-14 md:h-16 bg-[#fffaf4]/90 dark:bg-[#181614]/90 backdrop-blur-md border-b border-[#b89569]/5 dark:border-white/5 transition-transform duration-500 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"
+        className={`sticky top-0 z-50 w-full h-14 md:h-16 bg-[#fffaf4]/90 dark:bg-[#181614]/90 backdrop-blur-md border-b border-[#b89569]/5 dark:border-white/5 shadow-[0_2px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)] transition-transform duration-500 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"
           }`}
       >
         <div className="max-w-[1400px] h-full mx-auto px-6 sm:px-10 flex items-center justify-between">
@@ -187,7 +187,7 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden flex justify-end"
+            className="fixed inset-0 z-40 bg-black/50 lg:hidden flex justify-end"
             onClick={() => setMenuOpen(false)}
           >
             {/* Drawer Container Panel */}
@@ -196,7 +196,7 @@ export function Header() {
               initial="closed"
               animate="open"
               exit="closed"
-              className="relative w-[85%] max-w-[380px] h-full bg-[#fffaf4]/95 dark:bg-[#181614]/95 backdrop-blur-xl border-l border-[#b89569]/10 dark:border-white/5 p-8 sm:p-10 flex flex-col justify-between shadow-3xl overflow-y-auto"
+              className="relative w-[85%] max-w-[380px] h-full bg-[#fffaf4] dark:bg-[#181614] border-l border-[#b89569]/10 dark:border-white/5 p-8 sm:p-10 flex flex-col justify-between shadow-3xl overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Top / Inner Section */}

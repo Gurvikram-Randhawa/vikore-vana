@@ -2,7 +2,7 @@
 
 import { Search, Grid2x2, Sofa, BedDouble, Coffee, Monitor, TreePine, Sparkles, Lamp, Package, Armchair, Bath, BoxSelect, Droplets } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useEffect, useRef, useDeferredValue } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { categorySlug, site } from "@/lib/site";
 import type { Article, Product } from "@/lib/content";
@@ -126,7 +126,7 @@ function SearchAndCategories({
   }, []);
 
   return (
-    <div className="mb-10 grid gap-4 rounded-2xl border border-[#b8935a]/20 bg-[#fdf6f0]/70 p-4 sm:p-5 shadow-[0_4px_20px_rgba(184,147,90,0.06)] backdrop-blur-md md:grid-cols-[1fr_auto] dark:border-[#b8935a]/15 dark:bg-[#25211e]/70 dark:shadow-[0_4px_24px_rgba(0,0,0,0.25)]">
+    <div className="mb-10 grid gap-4 rounded-2xl border border-[#b8935a]/20 bg-[#fdf6f0] p-4 sm:p-5 shadow-[0_4px_20px_rgba(184,147,90,0.06)] md:grid-cols-[1fr_auto] dark:border-[#b8935a]/15 dark:bg-[#25211e] dark:shadow-[0_4px_24px_rgba(0,0,0,0.25)]">
       <label className="relative block">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#b8935a]" size={18} />
         <input
@@ -138,7 +138,7 @@ function SearchAndCategories({
       </label>
       <div 
         ref={containerRef}
-        className="flex max-w-full items-center rounded-full p-1 bg-[#b8935a]/8 dark:bg-white/5 border border-[#b8935a]/20 dark:border-white/10 backdrop-blur-md overflow-x-auto no-scrollbar relative"
+        className="flex max-w-full items-center rounded-full p-1 bg-[#b8935a]/8 dark:bg-white/5 border border-[#b8935a]/20 dark:border-white/10 overflow-x-auto no-scrollbar relative"
         onMouseEnter={() => (isInteractingRef.current = true)}
         onMouseLeave={() => (isInteractingRef.current = false)}
         onTouchStart={() => (isInteractingRef.current = true)}
@@ -203,17 +203,32 @@ export function UnifiedSearch({ articles, products }: { articles: Article[]; pro
   const router = useRouter();
   const pathname = usePathname();
 
-  const query = searchParams.get("query") || "";
+  const urlQuery = searchParams.get("query") || "";
   const category = searchParams.get("category") || "all";
 
+  // Local state for instant typing — URL syncs after a debounce
+  const [localQuery, setLocalQuery] = useState(urlQuery);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+  // Sync local state when URL changes externally (e.g. back/forward navigation)
+  useEffect(() => {
+    setLocalQuery(urlQuery);
+  }, [urlQuery]);
+
   const setQuery = (newQuery: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (newQuery) {
-      params.set("query", newQuery);
-    } else {
-      params.delete("query");
-    }
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    setLocalQuery(newQuery); // Update input instantly
+
+    // Debounce the URL update to avoid router.replace on every keystroke
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (newQuery) {
+        params.set("query", newQuery);
+      } else {
+        params.delete("query");
+      }
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }, 300);
   };
 
   const setCategory = (newCategory: string) => {
@@ -226,12 +241,17 @@ export function UnifiedSearch({ articles, products }: { articles: Article[]; pro
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  const filteredArticles = useMemo(() => articles.filter((item) => matches(item, query, category)), [articles, query, category]);
-  const filteredProducts = useMemo(() => products.filter((item) => matches(item, query, category)), [products, query, category]);
+  // Defer filtering so the input never blocks while React re-renders the grid
+  const deferredQuery = useDeferredValue(localQuery);
+  const deferredCategory = useDeferredValue(category);
+
+  // Filter using deferred values so typing stays instant
+  const filteredArticles = useMemo(() => articles.filter((item) => matches(item, deferredQuery, deferredCategory)), [articles, deferredQuery, deferredCategory]);
+  const filteredProducts = useMemo(() => products.filter((item) => matches(item, deferredQuery, deferredCategory)), [products, deferredQuery, deferredCategory]);
 
   return (
     <>
-      <SearchAndCategories query={query} setQuery={setQuery} category={category} setCategory={setCategory} placeholder="Search inspiration, rooms, products..." />
+      <SearchAndCategories query={localQuery} setQuery={setQuery} category={category} setCategory={setCategory} placeholder="Search inspiration, rooms, products..." />
 
       <h2 className="mb-6 font-serif text-3xl text-ink dark:text-linen">Articles ({filteredArticles.length})</h2>
       {filteredArticles.length > 0 ? (

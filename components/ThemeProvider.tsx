@@ -31,12 +31,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       const timer = setTimeout(() => {
         setDark(transitionTheme === "dark");
         setTransitionState("exit");
-      }, 350);
+      }, 800);
       return () => clearTimeout(timer);
     } else if (transitionState === "exit") {
       const timer = setTimeout(() => {
         setTransitionState("idle");
-      }, 350);
+      }, 800);
       return () => clearTimeout(timer);
     }
   }, [transitionState, transitionTheme]);
@@ -62,11 +62,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             ${
               transitionState === "enter"
                 ? transitionDirection === "ltr"
-                  ? "animate-[sweep-ltr-enter_350ms_cubic-bezier(0.65,0,0.35,1)_forwards]"
-                  : "animate-[sweep-rtl-enter_350ms_cubic-bezier(0.65,0,0.35,1)_forwards]"
+                  ? "animate-[sweep-ltr-enter_800ms_cubic-bezier(0.65,0,0.35,1)_forwards]"
+                  : "animate-[sweep-rtl-enter_800ms_cubic-bezier(0.65,0,0.35,1)_forwards]"
                 : transitionDirection === "ltr"
-                ? "animate-[sweep-ltr-exit_350ms_cubic-bezier(0.65,0,0.35,1)_forwards]"
-                : "animate-[sweep-rtl-exit_350ms_cubic-bezier(0.65,0,0.35,1)_forwards]"
+                ? "animate-[sweep-ltr-exit_800ms_cubic-bezier(0.65,0,0.35,1)_forwards]"
+                : "animate-[sweep-rtl-exit_800ms_cubic-bezier(0.65,0,0.35,1)_forwards]"
             }
           `}
         />

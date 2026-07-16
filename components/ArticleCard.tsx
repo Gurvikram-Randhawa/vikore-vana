@@ -19,7 +19,7 @@ export function ArticleCard({ article, large = false }: { article: Article; larg
   const readingTime = Math.max(1, Math.ceil(words / wordsPerMinute));
 
   return (
-    <article className="group flex flex-col h-full bg-[#fdf6f0]/70 dark:bg-[#25211e]/70 backdrop-blur-sm border border-[#b8935a]/20 dark:border-[#b8935a]/15 rounded-2xl shadow-[0_4px_16px_rgba(184,147,90,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.25)] hover:shadow-[0_12px_32px_rgba(184,147,90,0.14)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.35)] hover:-translate-y-1.5 transition-all duration-500 overflow-hidden">
+    <article className="group flex flex-col h-full bg-[#fdf6f0]/70 dark:bg-[#25211e]/70 backdrop-blur-sm border border-[#b8935a]/20 dark:border-[#b8935a]/15 rounded-2xl shadow-[0_8px_30px_rgba(184,147,90,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_16px_40px_rgba(184,147,90,0.25)] dark:hover:shadow-[0_16px_40px_rgba(203,166,119,0.2)] hover:-translate-y-1.5 transition-all duration-500 overflow-hidden">
       <Link href={`/articles/${article.slug}`} className="flex flex-col h-full">
         {/* Cinematic Cover Image */}
         <div className={`relative overflow-hidden w-full ${large ? "aspect-[4/3] sm:aspect-[16/10]" : "aspect-[4/3] sm:aspect-[16/11]"} bg-bone/35 dark:bg-black/10 border-b border-[#b8935a]/10 dark:border-[#b8935a]/10`}>

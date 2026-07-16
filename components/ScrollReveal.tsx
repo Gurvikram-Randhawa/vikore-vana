@@ -67,6 +67,15 @@ export function ScrollReveal({
     }
   };
 
+  const hasBlur = blur > 0;
+  const transitions = [
+    `opacity ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+    `transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+  ];
+  if (hasBlur) {
+    transitions.push(`filter ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`);
+  }
+
   return (
     <div
       ref={ref}
@@ -74,13 +83,9 @@ export function ScrollReveal({
       style={{
         opacity: isVisible ? 1 : 0,
         transform: getTransform(),
-        filter: isVisible ? "blur(0px)" : `blur(${blur}px)`,
-        transition: [
-          `opacity ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
-          `transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
-          `filter ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
-        ].join(", "),
-        willChange: "opacity, transform, filter",
+        ...(hasBlur && { filter: isVisible ? "blur(0px)" : `blur(${blur}px)` }),
+        transition: transitions.join(", "),
+        willChange: hasBlur ? "opacity, transform, filter" : "opacity, transform",
       }}
     >
       {children}
