@@ -113,7 +113,7 @@ export function Header() {
             className="flex items-center gap-3 font-serif tracking-[0.25em] uppercase text-xs sm:text-sm font-light text-ink dark:text-linen transition-opacity hover:opacity-85"
           >
             <span className="relative overflow-hidden w-8 h-8 rounded-full border border-[#b89569]/10 dark:border-white/5 flex items-center justify-center shrink-0">
-              <Image src="/logo.jpg" alt="Vikore Vana Logo" fill className="object-cover" />
+              <Image src="/logo.png" alt="Vikore Vana Logo" fill className="object-cover" />
             </span>
             <span>Vikore Vana</span>
           </Link>
