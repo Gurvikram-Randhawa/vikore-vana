@@ -246,7 +246,7 @@ export function AestheticCarousel() {
               }}
             >
               {/* Full Image Background with parallax scale transition */}
-              <div className="relative w-full h-full bg-linen dark:bg-[#25211e] overflow-hidden">
+              <div className="relative w-full h-full bg-linen dark:bg-[#2d2925] overflow-hidden">
                 <motion.div
                   className="relative w-full h-full"
                   animate={{

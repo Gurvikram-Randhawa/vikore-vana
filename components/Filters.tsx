@@ -126,7 +126,7 @@ function SearchAndCategories({
   }, []);
 
   return (
-    <div className="mb-10 grid gap-4 rounded-2xl border border-[#b8935a]/20 bg-[#fdf6f0] p-4 sm:p-5 shadow-[0_4px_20px_rgba(184,147,90,0.06)] md:grid-cols-[1fr_auto] dark:border-[#b8935a]/15 dark:bg-[#25211e] dark:shadow-[0_4px_24px_rgba(0,0,0,0.25)]">
+    <div className="mb-10 grid gap-4 rounded-[24px] border border-[#b8935a]/20 bg-[#fdf6f0] p-4 sm:p-5 shadow-[0_4px_20px_rgba(184,147,90,0.06)] md:grid-cols-[1fr_auto] dark:border-[#b8935a]/15 dark:bg-[#2d2925] dark:shadow-[0_4px_24px_rgba(0,0,0,0.25)]">
       <label className="relative block">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#b8935a]" size={18} />
         <input

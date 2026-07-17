@@ -50,12 +50,12 @@ body::before {
 }
 
 .dark body {
-  background-color: #12100e;
+  background-color: #1c1a18;
   color: #f8efe4;
 }
 
 .dark body::before {
-  background-color: #12100e;
+  background-color: #1c1a18;
 }
 
 ::selection {

@@ -78,7 +78,7 @@ export function BeforeAfterGallery() {
             </button>
 
             {/* Frosted glass container for mobile premium feel */}
-            <div className="w-full rounded-2xl md:rounded-none bg-white/40 dark:bg-white/[0.03] backdrop-blur-xl md:backdrop-blur-none md:bg-transparent border border-black/[0.04] dark:border-white/[0.06] md:border-0 p-1.5 md:p-0">
+            <div className="w-full rounded-[24px] md:rounded-none bg-white/40 dark:bg-white/[0.03] backdrop-blur-xl md:backdrop-blur-none md:bg-transparent border border-black/[0.04] dark:border-white/[0.06] md:border-0 p-1.5 md:p-0">
               {/* Scrollable Container */}
               <div 
                 ref={scrollContainerRef}

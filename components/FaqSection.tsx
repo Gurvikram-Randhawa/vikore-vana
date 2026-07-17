@@ -57,9 +57,9 @@ export function FaqSection() {
             return (
               <ScrollReveal key={index} delay={index * 100} distance={30}>
                 <div 
-                  className={`rounded-2xl transition-all duration-300 ${
+                  className={`rounded-[24px] transition-all duration-300 ${
                     isOpen 
-                      ? "bg-[#fdf6f0]/70 dark:bg-[#25211e]/70 backdrop-blur-md shadow-[0_8px_30px_rgba(184,147,90,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-[#b8935a]/20 dark:border-[#b8935a]/15" 
+                      ? "bg-[#fdf6f0]/70 dark:bg-[#2d2925]/70 backdrop-blur-md shadow-[0_8px_30px_rgba(184,147,90,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-[#b8935a]/20 dark:border-[#b8935a]/15" 
                       : "bg-transparent border border-black/10 hover:border-[#b8935a]/50 dark:border-white/10 dark:hover:border-[#b8935a]/40"
                   }`}
                 >

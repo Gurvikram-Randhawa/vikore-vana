@@ -36,7 +36,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } else if (transitionState === "exit") {
       const timer = setTimeout(() => {
         setTransitionState("idle");
-      }, 800);
+      }, 850); // 50ms buffer to guarantee the 800ms CSS animation fully completes before unmount
       return () => clearTimeout(timer);
     }
   }, [transitionState, transitionTheme]);
@@ -56,8 +56,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     <ThemeContext.Provider value={value}>
       {children}
       {transitionState !== "idle" && (
-        <div
-          className={`fixed inset-0 z-[9999] pointer-events-auto
+        <>
+          <style dangerouslySetInnerHTML={{ __html: `*, *::before, *::after { transition-duration: 0s !important; }` }} />
+          <div
+            className={`fixed inset-0 z-[9999] pointer-events-auto
             ${transitionTheme === "dark" ? "bg-[#181614]" : "bg-[#fffaf4]"}
             ${
               transitionState === "enter"
@@ -70,6 +72,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             }
           `}
         />
+        </>
       )}
     </ThemeContext.Provider>
   );

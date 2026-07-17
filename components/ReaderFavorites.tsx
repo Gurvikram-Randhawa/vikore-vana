@@ -40,7 +40,7 @@ function PinCard({ pin, index }: { pin: FavoriteArticle; index: number }) {
     <ScrollReveal delay={index * 100} distance={30} duration={900} className="lg:!transform-none">
       <Link href={`/articles/${pin.slug}`}>
         <div
-          className="group relative rounded-2xl overflow-hidden cursor-pointer"
+          className="group relative rounded-[24px] overflow-hidden cursor-pointer"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -102,7 +102,7 @@ function FavoriteCard({
   return (
     <ScrollReveal delay={index * 120} distance={35} duration={900}>
       <Link href={`/articles/${article.slug}`}>
-        <article className="group relative flex flex-col sm:flex-row gap-4 sm:gap-5 lg:gap-8 p-4 sm:p-5 lg:p-7 rounded-2xl bg-white/80 dark:bg-[#221f1c]/80 backdrop-blur-sm border border-black/[0.04] dark:border-white/[0.06] shadow-[0_2px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_30px_rgba(184,147,90,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.35)] transition-all duration-500 hover:-translate-y-0.5">
+        <article className="group relative flex flex-col sm:flex-row gap-4 sm:gap-5 lg:gap-8 p-4 sm:p-5 lg:p-7 rounded-[24px] bg-white/80 dark:bg-[#2a2723]/80 backdrop-blur-sm border border-black/[0.04] dark:border-white/[0.06] shadow-[0_2px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_30px_rgba(184,147,90,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.35)] transition-all duration-500 hover:-translate-y-0.5">
           {/* Ranking number */}
           <div className="absolute -top-2.5 -left-1.5 sm:-top-3 sm:-left-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#b89569] dark:bg-[#cba677] flex items-center justify-center shadow-md z-10">
             <span className="text-white text-[11px] sm:text-xs font-bold font-sans">
@@ -111,7 +111,7 @@ function FavoriteCard({
           </div>
 
           {/* Thumbnail */}
-          <div className="relative w-full sm:w-28 md:w-32 lg:w-44 aspect-[16/10] sm:aspect-square shrink-0 rounded-xl overflow-hidden bg-bone/30 dark:bg-black/10">
+          <div className="relative w-full sm:w-28 md:w-32 lg:w-44 aspect-[16/10] sm:aspect-square shrink-0 rounded-[20px] overflow-hidden bg-bone/30 dark:bg-black/10">
             <Image
               src={article.cover}
               alt={article.title}

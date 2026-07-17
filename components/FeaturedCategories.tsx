@@ -144,7 +144,7 @@ function CategoryCard({ item }: { item: CategoryItem }) {
       <Link
         href={`/search?category=${item.slug}`}
         className="group flex flex-col justify-center items-center h-full min-h-[125px] sm:min-h-[145px] md:min-h-[195px] rounded-[20px] p-4 sm:p-5 md:p-8 text-center
-          bg-[#fdf6f0]/60 dark:bg-[#25211e]/60 backdrop-blur-md
+          bg-[#fdf6f0]/60 dark:bg-[#2d2925]/60 backdrop-blur-md
           border border-[#b8935a]/20 dark:border-[#b8935a]/15
           shadow-[0_4px_12px_rgba(184,147,90,0.08)]
           hover:-translate-y-1.5 hover:shadow-[0_12px_24px_rgba(184,147,90,0.15)]

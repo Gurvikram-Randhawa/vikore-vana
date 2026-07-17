@@ -95,7 +95,7 @@ export function BeforeAfterImage({ beforeImage, afterImage, alt }: BeforeAfterIm
   return (
     <div 
       ref={containerRef}
-      className="relative w-full aspect-[4/5] rounded-2xl md:rounded-[2.5rem] overflow-hidden select-none touch-none group shadow-2xl border border-black/5 dark:border-white/5"
+      className="relative w-full aspect-[4/5] rounded-[24px] md:rounded-[2.5rem] overflow-hidden select-none touch-none group shadow-2xl border border-black/5 dark:border-white/5"
       onMouseDown={(e) => handleInteractionStart(e.clientX)}
       onTouchStart={(e) => handleInteractionStart(e.touches[0].clientX)}
     >
@@ -143,7 +143,7 @@ export function BeforeAfterImage({ beforeImage, afterImage, alt }: BeforeAfterIm
       {/* Minimal Slider Handle */}
       <div 
         ref={sliderRef}
-        className={`absolute top-0 bottom-0 w-[1.5px] bg-white/80 cursor-col-resize shadow-[0_0_15px_rgba(0,0,0,0.5)] z-20 group-hover:w-[2px] transition-all duration-300`}
+        className={`absolute top-0 bottom-0 w-[1.5px] bg-white/80 cursor-col-resize shadow-[0_0_15px_rgba(0,0,0,0.5)] z-20 transition-all duration-300 ${isDragging ? "opacity-0" : "opacity-100 group-hover:w-[2px]"}`}
         style={{ left: `50%`, transform: 'translateX(-50%)' }}
       >
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40 shadow-xl group-hover:scale-110 group-hover:bg-white/20 transition-all duration-300">

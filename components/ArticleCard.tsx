@@ -19,7 +19,7 @@ export function ArticleCard({ article, large = false }: { article: Article; larg
   const readingTime = Math.max(1, Math.ceil(words / wordsPerMinute));
 
   return (
-    <article className="group flex flex-col h-full bg-[#fdf6f0]/70 dark:bg-[#25211e]/70 backdrop-blur-sm border border-[#b8935a]/20 dark:border-[#b8935a]/15 rounded-2xl shadow-[0_8px_30px_rgba(184,147,90,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_16px_40px_rgba(184,147,90,0.25)] dark:hover:shadow-[0_16px_40px_rgba(203,166,119,0.2)] hover:-translate-y-1.5 transition-all duration-500 overflow-hidden">
+    <article className="group flex flex-col h-full bg-[#fdf6f0]/70 dark:bg-[#2d2925]/70 backdrop-blur-sm border border-[#b8935a]/20 dark:border-[#b8935a]/15 rounded-[24px] shadow-[0_8px_30px_rgba(184,147,90,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_16px_40px_rgba(184,147,90,0.25)] dark:hover:shadow-[0_16px_40px_rgba(203,166,119,0.2)] hover:-translate-y-1.5 transition-all duration-500 overflow-hidden">
       <Link href={`/articles/${article.slug}`} className="flex flex-col h-full">
         {/* Cinematic Cover Image */}
         <div className={`relative overflow-hidden w-full ${large ? "aspect-[4/3] sm:aspect-[16/10]" : "aspect-[4/3] sm:aspect-[16/11]"} bg-bone/35 dark:bg-black/10 border-b border-[#b8935a]/10 dark:border-[#b8935a]/10`}>
@@ -31,14 +31,14 @@ export function ArticleCard({ article, large = false }: { article: Article; larg
             speed={0.12}
           />
           {/* Elegant Category Badge */}
-          <div className="absolute top-3 sm:top-4 left-3 sm:left-4 bg-[#fdf6f0]/95 dark:bg-[#25211e]/95 border border-[#b8935a]/30 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-[0_2px_8px_rgba(184,147,90,0.12)] transition-colors duration-300 flex items-center justify-center">
+          <div className="absolute top-3 sm:top-4 left-3 sm:left-4 bg-[#fdf6f0]/95 dark:bg-[#2d2925]/95 border border-[#b8935a]/30 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-[0_2px_8px_rgba(184,147,90,0.12)] transition-colors duration-300 flex items-center justify-center">
             <span className="font-sans text-[8px] sm:text-[9px] tracking-[2px] uppercase text-[#b8935a] dark:text-[#cba677] font-bold leading-none mt-[1px]">
               {article.category}
             </span>
           </div>
 
           {/* Floating Action Circle (Hover triggered) */}
-          <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#fdf6f0]/95 dark:bg-[#25211e]/95 border border-[#b8935a]/30 flex items-center justify-center shadow-md transition-all duration-300 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#fdf6f0]/95 dark:bg-[#2d2925]/95 border border-[#b8935a]/30 flex items-center justify-center shadow-md transition-all duration-300 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
             <ArrowUpRight size={14} className="text-[#b85c37] dark:text-[#c8653b] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
         </div>

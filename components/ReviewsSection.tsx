@@ -172,9 +172,9 @@ export function ReviewsSection() {
               style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}
             >
               {reviews.map((review) => (
-                <div 
+                <article 
                   key={review.id} 
-                  className="flex flex-col w-[85vw] shrink-0 sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] snap-center sm:snap-start bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-black/5 dark:bg-[#221f1c] dark:border-white/5 transition-transform duration-300 hover:-translate-y-1 hover:shadow-md"
+                  className="flex flex-col w-[85vw] shrink-0 sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] snap-center sm:snap-start bg-white p-6 md:p-8 rounded-[24px] shadow-sm border border-black/5 dark:bg-[#2a2723] dark:border-white/5 transition-transform duration-300 hover:-translate-y-1 hover:shadow-md"
                 >
                   <div className="flex gap-1 mb-5">
                     {[...Array(5)].map((_, i) => (
@@ -205,7 +205,7 @@ export function ReviewsSection() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
             

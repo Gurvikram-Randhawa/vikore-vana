@@ -80,7 +80,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <span>{article.category}</span>
           </nav>
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
-            <div className="flex justify-center overflow-hidden rounded-lg bg-bone">
+            <div className="flex justify-center overflow-hidden rounded-[24px] bg-bone">
               <Image
                 src={article.cover}
                 alt={article.title}

@@ -140,7 +140,7 @@ export function StyleQuiz({ allProducts }: { allProducts: Product[] }) {
           <button
             key={opt}
             onClick={() => handleSelect(opt)}
-            className="group relative overflow-hidden bg-white/50 dark:bg-[#25211e]/50 backdrop-blur-sm border border-[#b8935a]/20 dark:border-[#b8935a]/15 p-4 sm:p-5 rounded-2xl flex items-center justify-between text-left hover:border-[#b8935a] dark:hover:border-[#b8935a] hover:shadow-[0_8px_30px_rgba(184,147,90,0.15)] transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 fill-mode-both"
+            className="group relative overflow-hidden bg-white/50 dark:bg-[#2d2925]/50 backdrop-blur-sm border border-[#b8935a]/20 dark:border-[#b8935a]/15 p-4 sm:p-5 rounded-[24px] flex items-center justify-between text-left hover:border-[#b8935a] dark:hover:border-[#b8935a] hover:shadow-[0_8px_30px_rgba(184,147,90,0.15)] transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 fill-mode-both"
             style={{ animationDelay: `${i * 100}ms` }}
           >
             <div className="absolute inset-0 bg-[#b8935a]/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
