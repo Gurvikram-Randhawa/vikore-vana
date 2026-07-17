@@ -83,7 +83,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <div className="flex justify-center overflow-hidden rounded-lg bg-bone">
               <Image
                 src={article.cover}
-                alt=""
+                alt={article.title}
                 width={0}
                 height={0}
                 sizes="100vw"
@@ -102,16 +102,18 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         </section>
 
-        <section className="container-premium grid gap-12 lg:gap-16 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px]">
-          <div className="w-full max-w-5xl pr-0 lg:pr-8">
+        <section className="container-premium grid gap-12 sm:gap-4 lg:gap-8 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px]">
+          <div className="w-full max-w-5xl pr-0 lg:pr-4">
             <div className="prose-vana prose-lg xl:prose-xl">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.body}</ReactMarkdown>
             </div>
             <ArticleLikeButton slug={article.slug} />
           </div>
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <h2 className="mb-4 md:mb-5 font-serif text-2xl md:text-3xl text-ink dark:text-linen">Recommended Products</h2>
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 lg:gap-5">
+            <h2 className="mb-2 md:mb-3 font-serif text-2xl md:text-3xl text-ink dark:text-linen text-center">Recommended Products</h2>
+            <p className="mb-1 text-[10px] sm:text-[11px] text-[#9c8b7a] dark:text-bone/50 leading-relaxed text-center">This article may contain affiliate links. We earn a small commission at no extra cost to you.</p>
+            <p className="mb-6 md:mb-8 text-center"><a href="/disclosure" className="text-[10px] sm:text-[11px] text-[#9c8b7a] dark:text-bone/50 underline underline-offset-2 hover:text-[#b89569] transition-colors">Learn more</a></p>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-2 lg:gap-5">
               {products.slice(0, 10).map((product, index) => (
                 <div key={product.slug} className={index >= 4 ? "hidden lg:block" : ""}>
                   <ProductCard product={product} />

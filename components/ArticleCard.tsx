@@ -25,7 +25,7 @@ export function ArticleCard({ article, large = false }: { article: Article; larg
         <div className={`relative overflow-hidden w-full ${large ? "aspect-[4/3] sm:aspect-[16/10]" : "aspect-[4/3] sm:aspect-[16/11]"} bg-bone/35 dark:bg-black/10 border-b border-[#b8935a]/10 dark:border-[#b8935a]/10`}>
           <ParallaxImage
             src={article.cover}
-            alt=""
+            alt={article.title}
             sizes={large ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 1024px) 33vw, 100vw"}
             className="transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
             speed={0.12}

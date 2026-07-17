@@ -47,8 +47,8 @@ export default function HomePage() {
       readingTime: Math.max(1, Math.ceil((a.body?.split(/\s+/).length || 0) / 200)),
     }));
 
-  // Most Pinned: a different shuffled set of articles for the Pinterest grid
-  const mostPinned = [...articles]
+  // Editor's Picks: a curated selection of articles for the Pinterest-style grid
+  const editorPicks = [...articles]
     .filter((a) => !readerFavorites.some((f) => f.slug === a.slug))
     .sort(() => 0.5 - Math.random())
     .slice(0, 6)
@@ -60,6 +60,12 @@ export default function HomePage() {
       cover: a.cover,
       readingTime: Math.max(1, Math.ceil((a.body?.split(/\s+/).length || 0) / 200)),
     }));
+
+  const homeProducts = [...products].sort(() => 0.5 - Math.random()).slice(0, 12);
+  const badgeIndices = new Set<number>();
+  while (badgeIndices.size < 4 && badgeIndices.size < homeProducts.length) {
+    badgeIndices.add(Math.floor(Math.random() * homeProducts.length));
+  }
 
 
   return (
@@ -83,8 +89,11 @@ export default function HomePage() {
               <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-ink dark:text-linen leading-[1.1] mb-4">
                 Trending <span className="italic text-[#b89569] dark:text-[#cba677]">Products</span>
               </h2>
-              <p className="text-[#9c8b7a] dark:text-bone/80 text-sm max-w-sm mx-auto">
+              <p className="text-[#9c8b7a] dark:text-bone/80 text-sm max-w-sm mx-auto mb-2">
                 Handpicked pieces that balance beauty and purpose.
+              </p>
+              <p className="text-[10px] sm:text-[11px] text-[#9c8b7a]/70 dark:text-bone/50 max-w-sm mx-auto">
+                These curated finds may contain affiliate links. We earn a small commission at no extra cost to you. <a href="/disclosure" className="underline underline-offset-2 hover:text-[#b89569] transition-colors">Learn more</a>
               </p>
             </div>
           </ScrollReveal>
@@ -92,8 +101,8 @@ export default function HomePage() {
 
         {/* Product Grid */}
         <div className="w-full max-w-[1536px] mx-auto px-3 sm:px-4 lg:px-8 mt-6 sm:mt-8">
-            <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-              {[...products].sort(() => 0.5 - Math.random()).slice(0, 12).map((product, index) => (
+            <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+              {homeProducts.map((product, index) => (
                 <ScrollReveal 
                   key={product.slug} 
                   delay={index * 80} 
@@ -104,7 +113,7 @@ export default function HomePage() {
                   direction="up"
                   className={index >= 10 ? 'hidden xl:block' : ''}
                 >
-                  <ProductCard product={product} />
+                  <ProductCard product={product} showBadge={badgeIndices.has(index)} />
                 </ScrollReveal>
               ))}
             </div>
@@ -170,9 +179,9 @@ export default function HomePage() {
 
 
 
-      {/* Reader Favorites & Most Pinned */}
+      {/* Reader Favorites & Editor's Picks */}
       <SectionDivider />
-      <ReaderFavorites articles={readerFavorites} pins={mostPinned} />
+      <ReaderFavorites articles={readerFavorites} pins={editorPicks} />
 
 
       {/* FAQ */}

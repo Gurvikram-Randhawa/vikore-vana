@@ -11,7 +11,7 @@ export function Footer() {
             Vikore Vana
           </Link>
           <p className="mt-3 md:mt-4 max-w-sm text-xs md:text-sm leading-relaxed md:leading-7 text-smoke dark:text-bone">
-            Curated interiors, small-space ideas, and affiliate furniture edits for a calmer, more beautiful home.
+            Curated interiors, small-space ideas, and furniture edits for a calmer, more beautiful home.
           </p>
         </div>
         <div>
@@ -46,6 +46,21 @@ export function Footer() {
           </div>
         </div>
       </div>
+      {/* Bottom bar — legal links */}
+      <div className="container-premium mt-8 md:mt-10 pt-6 border-t border-black/5 dark:border-white/10 flex flex-wrap items-center justify-between gap-4">
+        <p className="text-[11px] text-smoke dark:text-bone/50">
+          &copy; {new Date().getFullYear()} Vikore Vana. All rights reserved.
+        </p>
+        <div className="flex flex-wrap gap-4 sm:gap-6">
+          <Link href="/disclosure" className="text-[11px] text-smoke dark:text-bone/50 hover:text-ink dark:hover:text-white transition-colors underline-offset-2 hover:underline">
+            Affiliate Disclosure
+          </Link>
+          <Link href="/privacy" className="text-[11px] text-smoke dark:text-bone/50 hover:text-ink dark:hover:text-white transition-colors underline-offset-2 hover:underline">
+            Privacy Policy
+          </Link>
+        </div>
+      </div>
     </footer>
   );
 }
+

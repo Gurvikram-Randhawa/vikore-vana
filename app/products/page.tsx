@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Curated Home Decor Products",
-  description: "Shop curated affiliate furniture, home decor, and small-space product recommendations from Vikore Vana."
+  description: "Shop curated furniture, home decor, and small-space product recommendations from Vikore Vana."
 };
 
 export default function ProductsPage() {
@@ -24,7 +24,11 @@ export default function ProductsPage() {
           The edit: beautiful pieces with <span className="italic text-[#b89569] dark:text-[#cba677]">purpose.</span>
         </h1>
         <p className="mt-4 sm:mt-5 max-w-2xl text-sm md:text-base leading-relaxed md:leading-7 text-smoke dark:text-bone/80 font-light">
-          Every product card is powered by markdown content and ready for affiliate links, category filtering, and search.
+          Handpicked home decor and furniture finds that balance beauty and purpose.
+        </p>
+        <p className="mt-3 max-w-2xl text-[10px] sm:text-[11px] leading-relaxed text-[#9c8b7a] dark:text-bone/50">
+          This page contains affiliate links. We earn a small commission at no extra cost to you.{" "}
+          <a href="/disclosure" className="underline underline-offset-2 hover:text-[#b89569] transition-colors">Learn more</a>
         </p>
       </div>
       <FilteredProducts products={getProducts()} />

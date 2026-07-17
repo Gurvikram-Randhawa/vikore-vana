@@ -99,6 +99,7 @@ export function FurnishEasyHero() {
                 <div className="mt-1 text-[9px] sm:text-xs font-semibold uppercase tracking-wider text-smoke dark:text-bone/60 max-w-[80px] sm:max-w-[100px] mx-auto leading-relaxed">Engaged Community</div>
               </div>
             </div>
+            <p className="mt-6 mb-2 text-[8px] sm:text-[9px] text-[#9c8b7a]/50 dark:text-bone/30 tracking-wide">Stats from our <a href="https://www.pinterest.com/vikore_vana/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-[#b89569] transition-colors">Pinterest</a> community</p>
           </div>
         </div>
       </div>

@@ -114,7 +114,7 @@ function FavoriteCard({
           <div className="relative w-full sm:w-28 md:w-32 lg:w-44 aspect-[16/10] sm:aspect-square shrink-0 rounded-xl overflow-hidden bg-bone/30 dark:bg-black/10">
             <Image
               src={article.cover}
-              alt=""
+              alt={article.title}
               fill
               sizes="(min-width: 640px) 128px, 100vw"
               className="object-cover transition-transform duration-700 group-hover:scale-[1.08]"
@@ -175,11 +175,11 @@ export function ReaderFavorites({ articles, pins }: ReaderFavoritesProps) {
             <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-ink dark:text-linen leading-[1.1] mb-3 text-center">
-            Most Saved &<br className="sm:hidden" /> <span className="text-[#b89569] italic dark:text-[#cba677]">Most Read</span>
+            Most Saved &<br className="sm:hidden" /> <span className="text-[#b89569] italic dark:text-[#cba677]">Most Loved</span>
           </h2>
           <ScrollReveal delay={200}>
             <p className="text-smoke dark:text-bone/70 text-sm sm:text-base max-w-md mx-auto font-light leading-relaxed">
-              Real inspiration from our most bookmarked articles and top-saved Pinterest pins.
+              Real inspiration from our most bookmarked articles and handpicked editorial selections.
             </p>
           </ScrollReveal>
         </div>
@@ -209,7 +209,7 @@ export function ReaderFavorites({ articles, pins }: ReaderFavoritesProps) {
             </div>
           </div>
 
-          {/* ─── Most Pinned (right) ─── */}
+          {/* ─── Editor's Picks (right) ─── */}
           <div>
             <ScrollReveal>
               <div className="flex items-center gap-2.5 mb-5 sm:mb-6">
@@ -217,7 +217,7 @@ export function ReaderFavorites({ articles, pins }: ReaderFavoritesProps) {
                   <Pin size={14} className="text-[#E60023]" />
                 </div>
                 <h3 className="font-serif text-lg sm:text-xl text-ink dark:text-linen">
-                  Most Pinned
+                  Editor&apos;s Picks
                 </h3>
                 {/* Pinterest branding badge — liquid glass style */}
                 <a
@@ -249,6 +249,7 @@ export function ReaderFavorites({ articles, pins }: ReaderFavoritesProps) {
                 </a>
               </div>
             </ScrollReveal>
+
 
             {/* Masonry-style Pinterest grid */}
             <div className="columns-2 sm:columns-3 lg:columns-2 gap-3 sm:gap-3.5 space-y-3 sm:space-y-3.5">

@@ -17,7 +17,7 @@ function safeDate(value: unknown): Date {
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const routes = ["", "/categories", "/products", "/search"].map((route) => ({
+  const routes = ["", "/categories", "/products", "/search", "/disclosure", "/privacy"].map((route) => ({
     url: `${site.url}${route}`,
     lastModified: now
   }));

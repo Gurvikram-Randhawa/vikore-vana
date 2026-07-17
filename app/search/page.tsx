@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Search",
-  description: "Search Vikore Vana articles and curated affiliate product recommendations."
+  description: "Search Vikore Vana articles and curated product recommendations."
 };
 
 export default function SearchPage() {

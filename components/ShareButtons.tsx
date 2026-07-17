@@ -1,14 +1,24 @@
 "use client";
 
 import { Check, Copy, Pin } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function ShareButtons({ title, url, image }: { title: string; url: string; image: string }) {
   const [copied, setCopied] = useState(false);
-  const pinterest = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&media=${encodeURIComponent(image)}&description=${encodeURIComponent(title)}`;
+  
+  // Use the actual window location to bypass any hardcoded domain blocks (like Pinterest blocking the main domain)
+  // Fall back to the provided url if window is not defined (during SSR)
+  const [currentUrl, setCurrentUrl] = useState(url);
+  
+  // Update to the real browser URL on mount
+  useEffect(() => {
+    setCurrentUrl(window.location.href);
+  }, []);
+
+  const pinterest = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(currentUrl)}&media=${encodeURIComponent(image)}&description=${encodeURIComponent(title)}`;
 
   async function copyLink() {
-    await navigator.clipboard.writeText(url);
+    await navigator.clipboard.writeText(currentUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 1600);
   }
