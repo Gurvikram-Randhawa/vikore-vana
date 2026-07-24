@@ -14,15 +14,7 @@ export function EditorsNote() {
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
         <ScrollReveal distance={30} duration={1200}>
           <div className="relative rounded-3xl p-8 sm:p-12 md:px-20 md:py-10 text-center bg-white/60 dark:bg-[#1e1a17]/70 backdrop-blur-xl border border-[#b8935a]/20 dark:border-white/8 shadow-[0_16px_48px_rgba(184,147,90,0.12),0_4px_16px_rgba(184,147,90,0.06)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.4)]">
-            {/* Corner ornament */}
-            <div className="absolute top-5 right-5 w-16 h-16 opacity-[0.04] dark:opacity-[0.06] pointer-events-none">
-              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="32" cy="32" r="31" stroke="#b8935a" strokeWidth="1" />
-                <circle cx="32" cy="32" r="20" stroke="#b8935a" strokeWidth="1" />
-                <line x1="32" y1="1" x2="32" y2="63" stroke="#b8935a" strokeWidth="0.5" />
-                <line x1="1" y1="32" x2="63" y2="32" stroke="#b8935a" strokeWidth="0.5" />
-              </svg>
-            </div>
+
 
             {/* Ornamental top flourish */}
             <div className="flex items-center justify-center gap-4 mb-6 sm:mb-8">

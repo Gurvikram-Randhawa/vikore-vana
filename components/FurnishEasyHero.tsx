@@ -13,7 +13,7 @@ export function FurnishEasyHero() {
           <div className="flex flex-col items-center text-center hero-stagger w-full">
             {/* Brand label */}
             <div
-              className="-mt-2 mb-12 md:-mt-4 md:mb-20 flex items-center justify-center gap-4 w-full"
+              className="-mt-2 mb-8 md:-mt-4 md:mb-12 flex items-center justify-center gap-4 w-full"
               style={{ animation: "heroTextReveal 0.6s ease 2.2s both" }}
             >
               <div className="h-px flex-1 max-w-[64px] bg-gradient-to-r from-transparent to-[#b89569]/40 dark:to-[#cba677]/30" />

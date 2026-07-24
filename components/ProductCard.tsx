@@ -13,7 +13,7 @@ export function ProductCard({ product, solidBackground, showBadge }: { product: 
       {/* Image Area — thicker border padding and slightly smaller image */}
       <div className="p-1.5 sm:p-2 md:p-2.5 shrink-0">
         <div className="relative aspect-square bg-white rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden flex items-center justify-center">
-          <Image src={product.image} alt={product.name} fill sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 50vw" className="object-contain p-3 md:p-4 transition-transform duration-700 ease-out group-hover:scale-[1.06]" />
+          <Image src={product.image} alt={product.name} fill sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 50vw" className="object-contain p-3 md:p-4 rounded-3xl transition-transform duration-700 ease-out group-hover:scale-[1.06]" />
 
           {/* Editor's Pick badge */}
           {displayBadge && (

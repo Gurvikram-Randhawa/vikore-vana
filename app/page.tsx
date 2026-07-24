@@ -228,16 +228,8 @@ export default function HomePage() {
               </div>
 
               {/* Right — Glassmorphism subscription card */}
-              <div className="relative rounded-3xl p-8 sm:p-10 bg-white/60 dark:bg-[#1e1a17]/70 backdrop-blur-xl border border-[#b8935a]/20 dark:border-white/8 shadow-[0_16px_48px_rgba(184,147,90,0.12),0_4px_16px_rgba(184,147,90,0.06)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.4)]">
-                {/* Corner ornament */}
-                <div className="absolute top-5 right-5 w-16 h-16 opacity-[0.06] dark:opacity-[0.08]">
-                  <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="32" cy="32" r="31" stroke="#b8935a" strokeWidth="1" />
-                    <circle cx="32" cy="32" r="20" stroke="#b8935a" strokeWidth="1" />
-                    <line x1="32" y1="1" x2="32" y2="63" stroke="#b8935a" strokeWidth="0.5" />
-                    <line x1="1" y1="32" x2="63" y2="32" stroke="#b8935a" strokeWidth="0.5" />
-                  </svg>
-                </div>
+              <div className="relative rounded-3xl p-8 sm:p-10 bg-white/60 dark:bg-[#1e1a17]/70 backdrop-blur-xl border border-[#b8935a]/20 dark:border-white/8 shadow-[0_16px_48px_rgba(184,147,90,0.12),0_4px_16px_rgba(184,147,90,0.06)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.4)] text-center">
+
 
                 <p className="font-serif text-2xl sm:text-3xl text-ink dark:text-linen mb-2 leading-snug">Join the circle.</p>
                 <p className="text-[#9c8b7a] dark:text-bone/60 text-sm mb-8 leading-relaxed">One beautifully curated email, every Sunday.</p>

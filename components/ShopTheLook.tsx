@@ -67,7 +67,7 @@ export function ShopTheLook({ look }: { look: Look }) {
             {look.hotspots.map((spot, index) => (
               <div 
                 key={index}
-                className="absolute z-20 group/spot"
+                className={`absolute group/spot ${activeSpot === index.toString() ? 'z-50' : 'z-20'}`}
                 style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
                 onMouseEnter={() => setActiveSpot(index.toString())}
                 onMouseLeave={() => setActiveSpot(null)}

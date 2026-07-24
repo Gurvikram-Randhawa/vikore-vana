@@ -30,7 +30,7 @@ export function NewsletterForm() {
 
   if (status === "success") {
     return (
-      <div className="flex flex-col items-start gap-1 py-4">
+      <div className="flex flex-col items-center gap-1 py-4">
         <p className="font-serif text-xl text-ink dark:text-linen">Welcome to the circle ✦</p>
         <p className="text-sm text-[#9c8b7a] dark:text-bone/60">Check your inbox this Sunday.</p>
       </div>
