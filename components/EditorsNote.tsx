@@ -11,9 +11,9 @@ export function EditorsNote() {
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#b8935a]/25 to-transparent" />
       <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#b8935a]/25 to-transparent" />
 
-      <div className="relative max-w-3xl mx-auto px-4 sm:px-6">
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
         <ScrollReveal distance={30} duration={1200}>
-          <div className="relative rounded-3xl p-8 sm:p-12 md:p-16 text-center bg-white/60 dark:bg-[#1e1a17]/70 backdrop-blur-xl border border-[#b8935a]/20 dark:border-white/8 shadow-[0_16px_48px_rgba(184,147,90,0.12),0_4px_16px_rgba(184,147,90,0.06)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.4)]">
+          <div className="relative rounded-3xl p-8 sm:p-12 md:px-20 md:py-10 text-center bg-white/60 dark:bg-[#1e1a17]/70 backdrop-blur-xl border border-[#b8935a]/20 dark:border-white/8 shadow-[0_16px_48px_rgba(184,147,90,0.12),0_4px_16px_rgba(184,147,90,0.06)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.4)]">
             {/* Corner ornament */}
             <div className="absolute top-5 right-5 w-16 h-16 opacity-[0.04] dark:opacity-[0.06] pointer-events-none">
               <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,30 +52,12 @@ export function EditorsNote() {
               &ldquo;
             </span>
             Vikore Vana was born from a quiet frustration with spaces that scream instead of whisper. 
-            Every piece is chosen because it endures, not because it trends. We refuse to feature fast furniture or anything 
+            Every piece is chosen because it endures, not because it trends. I refuse to feature fast furniture or anything 
             designed to fill a feed rather than a room. Quiet luxury is about restraint and the courage to leave empty space.
             <span className="font-[family-name:var(--font-cormorant)] not-italic text-[2.5rem] sm:text-[3rem] leading-[0] text-[#b8935a]/60 dark:text-[#cba677]/50 align-middle ml-0.5">
               &rdquo;
             </span>
           </blockquote>
-
-          {/* Signature area */}
-          <div className="mt-8 sm:mt-10 flex flex-col items-center">
-            {/* Elegant thin rule */}
-            <div className="w-10 h-px bg-[#b8935a]/30 dark:bg-[#cba677]/25 mb-5 sm:mb-6" />
-
-            {/* Calligraphic signature */}
-            <p
-              className="font-[family-name:var(--font-calligraphy)] text-3xl sm:text-4xl text-cedar mb-2 select-none"
-            >
-              G Randhawa
-            </p>
-
-            {/* Title */}
-            <p className="text-[0.6rem] sm:text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-[#9c8b7a] dark:text-bone/50">
-              Founder &amp; Curator
-            </p>
-          </div>
 
           {/* Bottom ornamental flourish */}
           <div className="flex items-center justify-center gap-4 mt-8 sm:mt-10">

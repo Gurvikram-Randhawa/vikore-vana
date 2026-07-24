@@ -30,7 +30,7 @@ export default function DisclosurePage() {
       {/* Content */}
       <div className="max-w-2xl mx-auto prose-vana prose-lg">
         <p className="text-smoke dark:text-bone/80 text-base leading-relaxed mb-6">
-          At <strong className="text-ink dark:text-linen">Vikore Vana</strong>,
+          At <strong className="text-ink dark:text-linen">Vikore Vana</strong> (operated by Gurvikram Randhawa),
           transparency is important to us. This page explains how we fund our
           content and keep this platform running.
         </p>

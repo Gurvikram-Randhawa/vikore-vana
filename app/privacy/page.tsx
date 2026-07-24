@@ -30,7 +30,7 @@ export default function PrivacyPage() {
       {/* Content */}
       <div className="max-w-2xl mx-auto prose-vana prose-lg">
         <p className="text-smoke dark:text-bone/80 text-base leading-relaxed mb-6">
-          At <strong className="text-ink dark:text-linen">Vikore Vana</strong>,
+          At <strong className="text-ink dark:text-linen">Vikore Vana</strong> (operated by Gurvikram Randhawa),
           your privacy is important to us. This policy explains what information
           we collect, how we use it, and your rights regarding that data.
         </p>
@@ -127,15 +127,25 @@ export default function PrivacyPage() {
         </ul>
 
         <h2 className="font-serif text-2xl text-ink dark:text-linen mt-10 mb-4">
-          Your Rights
+          Your Rights (GDPR)
         </h2>
+        <p className="text-smoke dark:text-bone/80 text-base leading-relaxed mb-4">
+          Under the General Data Protection Regulation (GDPR) and other applicable laws, you have the following rights regarding your personal data:
+        </p>
         <ul className="text-smoke dark:text-bone/80 text-base leading-relaxed mb-6 list-disc pl-6 space-y-2">
-          <li>You may unsubscribe from our newsletter at any time</li>
-          <li>You may clear or block cookies via your browser settings</li>
-          <li>
-            You may request deletion of any personal data we hold by contacting
-            us
-          </li>
+          <li><strong className="text-ink dark:text-linen">Right to access:</strong> You can request a copy of the personal data we hold about you.</li>
+          <li><strong className="text-ink dark:text-linen">Right to rectification:</strong> You can request that we correct any inaccurate or incomplete personal data.</li>
+          <li><strong className="text-ink dark:text-linen">Right to erasure:</strong> You can request that we delete your personal data (also known as the "right to be forgotten").</li>
+          <li><strong className="text-ink dark:text-linen">Right to restrict processing:</strong> You can request that we restrict the processing of your personal data under certain conditions.</li>
+          <li><strong className="text-ink dark:text-linen">Right to data portability:</strong> You can request that we transfer your data to another organization or directly to you.</li>
+          <li><strong className="text-ink dark:text-linen">Right to lodge a complaint:</strong> You have the right to lodge a complaint with a supervisory authority if you believe your data privacy rights have been violated.</li>
+        </ul>
+        <p className="text-smoke dark:text-bone/80 text-base leading-relaxed mb-4">
+          In addition to these rights, you may also:
+        </p>
+        <ul className="text-smoke dark:text-bone/80 text-base leading-relaxed mb-6 list-disc pl-6 space-y-2">
+          <li>Unsubscribe from our newsletter at any time.</li>
+          <li>Clear or block cookies via your browser settings or our cookie consent banner.</li>
         </ul>
 
         <h2 className="font-serif text-2xl text-ink dark:text-linen mt-10 mb-4">

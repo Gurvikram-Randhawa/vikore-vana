@@ -19,7 +19,7 @@ export const site = {
     "Premium home decor, interior design inspiration, furniture finds, small-space ideas, and aesthetic living guides.",
   nav: [
     { href: "/", label: "Home" },
-    { href: "/categories", label: "Categories" },
+    { href: "/categories", label: "Articles" },
     { href: "/products", label: "Products" }
   ],
   categories: contentCategories,

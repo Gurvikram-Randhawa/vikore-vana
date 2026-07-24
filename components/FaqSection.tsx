@@ -8,19 +8,19 @@ import { Plus, Minus } from "lucide-react";
 const faqs = [
   {
     question: "How do you curate the products featured on Vikore Vana?",
-    answer: "Every piece featured on our site undergoes a rigorous selection process. Our editorial team reviews materials, craftsmanship, aesthetic harmony, and sustainability practices to ensure we only recommend items that meet our high standards for quiet luxury."
+    answer: "Every piece featured on the site undergoes a rigorous selection process. I personally review materials, craftsmanship, aesthetic harmony, and sustainability practices to ensure I only recommend items that meet my high standards for quiet luxury."
   },
   {
     question: "Do you offer direct interior design consultations?",
-    answer: "While our platform is primarily a curated editorial and affiliate destination, we occasionally offer styling advice through our newsletter and comprehensive design guides. We are actively exploring dedicated 1-on-1 consultations for the future."
+    answer: "Vikore Vana is currently a curated editorial destination. While I do not offer 1-on-1 interior design consultations at this time, I regularly share comprehensive styling advice and design inspiration through the weekly newsletter and articles."
   },
   {
     question: "How frequently are new room edits and articles published?",
-    answer: "We publish new editorial room edits and curated product lists every week. Our newsletter subscribers get first access to our Sunday features, which highlight our latest design discoveries."
+    answer: "I publish new editorial room edits and curated product lists every week. Newsletter subscribers get first access to the Sunday features, which highlight the latest design discoveries."
   },
   {
     question: "Can I request a styling guide for a specific room or style?",
-    answer: "Absolutely! We love hearing from our community. You can reach out to us through our newsletter or social channels with your styling requests. While we can't guarantee every request will be featured, our editorial team actively draws inspiration from the spaces and styles our readers care about most."
+    answer: "Absolutely! I love hearing from the community. You can reach out through the newsletter or social channels with your styling requests. While I can't guarantee every request will be featured, I actively draw inspiration from the spaces and styles that readers care about most."
   }
 ];
 

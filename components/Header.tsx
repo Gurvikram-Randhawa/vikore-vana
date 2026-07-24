@@ -167,7 +167,7 @@ export function Header() {
       <button
         aria-label="Toggle dark mode"
         onClick={toggle}
-        className={`fixed bottom-10 sm:bottom-16 right-4 sm:right-6 z-[99] flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full
+        className={`dark-mode-toggle fixed bottom-10 sm:bottom-16 right-4 sm:right-6 z-[99] flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full
           bg-[#fffaf4]/90 dark:bg-[#181614]/90 backdrop-blur-md
           border border-[#b89569]/20 dark:border-white/15
           shadow-[0_10px_30px_rgba(184,149,105,0.18),0_4px_12px_rgba(184,149,105,0.08)] dark:shadow-[0_12px_36px_rgba(0,0,0,0.6)]

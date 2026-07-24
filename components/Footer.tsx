@@ -7,9 +7,12 @@ export function Footer() {
     <footer className="mt-10 md:mt-16 border-t border-black/5 bg-linen py-8 md:py-12 dark:border-white/10 dark:bg-[#201d1a]">
       <div className="container-premium grid gap-8 md:gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <Link href="/" className="font-serif text-2xl md:text-3xl text-ink dark:text-linen transition-colors duration-300 hover:text-cedar">
+          <Link href="/" className="font-serif text-2xl md:text-3xl text-ink dark:text-linen transition-colors duration-300 hover:text-cedar block">
             Vikore Vana
           </Link>
+          <p className="font-[family-name:var(--font-calligraphy)] text-xl md:text-2xl text-cedar mt-1 mb-2">
+            by&nbsp;&nbsp;G Randhawa
+          </p>
           <p className="mt-3 md:mt-4 max-w-sm text-xs md:text-sm leading-relaxed md:leading-7 text-smoke dark:text-bone">
             Curated interiors, small-space ideas, and furniture edits for a calmer, more beautiful home.
           </p>

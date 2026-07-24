@@ -26,6 +26,8 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
@@ -292,6 +294,12 @@ main {
 
 .category-tile:hover::before {
   opacity: 1;
+}
+
+/* Hide dark mode toggle while cookie banner is open */
+body.cookie-banner-open .dark-mode-toggle {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* ── Value Card Float ─────────────────────────────────── */

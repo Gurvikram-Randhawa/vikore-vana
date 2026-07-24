@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Inter, Playfair_Display, Great_Vibes, Cormorant_Garamond, Jost, Alex_Brush, Sacramento } from "next/font/google";
 import { Footer } from "@/components/Footer";
@@ -9,6 +9,8 @@ import { EntranceReveal } from "@/components/EntranceReveal";
 import { QuizPopup } from "@/components/QuizPopup";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Preloader } from "@/components/Preloader";
+import { CookieBanner } from "@/components/CookieBanner";
+import { Analytics } from "@/components/Analytics";
 import { site } from "@/lib/site";
 import { getProducts } from "@/lib/content";
 import "./globals.css";
@@ -61,6 +63,14 @@ export const metadata: Metadata = {
     "p:domain_verify": "f62176cdc2626f54e31126000d5c7504"
   }
 };
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false, // Optional: ensures Safari doesn't zoom out or in uncontrollably.
+};
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -82,20 +92,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </ThemeProvider>
         </SmoothScroll>
 
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-          strategy="afterInteractive"
-        />
-
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-    `}
-        </Script>
+        <CookieBanner />
+        <Analytics />
       </body>
     </html>
   );
