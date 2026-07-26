@@ -14,6 +14,7 @@ const ShopTheLook = nextDynamic(() => import("@/components/ShopTheLook").then(mo
 const BeforeAfterGallery = nextDynamic(() => import("@/components/BeforeAfterGallery").then(mod => mod.BeforeAfterGallery));
 const ReaderFavorites = nextDynamic(() => import("@/components/ReaderFavorites").then(mod => mod.ReaderFavorites));
 const ScrollReveal = nextDynamic(() => import("@/components/ScrollReveal").then(mod => mod.ScrollReveal));
+const StylingGuideViewer = nextDynamic(() => import("@/components/StylingGuideViewer").then(mod => mod.StylingGuideViewer));
 import { getArticles, getProducts, getLooks } from "@/lib/content";
 import { site } from "@/lib/site";
 
@@ -177,7 +178,9 @@ export default function HomePage() {
         </div>
       </div>
 
-
+      {/* Styling Guide Viewer */}
+      <SectionDivider />
+      <StylingGuideViewer />
 
       {/* Reader Favorites & Editor's Picks */}
       <SectionDivider />

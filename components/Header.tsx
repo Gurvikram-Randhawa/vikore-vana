@@ -12,7 +12,6 @@ import { AnimatePresence, motion, Variants } from "framer-motion";
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [darkBtnVisible, setDarkBtnVisible] = useState(false);
   const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -42,20 +41,30 @@ export function Header() {
     return pathname.startsWith(href);
   };
 
+  const lastScrollY = useRef(0);
+
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+    let rafId: number;
+
+    const checkScroll = () => {
+      const currentScrollY = window.scrollY || document.documentElement.scrollTop;
+      const diff = currentScrollY - lastScrollY.current;
+      
+      // Only trigger if scrolled more than 5px to avoid jitter
+      if (diff > 5 && currentScrollY > 80) {
         setIsVisible(false);
-      } else {
+        lastScrollY.current = currentScrollY;
+      } else if (diff < -5) {
         setIsVisible(true);
+        lastScrollY.current = currentScrollY;
       }
-      setLastScrollY(currentScrollY);
+
+      rafId = requestAnimationFrame(checkScroll);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+    rafId = requestAnimationFrame(checkScroll);
+    return () => cancelAnimationFrame(rafId);
+  }, []);
 
   // Lock scroll when mobile menu is open
   useEffect(() => {
@@ -102,7 +111,7 @@ export function Header() {
     <>
       {/* Sleek, Minimal Luxury Header Bar */}
       <header
-        className={`sticky top-0 z-50 w-full h-14 md:h-16 bg-[#fffaf4]/90 dark:bg-[#181614]/90 backdrop-blur-md border-b border-[#b89569]/5 dark:border-white/5 shadow-[0_2px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)] transition-transform duration-500 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"
+        className={`fixed top-0 left-0 right-0 z-50 w-full h-14 md:h-16 bg-[#fffaf4]/90 dark:bg-[#181614]/90 backdrop-blur-md border-b border-[#b89569]/5 dark:border-white/5 shadow-[0_2px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)] transition-transform duration-500 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"
           }`}
       >
         <div className="max-w-[1400px] h-full mx-auto px-6 sm:px-10 flex items-center justify-between">

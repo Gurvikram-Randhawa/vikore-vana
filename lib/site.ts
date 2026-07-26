@@ -20,7 +20,8 @@ export const site = {
   nav: [
     { href: "/", label: "Home" },
     { href: "/categories", label: "Articles" },
-    { href: "/products", label: "Products" }
+    { href: "/products", label: "Products" },
+    { href: "/#styling-guide", label: "Free Guide" }
   ],
   categories: contentCategories,
   categoryTiles

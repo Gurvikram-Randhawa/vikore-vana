@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Inter, Playfair_Display, Great_Vibes, Cormorant_Garamond, Jost, Alex_Brush, Sacramento } from "next/font/google";
+import { Inter, Playfair_Display, Great_Vibes, Cormorant_Garamond, Jost, Alex_Brush, Sacramento, Pinyon_Script, Italianno, Oooh_Baby, Allison } from "next/font/google";
+import localFont from "next/font/local";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -28,6 +29,14 @@ const cormorant = Cormorant_Garamond({
 const jost = Jost({ weight: "300", subsets: ["latin"], variable: "--font-jost", display: "swap" });
 const alexBrush = Alex_Brush({ weight: "400", subsets: ["latin"], variable: "--font-alex-brush", display: "swap" });
 const sacramento = Sacramento({ weight: "400", subsets: ["latin"], variable: "--font-sacramento", display: "swap" });
+const pinyonScript = Pinyon_Script({ weight: "400", subsets: ["latin"], variable: "--font-pinyon", display: "swap" });
+const italianno = Italianno({ weight: "400", subsets: ["latin"], variable: "--font-italianno", display: "swap" });
+const ooohBaby = Oooh_Baby({ weight: "400", subsets: ["latin"], variable: "--font-oooh-baby", display: "swap" });
+const tempting = localFont({
+  src: "../public/fonts/Tempting.otf",
+  variable: "--font-tempting",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -80,12 +89,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           content="f62176cdc2626f54e31126000d5c7504"
         />
       </head>
-      <body className={`${inter.variable} ${playfair.variable} ${greatVibes.variable} ${cormorant.variable} ${jost.variable} ${alexBrush.variable} ${sacramento.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${playfair.variable} ${greatVibes.variable} ${cormorant.variable} ${jost.variable} ${alexBrush.variable} ${sacramento.variable} ${pinyonScript.variable} ${italianno.variable} ${ooohBaby.variable} ${tempting.variable} font-sans antialiased`}>
         <Preloader />
         <EntranceReveal />
         <SmoothScroll>
           <ThemeProvider>
             <Header />
+            <div className="h-14 md:h-16" /> {/* Spacer for fixed header */}
             <main>{children}</main>
             <Footer />
             <QuizPopup allProducts={getProducts()} />

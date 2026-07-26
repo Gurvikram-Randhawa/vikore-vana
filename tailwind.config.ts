@@ -15,7 +15,11 @@ const config: Config = {
       },
       fontFamily: {
         serif: ["var(--font-playfair)", "Georgia", "serif"],
-        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"]
+        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
+        calligraphy: ["var(--font-calligraphy)", "cursive"],
+        cormorant: ["var(--font-cormorant)", "serif"],
+        tempting: ["var(--font-tempting)", "cursive"],
+        jost: ["var(--font-jost)", "sans-serif"],
       },
       boxShadow: {
         soft: "0 22px 60px rgba(42, 37, 32, 0.08)"

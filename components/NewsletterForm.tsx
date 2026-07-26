@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export function NewsletterForm() {
+export function NewsletterForm({ isEbook = false }: { isEbook?: boolean }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -20,6 +20,16 @@ export function NewsletterForm() {
       if (res.ok) {
         setStatus("success");
         setEmail("");
+        
+        if (isEbook) {
+          // You might need to change this path depending on where the PDF actually is
+          const a = document.createElement("a");
+          a.href = "/styling-guide.pdf";
+          a.download = "Vikore-Vana-Styling-Guide.pdf";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
       } else {
         setStatus("error");
       }
@@ -31,8 +41,17 @@ export function NewsletterForm() {
   if (status === "success") {
     return (
       <div className="flex flex-col items-center gap-1 py-4">
-        <p className="font-serif text-xl text-ink dark:text-linen">Welcome to the circle ✦</p>
-        <p className="text-sm text-[#9c8b7a] dark:text-bone/60">Check your inbox this Sunday.</p>
+        {isEbook ? (
+          <>
+            <p className="font-serif text-xl text-ink dark:text-linen">Your guide is downloading!</p>
+            <p className="text-sm text-[#9c8b7a] dark:text-bone/60">Check your downloads folder.</p>
+          </>
+        ) : (
+          <>
+            <p className="font-serif text-xl text-ink dark:text-linen">Welcome to the circle ✦</p>
+            <p className="text-sm text-[#9c8b7a] dark:text-bone/60">Check your inbox this Sunday.</p>
+          </>
+        )}
       </div>
     );
   }
@@ -58,11 +77,11 @@ export function NewsletterForm() {
           {status === "loading" ? (
             <span className="flex items-center gap-2">
               <span className="w-3.5 h-3.5 rounded-full border-2 border-current border-t-transparent animate-spin" />
-              Subscribing…
+              {isEbook ? "Downloading…" : "Subscribing…"}
             </span>
           ) : (
             <>
-              Subscribe
+              {isEbook ? "Download Guide" : "Subscribe"}
               <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </>
           )}

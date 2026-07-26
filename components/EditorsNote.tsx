@@ -36,20 +36,16 @@ export function EditorsNote() {
             The Editor&apos;s Note
           </p>
 
-          {/* The letter — Cormorant Garamond italic */}
-          <blockquote
-            className="font-[family-name:var(--font-cormorant)] italic text-ink/80 dark:text-linen/80 text-[1.15rem] sm:text-[1.35rem] md:text-[1.5rem] leading-[1.85] sm:leading-[1.9] font-light"
-          >
-            <span className="font-[family-name:var(--font-cormorant)] not-italic text-[2.5rem] sm:text-[3rem] leading-[0] text-[#b8935a]/60 dark:text-[#cba677]/50 align-middle mr-1">
-              &ldquo;
-            </span>
-            Vikore Vana was born from a quiet frustration with spaces that scream instead of whisper. 
-            Every piece is chosen because it endures, not because it trends. I refuse to feature fast furniture or anything 
-            designed to fill a feed rather than a room. Quiet luxury is about restraint and the courage to leave empty space.
-            <span className="font-[family-name:var(--font-cormorant)] not-italic text-[2.5rem] sm:text-[3rem] leading-[0] text-[#b8935a]/60 dark:text-[#cba677]/50 align-middle ml-0.5">
-              &rdquo;
-            </span>
-          </blockquote>
+          {/* The letter — Small Luxury Styling */}
+          <div className="max-w-3xl mx-auto px-4 sm:px-8 relative">
+            <blockquote
+              className="font-cormorant italic text-ink/80 dark:text-linen/80 text-[1rem] sm:text-[1.1rem] md:text-[1.15rem] leading-[2] sm:leading-[2.2] font-light tracking-[0.03em] text-center"
+            >
+              Vikore Vana was born from a quiet frustration with spaces that scream instead of whisper. 
+              Every piece is chosen because it endures, not because it trends. I refuse to feature fast furniture or anything 
+              designed to fill a feed rather than a room. Quiet luxury is about restraint and the courage to leave empty space.
+            </blockquote>
+          </div>
 
           {/* Bottom ornamental flourish */}
           <div className="flex items-center justify-center gap-4 mt-8 sm:mt-10">

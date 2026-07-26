@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
 
 export function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false);
@@ -45,13 +44,7 @@ export function CookieBanner() {
           <div 
             className="bg-linen dark:bg-[#201d1a] border border-cedar/20 shadow-xl rounded-2xl p-5 md:p-6 max-w-sm w-full text-center pointer-events-auto relative"
           >
-            <button 
-              onClick={handleReject}
-              className="absolute top-3 right-3 text-smoke/50 hover:text-cedar transition-colors"
-              aria-label="Close and reject"
-            >
-              <X size={16} strokeWidth={1.5} />
-            </button>
+
 
             <h3 className="font-serif text-xl text-ink dark:text-linen mb-2">
               Privacy & Cookies

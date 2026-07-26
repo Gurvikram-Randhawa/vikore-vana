@@ -36,8 +36,7 @@ export function FurnishEasyHero() {
                 Home is not a place
               </span>
               <span 
-                className="text-[9.5vw] sm:text-[48px] md:text-[64px] lg:text-[84px] text-[#b89569] dark:text-[#cba677] leading-[0.8] mt-2 lg:mt-4 whitespace-nowrap"
-                style={{ fontFamily: "var(--font-calligraphy)" }}
+                className="text-[9.5vw] sm:text-[48px] md:text-[64px] lg:text-[84px] text-[#b89569] dark:text-[#cba677] leading-[0.8] mt-2 lg:mt-4 whitespace-nowrap font-calligraphy"
               >
                 it&apos;s a feeling you create.
               </span>
@@ -45,8 +44,7 @@ export function FurnishEasyHero() {
 
             {/* Subtext */}
             <p 
-              className="mt-[32px] md:mt-[38px] mb-[16px] lg:mb-[32px] text-[9px] sm:text-[14px] lg:text-[16px] font-bold text-[#9c8b7a] tracking-[1.5px] uppercase text-center mx-auto px-[28px] lg:px-0 dark:text-bone/80"
-              style={{ fontFamily: "var(--font-jost)" }}
+              className="mt-[32px] md:mt-[38px] mb-[16px] lg:mb-[32px] text-[9px] sm:text-[14px] lg:text-[16px] font-bold text-[#9c8b7a] tracking-[1.5px] uppercase text-center mx-auto px-[28px] lg:px-0 dark:text-bone/80 font-jost"
             >
               Curated pieces to help you build it.
             </p>

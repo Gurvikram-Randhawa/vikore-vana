@@ -16,31 +16,16 @@ export function QuizPopup({ allProducts }: { allProducts: Product[] }) {
 
     if (shown) return;
 
-    let canTrigger = false;
-    // Require at least 20 seconds on the page before it can ever trigger
+    // Open the quiz popup after 30 seconds
     const timer = setTimeout(() => {
-      canTrigger = true;
-    }, 20000);
+      setIsOpen(true);
+      setHasShown(true);
+      sessionStorage.setItem("quizPopupShown", "true");
+      document.body.style.overflow = 'hidden';
+    }, 30000);
 
-    const handleScroll = () => {
-      if (!canTrigger) return;
-
-      // Trigger if user scrolls past 2000px or hits the bottom of the page (within 200px)
-      if (window.scrollY > 2000 || window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-        setIsOpen(true);
-        setHasShown(true);
-        sessionStorage.setItem("quizPopupShown", "true");
-        window.removeEventListener("scroll", handleScroll);
-        
-        // Prevent background scrolling when open
-        document.body.style.overflow = 'hidden';
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
     return () => {
       clearTimeout(timer);
-      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 

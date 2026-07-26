@@ -10,6 +10,10 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  
+  .font-calligraphy { font-family: var(--font-calligraphy), cursive !important; }
+  .font-cormorant { font-family: var(--font-cormorant), serif !important; }
+  .font-jost { font-family: var(--font-jost), sans-serif !important; }
 }
 
 :root {
@@ -478,3 +482,17 @@ body.cookie-banner-open .dark-mode-toggle {
 .blob-1 { animation-delay: 0s; }
 .blob-2 { animation-delay: -7s; }
 .blob-3 { animation-delay: -14s; }
+
+/* Guide viewer: on mobile, fit just slightly more than one page */
+.guide-viewer-scroll {
+  aspect-ratio: 1200 / 1620;
+  height: auto !important;
+  max-height: 90vh;
+}
+
+@media (min-width: 768px) {
+  .guide-viewer-scroll {
+    aspect-ratio: unset;
+    height: min(88vh, 900px) !important;
+  }
+}

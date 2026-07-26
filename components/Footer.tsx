@@ -10,7 +10,7 @@ export function Footer() {
           <Link href="/" className="font-serif text-2xl md:text-3xl text-ink dark:text-linen transition-colors duration-300 hover:text-cedar block">
             Vikore Vana
           </Link>
-          <p className="font-[family-name:var(--font-calligraphy)] text-xl md:text-2xl text-cedar mt-1 mb-2">
+          <p className="font-[family-name:var(--font-tempting)] text-lg md:text-xl text-cedar mt-1 mb-2">
             by&nbsp;&nbsp;G Randhawa
           </p>
           <p className="mt-3 md:mt-4 max-w-sm text-xs md:text-sm leading-relaxed md:leading-7 text-smoke dark:text-bone">
@@ -57,6 +57,9 @@ export function Footer() {
         <div className="flex flex-wrap gap-4 sm:gap-6">
           <Link href="/disclosure" className="text-[11px] text-smoke dark:text-bone/50 hover:text-ink dark:hover:text-white transition-colors underline-offset-2 hover:underline">
             Affiliate Disclosure
+          </Link>
+          <Link href="/terms" className="text-[11px] text-smoke dark:text-bone/50 hover:text-ink dark:hover:text-white transition-colors underline-offset-2 hover:underline">
+            Terms of Use
           </Link>
           <Link href="/privacy" className="text-[11px] text-smoke dark:text-bone/50 hover:text-ink dark:hover:text-white transition-colors underline-offset-2 hover:underline">
             Privacy Policy
