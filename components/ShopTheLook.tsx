@@ -23,7 +23,7 @@ export function ShopTheLook({ look }: { look: Look }) {
       <div className="container-premium relative z-10">
         
         {/* Header */}
-        <div className="text-center mb-12 md:mb-16 lg:h-[180px] flex flex-col justify-end">
+        <div className="text-center mb-6 md:mb-8 lg:h-[180px] flex flex-col justify-end">
           <ScrollReveal>
             <div className="inline-flex items-center gap-3 mb-4">
               <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
@@ -36,7 +36,10 @@ export function ShopTheLook({ look }: { look: Look }) {
               Shop the <span className="italic text-[#b89569] dark:text-[#cba677]">Look</span>
             </h2>
             <p className="mt-4 md:mt-6 text-sm md:text-base text-smoke dark:text-bone/80 max-w-xl mx-auto">
-              Hover over the highlighted pieces to discover the curated elements that bring this sanctuary to life.
+              Tap the pins to explore each piece.
+            </p>
+            <p className="mt-2 text-[10px] text-smoke/50 dark:text-bone/40 tracking-wide">
+              Contains affiliate links. <a href="/disclosure" className="underline hover:text-[#b89569] dark:hover:text-[#cba677] transition-colors">Learn more</a>
             </p>
           </ScrollReveal>
         </div>
@@ -46,7 +49,7 @@ export function ShopTheLook({ look }: { look: Look }) {
 
         {/* Interactive Image Container — constrained to match BeforeAfterGallery sizing */}
         <ScrollReveal delay={200} duration={1200} scale={0.95} rotate={15}>
-          <div className="relative w-full max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-md mx-auto rounded-[24px] md:rounded-[2.5rem] shadow-[0_8px_30px_rgba(184,149,105,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_16px_40px_rgba(184,149,105,0.25)] dark:hover:shadow-[0_16px_40px_rgba(203,166,119,0.25)] hover:-translate-y-2 transition-all duration-500 group border border-[#b89569]/15 z-10 hover:z-50">
+          <div className="relative w-full max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-lg mx-auto rounded-[24px] md:rounded-[2.5rem] shadow-[0_8px_30px_rgba(184,149,105,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_16px_40px_rgba(184,149,105,0.25)] dark:hover:shadow-[0_16px_40px_rgba(203,166,119,0.25)] hover:-translate-y-2 transition-all duration-500 group border border-[#b89569]/15 z-10 hover:z-50">
             
             {/* Image Wrapper locked to an elegant tall ratio */}
             <div className="relative w-full aspect-[4/5] rounded-[inherit] overflow-hidden pointer-events-none">

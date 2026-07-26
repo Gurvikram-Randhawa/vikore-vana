@@ -221,7 +221,7 @@ export default function HomePage() {
                 </p>
                 {/* Small trust signals */}
                 <div className="flex flex-wrap gap-x-6 gap-y-2">
-                  {["No spam, ever", "Unsubscribe anytime", "1K+ readers"].map((item) => (
+                  {["No spam, ever", "Unsubscribe anytime"].map((item) => (
                     <span key={item} className="flex items-center gap-1.5 text-[11px] font-medium text-[#9c8b7a] dark:text-bone/50 uppercase tracking-wider">
                       <span className="w-1 h-1 rounded-full bg-[#b8935a]/60 dark:bg-[#cba677]/50 inline-block" />
                       {item}

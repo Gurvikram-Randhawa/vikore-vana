@@ -65,12 +65,12 @@ export function ArticleLikeButton({ slug }: { slug: string }) {
           transition={{ duration: 0.6, ease: "easeInOut" }}
         >
           <Heart 
-            className={`w-5 h-5 sm:w-6 sm:h-6 transition-colors duration-500 ${
+            className={`w-7 h-7 sm:w-8 sm:h-8 transition-all duration-500 text-[#b8935a] dark:text-[#cba677] ${
               isLiked 
-                ? "text-[#b8935a] dark:text-[#cba677] fill-[#b8935a] dark:fill-[#cba677]" 
-                : "text-[#b8935a]/60 dark:text-[#cba677]/60 group-hover:text-[#b8935a] dark:group-hover:text-[#cba677]"
+                ? "fill-[#ef4444] dark:fill-[#f87171]" 
+                : "fill-[#fda4af]/40 dark:fill-[#fca5a5]/30 group-hover:fill-[#f87171]/70"
             }`}
-            strokeWidth={1.5}
+            strokeWidth={1.2}
           />
         </motion.div>
 

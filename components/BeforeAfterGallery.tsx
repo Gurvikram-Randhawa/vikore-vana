@@ -6,11 +6,11 @@ import { ScrollReveal } from './ScrollReveal';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const categories = [
-  { id: 'living', name: 'Living Room', before: '/images/before-after/living-before.jpg', after: '/images/before-after/living-after.jpg' },
   { id: 'bedroom', name: 'Bedroom', before: '/images/before-after/bedroom-before.jpg', after: '/images/before-after/bedroom-after.jpg' },
+  { id: 'bathroom', name: 'Bathroom', before: '/images/before-after/bathroom-before.jpg', after: '/images/before-after/bathroom-after.jpg' },
+  { id: 'living', name: 'Living Room', before: '/images/before-after/living-before.jpg', after: '/images/before-after/living-after.jpg' },
   { id: 'kitchen', name: 'Kitchen', before: '/images/before-after/kitchen-before.jpg', after: '/images/before-after/kitchen-after.jpg' },
   { id: 'dining', name: 'Dining Room', before: '/images/before-after/dining-before.jpg', after: '/images/before-after/dining-after.jpg' },
-  { id: 'bathroom', name: 'Bathroom', before: '/images/before-after/bathroom-before.jpg', after: '/images/before-after/bathroom-after.jpg' },
   { id: 'reading', name: 'Reading Nook', before: '/images/before-after/reading-before.jpg', after: '/images/before-after/reading-after.jpg' },
   { id: 'study', name: 'Store Room', before: '/images/before-after/study-before.jpg', after: '/images/before-after/study-after.jpg' },
 ];
@@ -52,12 +52,16 @@ export function BeforeAfterGallery() {
       <div className="container-premium relative z-10">
         
         <ScrollReveal>
-          <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16 lg:h-[180px] flex flex-col justify-end">
-            <span className="text-[#b89569] font-medium tracking-widest uppercase text-sm mb-4 block">
-              The Transformation
-            </span>
+          <div className="text-center max-w-3xl mx-auto mb-6 md:mb-8 lg:h-[180px] flex flex-col justify-end">
+            <div className="inline-flex items-center justify-center gap-3 mb-4">
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
+              <p className="text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-[#b89569] dark:text-[#cba677]">
+                The Transformation
+              </p>
+              <div className="h-px w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#b89569]/50 dark:to-[#cba677]/50" />
+            </div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-ink dark:text-white mb-6">
-              Before & After
+              Before & <span className="italic text-[#b89569] dark:text-[#cba677]">After</span>
             </h2>
             <p className="text-sm sm:text-base text-ink/70 dark:text-white/70 max-w-lg mx-auto">
               Drag the slider to see how Vikore Vana transforms.
@@ -114,7 +118,7 @@ export function BeforeAfterGallery() {
 
         {/* The Slider Images */}
         <ScrollReveal delay={300}>
-          <div className="relative w-full max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-md mx-auto">
+          <div className="relative w-full max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-lg mx-auto">
             <div className="w-full">
               <BeforeAfterImage 
                 beforeImage={activeCat.before} 

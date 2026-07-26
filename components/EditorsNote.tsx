@@ -39,11 +39,9 @@ export function EditorsNote() {
           {/* The letter — Small Luxury Styling */}
           <div className="max-w-3xl mx-auto px-4 sm:px-8 relative">
             <blockquote
-              className="font-cormorant italic text-ink/80 dark:text-linen/80 text-[1rem] sm:text-[1.1rem] md:text-[1.15rem] leading-[2] sm:leading-[2.2] font-light tracking-[0.03em] text-center"
+              className="font-cormorant italic text-smoke/80 dark:text-bone/70 text-base sm:text-lg md:text-xl leading-[1.8] text-center font-light tracking-[0.03em]"
             >
-              Vikore Vana was born from a quiet frustration with spaces that scream instead of whisper. 
-              Every piece is chosen because it endures, not because it trends. I refuse to feature fast furniture or anything 
-              designed to fill a feed rather than a room. Quiet luxury is about restraint and the courage to leave empty space.
+              &ldquo;Vikore Vana exists for spaces that whisper, not scream. We curate pieces that endure, not trends—because true luxury is restraint, intention, and empty space.&rdquo;
             </blockquote>
           </div>
 

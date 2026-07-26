@@ -10,7 +10,7 @@ export function Footer() {
           <Link href="/" className="font-serif text-2xl md:text-3xl text-ink dark:text-linen transition-colors duration-300 hover:text-cedar block">
             Vikore Vana
           </Link>
-          <p className="font-[family-name:var(--font-tempting)] text-lg md:text-xl text-cedar mt-1 mb-2">
+          <p className="font-[family-name:var(--font-tempting)] text-sm md:text-base text-cedar mt-3 md:mt-3.5 mb-2">
             by&nbsp;&nbsp;G Randhawa
           </p>
           <p className="mt-3 md:mt-4 max-w-sm text-xs md:text-sm leading-relaxed md:leading-7 text-smoke dark:text-bone">

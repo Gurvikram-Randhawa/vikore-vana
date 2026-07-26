@@ -26,7 +26,7 @@ export function StylingGuideViewer() {
     const handleScroll = () => {
       const scrollTop = container.scrollTop;
       const pageHeight = container.scrollHeight / TOTAL_PAGES;
-      const page = Math.min(TOTAL_PAGES, Math.floor(scrollTop / pageHeight) + 1);
+      const page = Math.min(TOTAL_PAGES, Math.max(1, Math.round(scrollTop / pageHeight) + 1));
       setCurrentPage(page);
     };
 
@@ -74,11 +74,20 @@ export function StylingGuideViewer() {
 
   const scrollToDirection = (dir: "up" | "down") => {
     if (!scrollRef.current) return;
-    const amount = scrollRef.current.clientHeight * 0.85;
-    scrollRef.current.scrollBy({
-      top: dir === "down" ? amount : -amount,
-      behavior: "smooth",
-    });
+    const container = scrollRef.current;
+    const children = container.children;
+
+    const targetPage = dir === "down" 
+      ? Math.min(TOTAL_PAGES, currentPage + 1) 
+      : Math.max(1, currentPage - 1);
+
+    const targetChild = children[targetPage - 1] as HTMLElement;
+    if (targetChild) {
+      container.scrollTo({
+        top: targetChild.offsetTop,
+        behavior: "smooth",
+      });
+    }
   };
 
   return (
@@ -120,9 +129,8 @@ export function StylingGuideViewer() {
             {/* Scrollable container */}
             <div
               ref={scrollRef}
-              className="relative w-full max-w-3xl rounded-3xl overflow-y-auto overflow-x-hidden border border-cedar/15 dark:border-white/10 shadow-[0_16px_48px_rgba(184,147,90,0.1),0_4px_16px_rgba(184,147,90,0.06)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.4)] bg-white dark:bg-[#201d1a] select-none guide-viewer-scroll"
+              className="relative w-full max-w-[560px] aspect-[1200/1553] max-h-[82vh] rounded-3xl overflow-y-auto overflow-x-hidden snap-y snap-mandatory border border-cedar/15 dark:border-white/10 shadow-[0_16px_48px_rgba(184,147,90,0.1),0_4px_16px_rgba(184,147,90,0.06)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.4)] bg-white dark:bg-[#201d1a] select-none guide-viewer-scroll"
               style={{
-                height: "min(88vh, 900px)",
                 cursor: "grab",
                 userSelect: "none",
                 WebkitUserSelect: "none",
@@ -138,7 +146,7 @@ export function StylingGuideViewer() {
                 (pageNum) => (
                   <div
                     key={pageNum}
-                    className="relative w-full leading-[0]"
+                    className="relative w-full aspect-[1200/1553] shrink-0 leading-[0] snap-start snap-always"
                     style={{ pointerEvents: "none", margin: 0, padding: 0 }}
                   >
                     <Image
@@ -165,14 +173,22 @@ export function StylingGuideViewer() {
             {/* Scroll navigation buttons */}
             <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-2">
               <button
-                onClick={() => scrollToDirection("up")}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToDirection("up");
+                }}
                 className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/80 dark:bg-black/60 backdrop-blur-sm border border-black/10 dark:border-white/10 shadow-lg flex items-center justify-center text-ink dark:text-linen hover:bg-white dark:hover:bg-black/80 transition-all hover:scale-110 active:scale-95"
                 aria-label="Scroll up"
               >
                 <ChevronUp size={18} />
               </button>
               <button
-                onClick={() => scrollToDirection("down")}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToDirection("down");
+                }}
                 className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/80 dark:bg-black/60 backdrop-blur-sm border border-black/10 dark:border-white/10 shadow-lg flex items-center justify-center text-ink dark:text-linen hover:bg-white dark:hover:bg-black/80 transition-all hover:scale-110 active:scale-95"
                 aria-label="Scroll down"
               >
