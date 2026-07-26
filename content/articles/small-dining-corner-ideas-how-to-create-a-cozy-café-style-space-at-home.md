@@ -2,9 +2,9 @@
 title: "Small Dining Corner Ideas: How to Create a Cozy Café-Style Space at Home"
 description: Transform an unused corner into a stylish dining nook with smart
   furniture, floating shelves, wall art, and warm lighting. Discover beautiful
-  small dining corner ideas for apartments and compact homes.
+  small dining corner ideas for apartments and compact Homes.
 category: Home Decor
-date: 2026-07-27T01:49:00.000+05:30
+date: 2026-07-27T01:53:00.000+05:30
 cover: /uploads/beautiful-small-dining-corner-design.jpg
 featured: true
 draft: false
