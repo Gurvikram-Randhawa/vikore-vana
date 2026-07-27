@@ -1,6 +1,5 @@
 ---
-title: "Wardrobe Organization Ideas: How to Create a Beautiful, Functional
-  Closet That Stays Tidy"
+title: "Wardrobe Organization Ideas: How to Create a Beautiful Closet "
 description: Learn how to organize your wardrobe with smart storage solutions,
   seasonal clothing organization, shelf styling, and minimalist closet ideas.
   Create a functional and clutter-free wardrobe that stays organized every day.
