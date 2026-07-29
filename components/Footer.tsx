@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Instagram, Mail, Pin } from "lucide-react";
+import { Instagram, Mail, Pin, Facebook } from "lucide-react";
 import { site } from "@/lib/site";
 
 export function Footer() {
@@ -33,6 +33,7 @@ export function Footer() {
             {[
               { Icon: Instagram, href: "https://www.instagram.com/vikore_vana", label: "Instagram" },
               { Icon: Pin, href: "https://www.pinterest.com/vikore_vana/", label: "Pinterest" },
+              { Icon: Facebook, href: "https://www.facebook.com/share/1HABJXfXLj/", label: "Facebook" },
               { Icon: Mail, href: "mailto:vikorevana@gmail.com", label: "Email" },
             ].map(({ Icon, href, label }) => (
               <a

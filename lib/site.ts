@@ -21,6 +21,8 @@ export const site = {
     { href: "/", label: "Home" },
     { href: "/categories", label: "Articles" },
     { href: "/products", label: "Products" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
     { href: "/#styling-guide", label: "Free Guide" }
   ],
   categories: contentCategories,
