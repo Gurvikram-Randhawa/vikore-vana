@@ -16,13 +16,13 @@ export function QuizPopup({ allProducts }: { allProducts: Product[] }) {
 
     if (shown) return;
 
-    // Open the quiz popup after 30 seconds
+    // Open the quiz popup after 1 minute (60,000 ms)
     const timer = setTimeout(() => {
       setIsOpen(true);
       setHasShown(true);
       sessionStorage.setItem("quizPopupShown", "true");
       document.body.style.overflow = 'hidden';
-    }, 30000);
+    }, 60000);
 
     return () => {
       clearTimeout(timer);
