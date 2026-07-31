@@ -12,6 +12,7 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { Preloader } from "@/components/Preloader";
 import { CookieBanner } from "@/components/CookieBanner";
 import { Analytics } from "@/components/Analytics";
+import { InstallPWA } from "@/components/InstallPWA";
 import { site } from "@/lib/site";
 import { getProducts } from "@/lib/content";
 import "./globals.css";
@@ -103,6 +104,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </SmoothScroll>
 
         <CookieBanner />
+        <InstallPWA />
         <Analytics />
       </body>
     </html>

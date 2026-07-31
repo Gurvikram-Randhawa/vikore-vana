@@ -1,48 +1,84 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Script from "next/script";
 
-export function Analytics() {
-  const [hasConsent, setHasConsent] = useState(false);
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+    dataLayer?: any[];
+  }
+}
 
-  useEffect(() => {
-    // Check initial consent status
-    if (localStorage.getItem("cookieConsent") === "accepted") {
-      setHasConsent(true);
+export function updateGoogleConsent(granted: boolean) {
+  if (typeof window !== "undefined") {
+    const status = granted ? "granted" : "denied";
+    window.dataLayer = window.dataLayer || [];
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", {
+        analytics_storage: status,
+        ad_storage: status,
+        ad_user_data: status,
+        ad_personalization: status,
+      });
+    } else {
+      window.dataLayer.push([
+        "consent",
+        "update",
+        {
+          analytics_storage: status,
+          ad_storage: status,
+          ad_user_data: status,
+          ad_personalization: status,
+        },
+      ]);
     }
+  }
+}
 
-    // Listen for consent granted event from CookieBanner
-    const handleConsent = () => {
-      setHasConsent(true);
-    };
+export function Analytics() {
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
-    window.addEventListener("cookieConsentAccepted", handleConsent);
-
-    return () => {
-      window.removeEventListener("cookieConsentAccepted", handleConsent);
-    };
-  }, []);
-
-  if (!hasConsent || !process.env.NEXT_PUBLIC_GA_ID) {
+  if (!gaId) {
     return null;
   }
 
   return (
     <>
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
+      {/* Google Consent Mode v2 Defaults */}
+      <Script id="google-analytics-consent" strategy="afterInteractive">
         {`
           window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+          window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
 
-          gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+          var storedConsent = typeof localStorage !== 'undefined' ? localStorage.getItem('cookieConsent') : null;
+          var consentState = storedConsent === 'accepted' ? 'granted' : 'denied';
+
+          window.gtag('consent', 'default', {
+            'analytics_storage': consentState,
+            'ad_storage': consentState,
+            'ad_user_data': consentState,
+            'ad_personalization': consentState,
+            'wait_for_update': 500
+          });
+        `}
+      </Script>
+
+      {/* Google Analytics Script */}
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+        strategy="afterInteractive"
+      />
+
+      {/* Google Analytics Config */}
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.gtag('js', new Date());
+          window.gtag('config', '${gaId}', {
+            page_path: window.location.pathname,
+          });
         `}
       </Script>
     </>
   );
 }
+

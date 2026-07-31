@@ -154,7 +154,7 @@ export function AestheticCarousel() {
     <div className="w-full h-full flex flex-col justify-center items-center select-none relative pt-0 pb-0 overflow-visible">
       
       <div 
-        className="relative w-full h-[220px] sm:h-[260px] md:h-[340px] lg:h-[480px] flex items-center justify-center overflow-visible cursor-grab active:cursor-grabbing"
+        className="relative w-full h-[220px] sm:h-[260px] md:h-[340px] lg:h-[390px] flex items-center justify-center overflow-visible cursor-grab active:cursor-grabbing"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -189,30 +189,30 @@ export function AestheticCarousel() {
             animZIndex = 40;
             animOpacity = 1;
           } else if (isNext) {
-            animX = isMobile ? "46%" : isTablet ? "48%" : "54%";
-            animY = isMobile ? "2%" : isTablet ? "4%" : "10%";
-            animRotate = isMobile ? -10 : isTablet ? -12 : -15;
+            animX = isMobile ? "46%" : isTablet ? "48%" : "48%";
+            animY = isMobile ? "2%" : isTablet ? "4%" : "5%";
+            animRotate = isMobile ? -10 : isTablet ? -12 : -10;
             animScale = 0.85;
             animZIndex = 30;
             animOpacity = 0.7;
           } else if (isNextNext) {
-            animX = isMobile ? "86%" : isTablet ? "90%" : "102%";
-            animY = isMobile ? "4%" : isTablet ? "8%" : "22%";
-            animRotate = isMobile ? -20 : isTablet ? -22 : -30;
+            animX = isMobile ? "86%" : isTablet ? "90%" : "90%";
+            animY = isMobile ? "4%" : isTablet ? "8%" : "12%";
+            animRotate = isMobile ? -20 : isTablet ? -22 : -20;
             animScale = 0.7;
             animZIndex = 20;
             animOpacity = 0.3;
           } else if (isPrev) {
-            animX = isMobile ? "-46%" : isTablet ? "-48%" : "-54%";
-            animY = isMobile ? "2%" : isTablet ? "4%" : "10%";
-            animRotate = isMobile ? 10 : isTablet ? 12 : 15;
+            animX = isMobile ? "-46%" : isTablet ? "-48%" : "-48%";
+            animY = isMobile ? "2%" : isTablet ? "4%" : "5%";
+            animRotate = isMobile ? 10 : isTablet ? 12 : 10;
             animScale = 0.85;
             animZIndex = 30;
             animOpacity = 0.7;
           } else if (isPrevPrev) {
-            animX = isMobile ? "-86%" : isTablet ? "-90%" : "-102%";
-            animY = isMobile ? "4%" : isTablet ? "8%" : "22%";
-            animRotate = isMobile ? 20 : isTablet ? 22 : 30;
+            animX = isMobile ? "-86%" : isTablet ? "-90%" : "-90%";
+            animY = isMobile ? "4%" : isTablet ? "8%" : "12%";
+            animRotate = isMobile ? 20 : isTablet ? 22 : 20;
             animScale = 0.7;
             animZIndex = 20;
             animOpacity = 0.3;
@@ -226,7 +226,7 @@ export function AestheticCarousel() {
                 if (isPrev || isPrevPrev) handlePrev();
               }}
               className={`absolute rounded-[2.5rem] bg-white dark:bg-[#1a1715] overflow-hidden shadow-2xl aspect-square ${
-                isMobile ? "w-[210px] h-[210px]" : isTablet ? "w-[250px] h-[250px]" : "w-[400px] h-[400px]"
+                isMobile ? "w-[210px] h-[210px]" : isTablet ? "w-[250px] h-[250px]" : "w-[320px] h-[320px]"
               }`}
               style={{
                 cursor: isActive ? "grab" : "pointer",

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { updateGoogleConsent } from "./Analytics";
 
 export function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false);
@@ -18,14 +19,14 @@ export function CookieBanner() {
 
   const handleAccept = () => {
     localStorage.setItem("cookieConsent", "accepted");
+    updateGoogleConsent(true);
     setIsVisible(false);
     document.body.classList.remove("cookie-banner-open");
-    // Dispatch a custom event so the Analytics component knows to load immediately
-    window.dispatchEvent(new Event("cookieConsentAccepted"));
   };
 
   const handleReject = () => {
     localStorage.setItem("cookieConsent", "rejected");
+    updateGoogleConsent(false);
     setIsVisible(false);
     document.body.classList.remove("cookie-banner-open");
   };

@@ -7,6 +7,7 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { ProductCard } from "@/components/ProductCard";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { ShareButtons } from "@/components/ShareButtons";
+import { ArticleShareBar } from "@/components/ArticleShareBar";
 import { ArticleLikeButton } from "@/components/ArticleLikeButton";
 import { getArticle, getArticleProducts, getArticles, getRelatedArticles } from "@/lib/content";
 import { site } from "@/lib/site";
@@ -107,10 +108,22 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <div className="prose-vana prose-lg xl:prose-xl">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.body}</ReactMarkdown>
             </div>
-            <ArticleLikeButton slug={article.slug} />
+            {/* End of Article Engagement Bar */}
+            <div className="mt-8 pt-7 flex flex-col items-center justify-center text-center gap-5 sm:gap-6">
+              <ArticleLikeButton slug={article.slug} />
+              <div className="flex flex-col items-center justify-center text-center mt-1 sm:mt-2">
+                <p className="text-[11px] uppercase tracking-wider font-semibold text-[#b89569] dark:text-[#cba677] mb-4 sm:mb-5">Enjoyed this look? Share it</p>
+                <ArticleShareBar title={article.title} url={url} image={article.cover} />
+              </div>
+            </div>
           </div>
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <h2 className="mb-2 md:mb-3 font-serif text-2xl md:text-3xl text-ink dark:text-linen text-center">Recommended Products</h2>
+            <h2 className="mb-2 font-serif text-2xl md:text-3xl text-ink dark:text-linen text-center">
+              Recommended{" "}
+              <span className="italic text-[#b89569] dark:text-[#cba677]">
+                Products
+              </span>
+            </h2>
             <p className="mb-1 text-[10px] sm:text-[11px] text-[#9c8b7a] dark:text-bone/50 leading-relaxed text-center">This article may contain affiliate links. We earn a small commission at no extra cost to you.</p>
             <p className="mb-6 md:mb-8 text-center"><a href="/disclosure" className="text-[10px] sm:text-[11px] text-[#9c8b7a] dark:text-bone/50 underline underline-offset-2 hover:text-[#b89569] transition-colors">Learn more</a></p>
             <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-2 lg:gap-5">
@@ -125,7 +138,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       </article>
 
       <section className="container-premium py-10 md:py-16">
-        <h2 className="mb-6 md:mb-8 font-serif text-3xl md:text-4xl lg:text-5xl text-ink dark:text-linen">Related Articles</h2>
+        <h2 className="mb-6 md:mb-8 font-serif text-3xl md:text-4xl lg:text-5xl text-ink dark:text-linen">
+          Related{" "}
+          <span className="italic text-[#b89569] dark:text-[#cba677]">
+            Articles
+          </span>
+        </h2>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {related.map((item) => <ArticleCard key={item.slug} article={item} />)}
         </div>

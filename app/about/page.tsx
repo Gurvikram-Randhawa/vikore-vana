@@ -22,7 +22,7 @@ const socialPlatforms = [
     handle: "@vikore_vana",
     href: "https://www.pinterest.com/vikore_vana/",
     icon: Pin,
-    focus: "Daily Pins & Moodboards",
+    focus: "Daily Pins",
   },
   {
     platform: "Instagram",
@@ -258,17 +258,17 @@ export default function AboutPage() {
                 return (
                   <div
                     key={sp.platform}
-                    className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#201d1a] border border-[#b89569]/20 dark:border-white/10 shadow-xs hover:shadow-md hover:border-[#b89569] transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+                    className="p-4 sm:p-6 rounded-3xl bg-white dark:bg-[#201d1a] border border-[#b89569]/20 dark:border-white/10 shadow-xs hover:shadow-md hover:border-[#b89569] transition-all duration-300 flex items-center justify-between gap-3 sm:gap-4 group"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-[#b89569]/10 text-[#b89569] dark:text-[#cba677] flex items-center justify-center shrink-0">
-                        <Icon className="w-6 h-6" />
+                    <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#b89569]/10 text-[#b89569] dark:text-[#cba677] flex items-center justify-center shrink-0">
+                        <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                       </div>
-                      <div>
-                        <h3 className="font-serif text-xl font-normal text-ink dark:text-linen">
+                      <div className="min-w-0">
+                        <h3 className="font-serif text-lg sm:text-xl font-normal text-ink dark:text-linen truncate">
                           {sp.platform}
                         </h3>
-                        <p className="text-sm md:text-base text-smoke dark:text-bone/85 font-light mt-0.5">
+                        <p className="text-xs sm:text-sm md:text-base text-smoke dark:text-bone/85 font-light mt-0.5 line-clamp-1">
                           {sp.focus}
                         </p>
                       </div>
@@ -278,10 +278,10 @@ export default function AboutPage() {
                       href={sp.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-full bg-[#faf7f2] dark:bg-[#161412] hover:bg-[#b89569] hover:text-white border border-[#b89569]/20 text-ink dark:text-linen text-xs uppercase tracking-wider font-medium transition-all duration-300 group/btn shrink-0 sm:self-center"
+                      className="inline-flex items-center justify-center gap-1 px-3.5 py-1.5 sm:px-6 sm:py-2.5 rounded-full bg-[#b89569] hover:bg-[#a38259] text-white text-[11px] sm:text-xs uppercase tracking-wider font-medium transition-all duration-300 shadow-sm hover:shadow-md group/btn shrink-0"
                     >
                       <span>Visit</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                      <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover/btn:translate-x-1 transition-transform" />
                     </a>
                   </div>
                 );

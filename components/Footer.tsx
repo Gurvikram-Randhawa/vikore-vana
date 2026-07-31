@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Instagram, Mail, Pin, Facebook } from "lucide-react";
 import { site } from "@/lib/site";
@@ -55,7 +57,16 @@ export function Footer() {
         <p className="text-[11px] text-smoke dark:text-bone/50">
           &copy; {new Date().getFullYear()} Vikore Vana. All rights reserved.
         </p>
-        <div className="flex flex-wrap gap-4 sm:gap-6">
+        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+          <button 
+            onClick={() => {
+              sessionStorage.removeItem("vikore_pwa_dismissed");
+              alert("To Add Vikore Vana to Home Screen:\n\n• On iPhone (Safari): Tap Share button -> 'Add to Home Screen'\n• On Android / Desktop (Chrome): Look for the 'Install App' banner at the bottom or click the Install icon in the top URL bar.");
+            }}
+            className="text-[11px] text-[#b89569] font-medium dark:text-[#cba677] hover:underline cursor-pointer flex items-center gap-1"
+          >
+            <span>Add to Home Screen</span>
+          </button>
           <Link href="/disclosure" className="text-[11px] text-smoke dark:text-bone/50 hover:text-ink dark:hover:text-white transition-colors underline-offset-2 hover:underline">
             Affiliate Disclosure
           </Link>
@@ -70,4 +81,3 @@ export function Footer() {
     </footer>
   );
 }
-

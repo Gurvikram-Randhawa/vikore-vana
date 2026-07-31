@@ -20,12 +20,12 @@ export function ArticleLikeButton({ slug }: { slug: string }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center mt-10 sm:mt-16">
-      <div className="flex flex-col items-center justify-center mb-8 sm:mb-10 text-center">
-        <p className="text-[0.65rem] sm:text-[0.7rem] font-bold uppercase tracking-[0.4em] text-[#b8935a] dark:text-[#cba677] mb-1">
+    <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center mb-5 text-center">
+        <p className="text-[0.65rem] sm:text-[0.7rem] font-bold uppercase tracking-[0.4em] text-[#b8935a] dark:text-[#cba677]">
           {isLiked ? "Thank you" : "Enjoyed This"}
         </p>
-        <p className="font-[family-name:var(--font-calligraphy)] text-4xl sm:text-5xl text-cedar">
+        <p className="font-[family-name:var(--font-calligraphy)] text-3xl sm:text-4xl text-cedar -mt-1">
           {isLiked ? "for reading" : "Article"}
         </p>
       </div>
