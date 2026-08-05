@@ -70,8 +70,7 @@ export const metadata: Metadata = {
   other: {
     "pinterest-rich-pin": "true",
     "google-site-verification": "KRtxf-ldKOW9N6uHexTvZwzj1H4kQ6z4w6I12UMapxE",
-    "p:domain_verify": "f62176cdc2626f54e31126000d5c7504",
-    "impact-site-verification": "a295c2fe-aa8f-423b-8126-a8f724b6db6c"
+    "p:domain_verify": "f62176cdc2626f54e31126000d5c7504"
   }
 };
 
@@ -89,6 +88,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <meta
           name="p:domain_verify"
           content="f62176cdc2626f54e31126000d5c7504"
+        />
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `(function(i,m,p,a,c,t){c.ire_o=p;c[p]=c[p]||function(){(c[p].a=c[p].a||[]).push(arguments)};t=a.createElement(m);var z=a.getElementsByTagName(m)[0];t.async=1;t.src=i;z.parentNode.insertBefore(t,z)})('https://utt.impactcdn.com/P-A7093347-39ae-4177-ac3c-32cf55a8cc761.js','script','impactStat',document,window);impactStat('transformLinks');impactStat('trackImpression');`,
+          }}
         />
       </head>
       <body className={`${inter.variable} ${playfair.variable} ${greatVibes.variable} ${cormorant.variable} ${jost.variable} ${alexBrush.variable} ${sacramento.variable} ${pinyonScript.variable} ${italianno.variable} ${ooohBaby.variable} ${tempting.variable} font-sans antialiased`}>
