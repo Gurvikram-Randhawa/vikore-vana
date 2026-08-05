@@ -70,7 +70,8 @@ export const metadata: Metadata = {
   other: {
     "pinterest-rich-pin": "true",
     "google-site-verification": "KRtxf-ldKOW9N6uHexTvZwzj1H4kQ6z4w6I12UMapxE",
-    "p:domain_verify": "f62176cdc2626f54e31126000d5c7504"
+    "p:domain_verify": "f62176cdc2626f54e31126000d5c7504",
+    "impact-site-verification": "a295c2fe-aa8f-423b-8126-a8f724b6db6c"
   }
 };
 
